@@ -7,7 +7,9 @@ estrutura de resposta e comandos, para reduzir retrabalho e sobrecarga
 cognitiva no fluxo multi-IA.
 
 ## Arquivos principais
+- README.md
 - instrucoes-universais.md — núcleo permanente para colar no Perfil da IA.
+- instrucoes-personalizadas-gpt.md
 - comandos.md — índice operacional dos comandos ativos.
 - friendly.md — comando adaptativo de acessibilidade cognitiva (/friendly).
 - rodape.md — comando de rodapé estendido sob demanda (/rodape).
@@ -23,7 +25,7 @@ deve ler a definição completa antes de executar o comando.
 
 ## Localização canônica por IA
 - Claude → Box → Recursos-IA → Comandos → <nome-do-comando>.md
-- Gemini / GPT → Google Drive → Meu Drive → Documentos → I.A. → comandos → <nome-do-comando>.md
+- Gemini / GPT → Google Drive → Meu Drive → Documentos → I.A. → Comandos → <nome-do-comando>.md
 - Perplexity → GitHub Raw → https://raw.githubusercontent.com/dozzademiranda/ia-comandos/main/<nome-do-comando>.md
 
 ## Regra de prevalência
