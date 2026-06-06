@@ -53,7 +53,9 @@ tokens N/A).
 
 /comandos → este arquivo.
 
-/PAFE → ativa fluxo de estudo para provas, com leitura de fontes, hierarquia documental, diagnóstico, teoria, pegadinhas, treino, revisão e artefatos opcionais. Definição completa em pafe/README.md.
+/pafe → ativa fluxo de estudo para provas, com leitura de fontes, hierarquia documental, diagnóstico, teoria, pegadinhas, treino, revisão e artefatos opcionais. Definição completa em pafe/README.md.
+
+
 ---
 
 REGRAS DE USO
@@ -74,7 +76,7 @@ a) IA CLAUDE = Box → Recursos-IA → Comandos → <nome-do-comando>.md
 b) IA GEMINI / GPT = Google Drive → Meu Drive → Documentos → I.A. → Comandos → <nome-do-comando>.md
 c) IA PERPLEXITY = GitHub Raw → https://raw.githubusercontent.com/dozzademiranda/ia-comandos/main/<nome-do-comando>.md
    Link humano: https://github.com/dozzademiranda/ia-comandos
-d) /PAFE https://raw.githubusercontent.com/dozzademiranda/ia-comandos/main/pafe/README.md   
+d) /pafe = GitHub Raw → https://raw.githubusercontent.com/dozzademiranda/ia-comandos/main/pafe/README.md
 
 REGRA DE PREVALÊNCIA:
 1. Se a IA tiver acesso ao Box, prevalece Box.
@@ -101,7 +103,9 @@ ARQUIVOS ATIVOS RECOMENDADOS
 8. consolidar.md
 9. nconversa.md
 10. id.md
-11. PAFE.md
+11. pafe/README.md
+12. pafe/html.md
+13. pafe/audio.md
 
 ---
 
