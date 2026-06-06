@@ -12,15 +12,10 @@ cognitiva no fluxo multi-IA.
 - friendly.md — comando adaptativo de acessibilidade cognitiva (/friendly).
 - rodape.md — comando de rodapé estendido sob demanda (/rodape).
 - consolidar.md — definição do /consolidar.
-- nova-conversa.md — definição do /nova-conversa.
+- nconversa.md — definição do /nconversa.
 - id.md — definição do /id (identificação e proveniência).
 - mpe.md
 - pafe.md
-
-## Arquivos históricos (absorvidos por /friendly; não usar como comando ativo)
-- friendly-tdah.md
-- friendly-autista.md
-- friendly-burnout.md
 
 ## Como usar
 Cada comando tem um arquivo .md próprio. Quando a IA tiver acesso ao arquivo,
