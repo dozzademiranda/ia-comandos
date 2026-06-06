@@ -1,57 +1,39 @@
 ---
-Gerado por: Claude (Anthropic) — modelo Opus 4.8
-Data de geração: 30/05/2026
+Gerado por: Claude (Anthropic) — modelo Opus 4.7
+Data de geração: 01/06/2026
 ---
 
 COMANDO: /consolidar
 
-O QUE É: instrução que gera um resumo de continuidade completo de uma
-conversa, em bloco único, para você retomar o trabalho noutra conversa
-ou noutra IA sem perder contexto.
+O QUE É: gera um resumo de continuidade da conversa atual, em bloco único,
+para retomar o trabalho noutra conversa ou noutra IA sem perder contexto.
 
-QUANDO USAR: ao fim de uma conversa longa, antes de ela travar por
-limite, ou quando você quiser migrar o trabalho para outra plataforma.
+QUANDO USAR: quando a conversa ficou longa, ou antes de trocar de IA/conversa,
+para não repetir trabalho já feito.
 
-POR QUE USAR: preserva decisões, justificativas e pendências num formato
-que a próxima IA lê e continua de onde paramos, sem refazer o caminho.
+POR QUE USAR: preserva decisões, pendências e o caminho percorrido, evitando
+reabrir o que já foi resolvido.
 
-NÃO CONFUNDIR COM: /nova-conversa. /consolidar RESUME o que já foi feito.
-/nova-conversa INICIA uma conversa nova já contextualizada. Primeiro
-consolida-se; depois, se você quiser, gera-se o prompt de inicialização.
+NÃO CONFUNDIR COM: /nova-conversa. /consolidar diagnostica e resume a conversa
+encerrada; /nova-conversa produz o prompt de inicialização da próxima.
 
 ---
 
 DEFINIÇÃO OPERACIONAL
 
-Ao receber /consolidar, gerar um resumo de continuidade em um único
-bloco de código, contendo, quando pertinente:
+Ao receber /consolidar, gerar UM bloco único contendo, quando pertinente:
+1. identificação da origem (IA, modelo, data);
+2. contexto e objetivo;
+3. protocolo/comandos ativos;
+4. decisões tomadas e justificativas;
+5. erros corrigidos;
+6. escolhas rejeitadas (e por quê);
+7. respostas de outras IAs analisadas e conclusão comparativa;
+8. pendências;
+9. próximos passos;
+10. instruções para a próxima IA não repetir trabalho.
 
-- identificação da origem (plataforma, modelo, data);
-- contexto;
-- objetivo;
-- protocolo ativo;
-- decisões tomadas;
-- justificativas;
-- erros corrigidos;
-- escolhas rejeitadas;
-- respostas de IAs analisadas;
-- ranking ou conclusão comparativa, se houver;
-- pendências;
-- próximos passos;
-- instruções para a próxima IA não repetir trabalho;
-- prompt inicial, se útil.
+Não inventar decisões. Onde algo for incerto: "não documentado no histórico
+disponível".
 
-Não inventar decisões. Onde algo for incerto, escrever exatamente:
-"não documentado no histórico disponível".
-
-Ao final do bloco, SEMPRE oferecer explicitamente, SEM EXECUTAR até o
-usuário confirmar:
-
-"Posso transformar isto num prompt de inicialização pronto para colar
-como primeira mensagem de uma nova conversa, no formato de bloco único
-com as seções IDENTIDADE E ESTILO, ARQUITETURA, SECRETS (só nomes),
-DECISÕES, DIFICULDADES E SOLUÇÕES, PENDÊNCIAS, REGRAS PARA A PRÓXIMA IA
-e SEGURANÇA. Quer que eu gere?"
-
-Só gerar esse prompt de inicialização se o usuário responder "sim". Se
-não quiser, não gastar tokens gerando o resultado não desejado.
+Ao final, oferecer (sem executar) gerar o /nova-conversa.

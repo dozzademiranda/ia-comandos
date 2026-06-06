@@ -1,65 +1,44 @@
-# ia-comandos
-
-Repositório canônico de comandos e instruções para uso em múltiplas IAs.
+# ia-comandos — Sistema de comandos multi-IA (Fábio)
 
 ## Objetivo
-
-Centralizar, versionar e distribuir os arquivos `.md` do sistema de comandos de forma legível por humanos e reutilizável por diferentes IAs.
+Conjunto de arquivos .md que definem um sistema de comandos portável, usado
+em várias IAs (Claude, GPT, Gemini, Perplexity). Padroniza perfil, postura,
+estrutura de resposta e comandos, para reduzir retrabalho e sobrecarga
+cognitiva no fluxo multi-IA.
 
 ## Arquivos principais
+- instrucoes-universais.md — núcleo permanente para colar no Perfil da IA.
+- comandos.md — índice operacional dos comandos ativos.
+- friendly.md — comando adaptativo de acessibilidade cognitiva (/friendly).
+- rodape.md — comando de rodapé estendido sob demanda (/rodape).
+- consolidar.md — definição do /consolidar.
+- nova-conversa.md — definição do /nova-conversa.
+- id.md — definição do /id (identificação e proveniência).
 
-- `README.md`
-- `instrucoes-universais.md`
-- `comandos.md`
-- `friendly.md`
-- `id.md`
-- `rodape.md`
-- `consolidar.md`
-- `nova-conversa.md`
-
-## Arquivos históricos
-
-Mantidos por histórico, mas não são mais comandos principais do sistema:
-
-- `friendly-tdah.md`
-- `friendly-autista.md`
-- `friendly-burnout.md`
+## Arquivos históricos (absorvidos por /friendly; não usar como comando ativo)
+- friendly-tdah.md
+- friendly-autista.md
+- friendly-burnout.md
 
 ## Como usar
-
-1. Cada comando possui um arquivo `.md` próprio.
-2. Quando a IA tiver acesso ao arquivo correspondente, deve ler a definição completa antes de executar o comando.
-3. `README.md` explica o repositório e as regras de acesso.
-4. `comandos.md` é o índice operacional da lista ativa.
-5. `friendly.md` define o novo `/friendly` adaptativo.
-6. `id.md` define o carimbo de identificação e proveniência.
-7. `rodape.md` define o rodapé estendido opcional.
+Cada comando tem um arquivo .md próprio. Quando a IA tiver acesso ao arquivo,
+deve ler a definição completa antes de executar o comando.
 
 ## Localização canônica por IA
-
-- IA CLAUDE → Box → Recursos-IA → Comandos → `<nome-do-comando>.md`
-- IA GEMINI / GPT → Google Drive → Meu Drive → Documentos → `I. A.` → comandos → `<nome-do-comando>.md`
-- IA PERPLEXITY → GitHub Raw → `https://raw.githubusercontent.com/dozzademiranda/ia-comandos/main/<nome-do-comando>.md`
-
-## Links principais
-
-- Repositório humano: `https://github.com/dozzademiranda/ia-comandos`
-- Leitura automatizada preferencial por IA: `https://raw.githubusercontent.com/dozzademiranda/ia-comandos/main/<nome-do-comando>.md`
+- Claude → Box → Recursos-IA → Comandos → <nome-do-comando>.md
+- Gemini / GPT → Google Drive → Meu Drive → Documentos → I.A. → comandos → <nome-do-comando>.md
+- Perplexity → GitHub Raw → https://raw.githubusercontent.com/dozzademiranda/ia-comandos/main/<nome-do-comando>.md
 
 ## Regra de prevalência
+1. Se a IA tiver acesso ao Box, prevalece a versão do Box.
+2. Se não, usar a fonte acessível na plataforma atual.
+3. Se eu anexar/colar uma versão mais recente na conversa, essa versão
+   prevalece para a tarefa atual.
 
-1. Se houver arquivo anexado ou colado na conversa atual, essa versão prevalece para a tarefa atual.
-2. Se a IA tiver acesso ao Box, prevalece Box.
-3. Se a IA não tiver acesso ao Box, usar a fonte acessível na plataforma atual.
-4. Se a IA não tiver acesso à fonte principal, usar GitHub Raw como fallback.
-5. Se houver divergência entre versões e a IA não conseguir acessar a fonte prevalente, deve declarar a limitação.
-
-## Regra de integridade
-
-- Não inventar comando, fonte, caminho, URL ou arquivo.
-- Se algo não estiver documentado no material disponível, escrever: `não documentado no material disponível`.
-- Se depender de arquivo não acessível na conversa, escrever: `não consigo validar sem o arquivo efetivamente anexado nesta conversa`.
-
-## Observação de segurança
-
-Este repositório deve conter apenas arquivos de comandos e instruções, sem dados sensíveis, credenciais, informações pessoais privadas ou conteúdo que dependa de sigilo.
+## Privacidade no GitHub
+1. Não presumir que GitHub público é seguro.
+2. Este repositório só pode conter instruções sanitizadas: sem dados
+   pessoais sensíveis, sem chaves, sem detalhes de casos jurídicos, sem
+   estratégias confidenciais.
+3. Conteúdo sensível vai apenas para Box, Google Drive, GitHub privado ou
+   arquivo anexado direto na conversa.

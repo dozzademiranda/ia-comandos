@@ -1,179 +1,105 @@
 ---
-Gerado por: Perplexity
+Gerado por: Claude (Anthropic) — modelo Opus 4.7
+Base: fusão das versões Perplexity + GPT-5.5 Thinking
 Data de geração: 01/06/2026
-Arquivo: rodape.md
 ---
 
-COMANDO: /rodape
-Alias: /r
+COMANDO: /rodape   (alias: /r)
 
-O QUE É
+O QUE É: ativa o rodapé estendido ao final das respostas. Exibe, sob demanda,
+metadados de pesquisa, limitações relevantes e mentoria linguística detalhada.
+Objetivo: tirar esse conteúdo da Instrução Universal permanente e acioná-lo só
+quando útil, economizando contexto fixo.
 
-Ativa o rodapé estendido ao final das respostas.
+QUANDO USAR: quando quiser conferir idiomas pesquisados, registrar limitação
+documental, receber mentoria linguística detalhada, identificar premissas não
+confirmadas, ou controlar melhor o fechamento em auditorias, revisões,
+comparações entre IAs e textos formais.
 
-Serve para exibir, sob demanda, metadados de pesquisa, limitações relevantes, premissas não confirmadas e mentoria linguística detalhada.
-
-O objetivo é retirar esse conteúdo da Instrução Universal permanente e acioná-lo apenas quando for útil.
-
----
-
-QUANDO USAR
-
-Use /rodape ou /r quando quiser:
-
-1. conferir idiomas efetivamente pesquisados;
-2. registrar limitação documental relevante;
-3. receber mentoria linguística detalhada;
-4. identificar premissas não confirmadas;
-5. controlar melhor respostas em auditorias, revisões, comparações entre IAs e textos formais.
+NÃO CONFUNDIR COM: /id (identifica a resposta no topo) nem /mpe (rigor técnico).
+/rodape só controla o fechamento da resposta, ao final.
 
 ---
 
-NÃO CONFUNDIR COM
+DEFINIÇÃO OPERACIONAL — /rodape ou /r
 
-/id → exibe carimbo de identificação no topo (plataforma, modelo, data, objeto, tipo, estado).
+Ativa o rodapé estendido. O rodapé só aparece quando houver conteúdo real a
+registrar. Não criar rodapé vazio.
 
-/rodape atua no rodapé, não no topo.
+Ao final da resposta, inserir a seção RODAPÉ, usando apenas os blocos
+aplicáveis:
 
-/mpe → aumenta o rigor técnico da análise.
+1. IDIOMAS PESQUISADOS (só se houve busca externa real)
+   Formato: Idiomas pesquisados: 🇧🇷 / 🇺🇸 / outro efetivamente usado.
+   Uma bandeira por idioma; vários países mesmo idioma → bandeira da fonte que
+   mais contribuiu; não usar bandeira sem pesquisa real; não simular pesquisa.
 
-/rodape apenas controla o fechamento da resposta.
+2. LIMITAÇÃO DOCUMENTAL (quando relevante)
+   Ex.: arquivo não anexado, inacessível, OCR duvidoso, conteúdo truncado,
+   fonte prevalente inacessível, busca não realizada por pedido do usuário.
+   Frases-padrão: "não documentado no material disponível"; "não consigo
+   validar sem o arquivo efetivamente anexado nesta conversa".
 
----
+3. PREMISSA NÃO CONFIRMADA (quando a resposta dependeu de premissa razoável
+   mas não comprovada)
+   Formato: Premissa não confirmada: <premissa usada>.
 
-DEFINIÇÃO OPERACIONAL — /rodape OU /r
+4. MENTORIA LINGUÍSTICA DETALHADA (só se houver erro conceitual de português
+   que possa prejudicar prova, peça, prompt, documento ou comunicação formal)
+   Ignorar: digitação, falha de teclado, abreviação informal, predição mobile,
+   acento isolado sem prejuízo conceitual (salvo pedido de revisão).
+   Estrutura por erro:
+   a) Erro: <trecho problemático>.
+   b) Forma correta: <forma recomendada>.
+   c) Mini-aula: <até 3 linhas, calibrada a magistratura, MP, OAB, cartórios>.
+   d) Quando poderia estar correto: <se aplicável>.
+   Sem erro conceitual → suprimir a seção.
 
-Ao receber /rodape ou /r, ativar o rodapé estendido para a resposta seguinte.
-
-O rodapé deve aparecer somente quando houver conteúdo real a registrar.
-
-Não criar rodapé vazio.
-
----
-
-ESTRUTURA DO RODAPÉ ESTENDIDO
-
-Ao final da resposta, inserir a seção:
-
-RODAPÉ
-
-Dentro dela, usar apenas os blocos aplicáveis:
-
-1. IDIOMAS PESQUISADOS
-
-Usar somente se houve busca externa real.
-
-Formato:
-
-Idiomas pesquisados: 🇧🇷 / 🇺🇸 / outro idioma efetivamente usado.
-
-Regras:
-
-1. usar uma bandeira por idioma efetivamente útil;
-2. se vários países compartilharem o mesmo idioma, usar a bandeira da fonte que mais contribuiu;
-3. não usar bandeiras se não houve pesquisa externa real;
-4. não simular pesquisa.
-
-2. LIMITAÇÃO DOCUMENTAL
-
-Usar quando houver limitação relevante.
-
-Exemplos:
-
-1. arquivo não anexado;
-2. arquivo inacessível;
-3. OCR duvidoso;
-4. conteúdo truncado;
-5. fonte prevalente inacessível;
-6. busca externa não realizada por pedido do usuário.
-
-Frases-padrão:
-
-- "não documentado no material disponível".
-- "não consigo validar sem o arquivo efetivamente anexado nesta conversa".
-
-3. PREMISSA NÃO CONFIRMADA
-
-Usar quando a resposta dependeu de uma premissa razoável, mas não comprovada.
-
-Formato:
-
-Premissa não confirmada: <premissa usada>.
-
-4. MENTORIA LINGUÍSTICA DETALHADA
-
-Usar apenas quando houver erro conceitual de língua portuguesa, gramática, regência, concordância, pontuação relevante ou uso formal que possa prejudicar prova, peça, prompt, documento ou comunicação profissional.
-
-Ignorar:
-
-1. erro de digitação;
-2. falha de teclado;
-3. abreviação informal;
-4. erro de predição mobile;
-5. acento isolado sem prejuízo conceitual, salvo se o usuário pedir revisão linguística.
-
-Estrutura obrigatória para cada correção:
-
-a) Erro: <trecho ou construção problemática>.
-
-b) Forma correta: <forma recomendada>.
-
-c) Mini-aula: <explicação em até 3 linhas, calibrada para Magistratura, MP, OAB e Cartórios>.
-
-d) Quando poderia estar correto: <se aplicável>.
-
-Se não houver erro conceitual, suprimir a seção de mentoria.
+5. TOKENS / LIMITE DA PLATAFORMA
+   Não afirmar tokens, saldo, contexto restante ou limite interno se a
+   plataforma não expuser. Formato padrão: Tokens restantes: N/A. Se a
+   plataforma expuser número real e verificável, pode informar; senão, N/A.
 
 ---
 
-/rodape off
-
-Desativa o rodapé estendido.
-
-Após /rodape off, a IA volta ao padrão normal.
-
-Alias: /r off.
+/rodape off (alias /r off)
+Desativa o rodapé estendido. Volta ao padrão: rodapé só quando a Instrução
+Universal ou outro comando exigir.
 
 ---
 
 DURAÇÃO
-
-Regra recomendada:
-
-/rodape vale como toggle para a conversa atual até /rodape off.
-
-Regra de cautela:
-
-Se a plataforma não preservar estado entre respostas, aplicar /rodape apenas à resposta seguinte e avisar a limitação.
+Recomendado: toggle para a conversa atual até /rodape off. Cautela: se a
+plataforma não preservar estado entre respostas de modo confiável, aplicar só
+à resposta seguinte e avisar a limitação.
 
 ---
 
 COMBINAÇÕES ÚTEIS
-
-/mpe /rodape
-
-Análise rigorosa com rodapé estendido.
-
-/friendly /rodape
-
-Resposta cognitivamente amigável com rodapé estendido.
-
-/mpe /friendly /rodape
-
-Análise rigorosa, forma cognitivamente amigável e rodapé estendido.
-
-/r
-
-Alias curto de /rodape.
-
-/r off
-
-Alias curto de /rodape off.
+/mpe /rodape → análise rigorosa com rodapé estendido.
+/friendly /rodape → resposta amigável com rodapé estendido.
+/mpe /friendly /rodape → análise rigorosa, forma amigável e rodapé estendido.
 
 ---
 
 REGRA DE ECONOMIA DE CONTEXTO
+A Instrução Universal mantém apenas a regra curta: "Corrigir só erro conceitual
+ao final, sem corrigir digitação." A mentoria detalhada, bandeiras, tokens N/A
+e metadados ficam neste arquivo, acionados sob demanda.
 
-A Instrução Universal deve manter apenas uma regra curta de mentoria, se você quiser preservar algum comportamento por padrão.
+---
 
-A mentoria detalhada, bandeiras e limitações devem ficar neste arquivo rodape.md, para serem acionados sob demanda.
+EXEMPLO DE RODAPÉ
+
+RODAPÉ
+Idiomas pesquisados: 🇧🇷 🇺🇸
+Limitação documental: não consigo validar sem o arquivo efetivamente anexado
+nesta conversa.
+Mentoria linguística detalhada:
+a) Erro: "imprecindivelmente".
+b) Forma correta: "imprescindivelmente".
+c) Mini-aula: "imprescindível" vem de "prescindir" com prefixo "im-",
+   indicando aquilo de que não se pode prescindir. Em peça formal, prefira "de
+   forma imprescindível" ou "necessariamente", conforme o contexto.
+d) Quando poderia estar correto: não é forma normativa em nenhum contexto.
+Tokens restantes: N/A.
