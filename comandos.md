@@ -17,9 +17,7 @@ POR QUE USAR: centraliza a referência; economiza esforço de memória.
 
 LISTA ATIVA
 
-/mpe → aplica silenciosamente o protocolo SRC CMP TEC CAL SYN VAL STR na
-próxima resposta. Para temas jurídicos, acadêmicos, técnicos, financeiros,
-regulatórios, comparativos, auditorias.
+/mpe → aplica silenciosamente o protocolo SRC CMP TEC CAL SYN VAL STR na próxima resposta. Para temas jurídicos, acadêmicos, técnicos, financeiros, regulatórios, comparativos, auditorias e análise de risco factual. Definição completa em mpe.md.
 
 /mpe+ → /mpe com pesquisa multilíngue ampliada. Sozinho: além de PT-BR e
 inglês, adiciona o que o assunto pedir. Com códigos (/mpe+ de fr zh): força
@@ -29,7 +27,7 @@ línguas específicas.
 retomar noutra conversa/IA sem perder contexto. Ao final, oferece (sem
 executar) gerar o prompt de inicialização da próxima conversa.
 
-/nova-conversa → gera o prompt de inicialização da próxima conversa, no
+/nconversa → gera o prompt de inicialização da próxima conversa, no
 formato IDENTIDADE E ESTILO / ARQUITETURA / SECRETS / DECISÕES / DIFICULDADES
 E SOLUÇÕES / PENDÊNCIAS / REGRAS PARA A PRÓXIMA IA / SEGURANÇA.
 
@@ -93,15 +91,15 @@ na conversa.
 ARQUIVOS ATIVOS RECOMENDADOS
 1. README.md
 2. instrucoes-universais.md
-3. comandos.md
-4. friendly.md
-5. rodape.md
-6. consolidar.md
-7. nova-conversa.md
-8. id.md
-
-ARQUIVOS HISTÓRICOS (absorvidos por /friendly; não usar como comando ativo):
-friendly-tdah.md, friendly-autista.md, friendly-burnout.md
+3. instrucoes-personalizadas-gpt.md
+4. comandos.md
+5. mpe.md
+6. friendly.md
+7. rodape.md
+8. consolidar.md
+9. nova-conversa.md
+10. id.md
+11. PAFE
 
 ---
 
