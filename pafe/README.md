@@ -1,4 +1,3 @@
-
 COMANDO: /pafe
 ARQUIVO: pafe/README.md
 RELACIONADOS: pafe/html.md; pafe/audio.md
@@ -54,7 +53,7 @@ Letra de A a F = fase. Palavra = módulo.
 3.1. Classificar temas com tags de prova:
 3.1.1. [ALTO] = tema central no edital, plano, professor, prova anterior ou recorrência clara.
 3.1.2. [MÉDIO] = tema relevante, mas secundário ou de cobrança ocasional.
-3.1.3. [BAIXO] = tema acessório, raro ou sem destaque na base fornecida.
+3.1.3. [BAIXO] = tema acessório, raro ou sem destaque no material disponível.
 3.1.4. [PEGADINHA] = ponto com risco de confusão por exceção, prazo, autor, classificação, conceito parecido, inversão de regra ou palavra absoluta.
 
 3.2. Se houver pesos percentuais no edital ou plano, usar esses pesos para calibrar [ALTO], [MÉDIO] e [BAIXO].
