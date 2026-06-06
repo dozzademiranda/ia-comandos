@@ -14,6 +14,8 @@ cognitiva no fluxo multi-IA.
 - consolidar.md — definição do /consolidar.
 - nova-conversa.md — definição do /nova-conversa.
 - id.md — definição do /id (identificação e proveniência).
+- mpe.md
+- pafe.md
 
 ## Arquivos históricos (absorvidos por /friendly; não usar como comando ativo)
 - friendly-tdah.md
