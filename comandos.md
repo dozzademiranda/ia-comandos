@@ -1,15 +1,15 @@
 ---
 Gerado por: Claude (Anthropic) — modelo Opus 4.7
-Data de geração: 01/06/2026
+Data de geração: 06/06/2026
 ---
 
 COMANDO: /comandos
 
-O QUE É: índice de todos os comandos disponíveis, com uma linha sobre
-cada um. Menu de consulta rápida.
+O QUE É: índice de todos os comandos disponíveis, com uma linha sobre cada
+um. Menu de consulta rápida.
 
-QUANDO USAR: quando não lembrar qual comando aciona o quê, ou ao mostrar
-o sistema a outra IA.
+QUANDO USAR: quando não lembrar qual comando aciona o quê, ou ao mostrar o
+sistema a outra IA.
 
 POR QUE USAR: centraliza a referência; economiza esforço de memória.
 
@@ -33,8 +33,10 @@ executar) gerar o prompt de inicialização da próxima conversa.
 formato IDENTIDADE E ESTILO / ARQUITETURA / SECRETS / DECISÕES / DIFICULDADES
 E SOLUÇÕES / PENDÊNCIAS / REGRAS PARA A PRÓXIMA IA / SEGURANÇA.
 
-/id → liga o carimbo de identificação e proveniência no topo de toda resposta
-(IA, modelo, versão, data, objeto, tipo, estado). /id off desliga.
+/id → liga o cabeçalho de identificação e proveniência no topo das respostas:
+plataforma, modelo, versão, data, objeto, tipo e estado. Em auditorias, revisão
+de arquivos, busca externa ou fluxos multi-IA, pode incluir Base como campo
+opcional. /id off desliga.
 
 /friendly → comando adaptativo de acessibilidade cognitiva. Ajusta a forma da
 resposta sem mexer no rigor técnico. TDAH como base fixa, explicitude ampliada
@@ -70,7 +72,7 @@ REGRAS DE USO
 ONDE ESTÃO AS DEFINIÇÕES
 
 a) IA CLAUDE = Box → Recursos-IA → Comandos → <nome-do-comando>.md
-b) IA GEMINI / GPT = Google Drive → Meu Drive → Documentos → I.A. → comandos → <nome-do-comando>.md
+b) IA GEMINI / GPT = Google Drive → Meu Drive → Documentos → I.A. → Comandos → <nome-do-comando>.md
 c) IA PERPLEXITY = GitHub Raw → https://raw.githubusercontent.com/dozzademiranda/ia-comandos/main/<nome-do-comando>.md
    Link humano: https://github.com/dozzademiranda/ia-comandos
 
@@ -89,13 +91,14 @@ na conversa.
 ---
 
 ARQUIVOS ATIVOS RECOMENDADOS
-1. instrucoes-universais.md
-2. comandos.md
-3. friendly.md
-4. rodape.md
-5. consolidar.md
-6. nova-conversa.md
-7. id.md
+1. README.md
+2. instrucoes-universais.md
+3. comandos.md
+4. friendly.md
+5. rodape.md
+6. consolidar.md
+7. nova-conversa.md
+8. id.md
 
 ARQUIVOS HISTÓRICOS (absorvidos por /friendly; não usar como comando ativo):
 friendly-tdah.md, friendly-autista.md, friendly-burnout.md
