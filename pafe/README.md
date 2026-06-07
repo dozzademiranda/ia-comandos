@@ -166,12 +166,51 @@ INVOCAÇÃO:
 
 8.2. Não afirmar que um arquivo foi gerado sem que o arquivo real exista.
 
-9. PAGINAÇÃO
+9. PAGINAÇÃO E PAUSAS OBRIGATÓRIAS
 
-9.1. Se /pafe completo exceder a capacidade segura da resposta, executar por fases, informar a pausa e aguardar comando para continuar.
+9.1. Se /pafe completo, /pafe html audio ou qualquer execução P.A.F.E. exceder a capacidade segura de uma resposta, a IA deve dividir a tarefa em fases ou blocos.
 
-9.2. A pausa deve indicar explicitamente em qual fase parou e qual é a próxima.
+9.2. Quando dividir a tarefa, a IA deve declarar expressamente:
+9.2.1. que a tarefa é grande demais para execução segura em uma única resposta;
+9.2.2. qual fase ou bloco foi concluído;
+9.2.3. qual fase ou bloco ainda falta;
+9.2.4. qual é o próximo comando exato para continuar.
 
+9.3. A IA não deve encerrar apenas com “próximo passo recomendado” quando a tarefa já estiver em execução.
+
+9.4. Nesses casos, a resposta deve terminar com uma pausa formal no seguinte modelo:
+
+PAUSA P.A.F.E. — [fase/bloco concluído].
+
+Motivo da pausa:
+[tarefa grande, volume documental, risco de truncamento, necessidade de preservar rastreabilidade ou outro motivo objetivo].
+
+Concluído nesta resposta:
+[lista objetiva do que foi concluído].
+
+Próximo bloco:
+[nome da próxima fase ou bloco].
+
+Para continuar, envie:
+[prompt/comando exato].
+
+9.5. A pausa deve ser operacional, não sugestiva. A IA deve indicar exatamente o comando de continuidade.
+
+9.6. Se o usuário pedir “continuar”, “siga”, “próximo” ou comando equivalente, a IA deve retomar do ponto indicado na pausa anterior, sem reiniciar a análise.
+
+9.7. Se houver artefatos pendentes, como HTML, áudio, DOCX, PDF ou ZIP, a IA deve declarar se eles ainda não foram gerados e por quê.
+
+9.8. Se HTML ou áudio dependerem da Fase F, a IA deve informar:
+9.8.1. se a Fase F ainda não foi alcançada;
+9.8.2. se a Fase F exige pedido expresso;
+9.8.3. qual comando aciona os artefatos.
+
+9.9. Comando recomendado para artefatos:
+9.9.1. /pafe html;
+9.9.2. /pafe audio;
+9.9.3. /pafe html audio;
+9.9.4. /pafe completo html audio;
+9.9.5. /pafe F.
 10. SAÍDA
 
 10.1. Entregável íntegro conforme a Instrução Universal: bloco único, completo, pronto para copiar; nunca patch, trecho solto, "insira aqui" ou montagem manual.
