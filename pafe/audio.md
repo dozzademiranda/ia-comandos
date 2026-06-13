@@ -28,6 +28,8 @@ Se o ambiente não puder gerar MP3 real, declarar:
 
 > [ARTEFATO: execução local necessária] — O MP3 ainda não foi gerado nesta plataforma. O arquivo `master_audio.mp3` só existirá após execução local bem-sucedida do script de geração.
 
+Quando o agente for Claude com ambiente de execução ativo, antes de declarar execução local necessária é obrigatório rodar um smoke test de TTS no próprio turno, conforme `pafe_claude.md` §2.1. Só declarar impossível após falha confirmada com diagnóstico.
+
 ---
 
 ### 2.2. Áudio deve ser juridicamente útil
@@ -168,6 +170,8 @@ Para áudio jurídico, preferir cálculo conservador de 150 palavras por minuto.
 | 180 min | 27.000 a 33.000 | maratona |
 
 Se o roteiro tiver menos palavras do que o mínimo estimado, expandir antes de tentar gerar o áudio.
+
+A duração-alvo deve ser declarada na invocação (ex.: `/pafe completo 60min`). Sem declaração, adotar a faixa da tabela compatível com o escopo (ex.: revisão de bimestre → 60 min) e registrar a premissa adotada. É proibido inflar o roteiro com conteúdo vazio para atingir uma duração maior do que o conteúdo real sustenta.
 
 ---
 
@@ -506,7 +510,11 @@ O script deve:
 12. gerar `audio/log_geracao_audio.txt`;
 13. validar duração final por `ffprobe`;
 14. falhar se o áudio tiver menos que a duração mínima;
-15. não instalar dependências automaticamente.
+15. não instalar dependências automaticamente;
+16. aplicar tratamento de SSL/CA do sistema (função `preparar_ssl()`) antes da primeira síntese — obrigatório no ambiente de execução do Claude (proxy com CA auto-assinado), inofensivo em máquina doméstica; código de referência em `pafe_claude.md` §2.2;
+17. inserir silêncio curto de transição entre blocos (600 a 1000 ms) — pausa pedagógica do §7.1.6, jamais usada para inflar duração (§2.1.4 permanece válido);
+18. aplicar fade-in e fade-out suaves no master (cerca de 800 a 1200 ms);
+19. embutir capítulos ID3 (`CHAP`/`CTOC`) via `mutagen`, com falha graciosa, mantendo `chapters.json` como fonte primária (§21).
 
 ### 13.2. Argumentos obrigatórios
 
@@ -975,7 +983,12 @@ Se houver ajustes, indique ação objetiva.
 
 ## 27. Rodapé operacional
 
-Versão: audio.md v2.0 — padrão geral para disciplinas de Direito  
+Versão: audio.md v2.1 — padrão geral para disciplinas de Direito  
 Uso: drives virtuais, comandos PAFE, projetos jurídicos e pacotes de áudio  
 Escopo: qualquer disciplina de Direito  
-Regra central: não existe áudio gerado sem arquivo real e duração validada
+Regra central: não existe áudio gerado sem arquivo real e duração validada  
+Overlay Claude: quando o agente for Claude com ambiente de execução, ler também `pafe_claude.md` (mesma pasta) — smoke test obrigatório antes de declarar execução local (§2.1) e `preparar_ssl()` no script (§13.1, item 16)
+
+Histórico:
+- v2.1 (2026-06-09): §2.1 smoke test obrigatório para Claude antes de declarar execução local; §5.2 duração-alvo declarável na invocação; §13.1 itens 16 a 19 (preparar_ssl, gap de transição, fade, capítulos ID3); referência ao pafe_claude.md.
+- v2.0: padrão geral para disciplinas de Direito.
