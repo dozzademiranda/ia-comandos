@@ -1,6 +1,8 @@
 ---
 Gerado por: Claude (Anthropic) — modelo Opus 4.7
 Data de geração: 06/06/2026
+Atualizado por: ChatGPT — ajuste PAFE áudio MP3 direto
+Data de atualização: 06/07/2026
 ---
 
 COMANDO: /comandos
@@ -55,6 +57,9 @@ tokens N/A).
 
 /pafe → ativa fluxo de estudo para provas, com leitura de fontes, hierarquia documental, diagnóstico, teoria, pegadinhas, treino, revisão e artefatos opcionais. Definição completa em pafe/README.md.
 
+/pafe html audio → gera HTML offline e tenta gerar MP3 real separado por padrão. Deve incluir flashcards e quiz dentro do HTML. Não gera audio.yaml, roteiro txt, script Python ou pipeline local salvo pedido expresso de pacote/local/script/yaml. Modos de áudio em pafe/audio_modos.md.
+
+/pafe audio pacote ou /pafe audio local → reativa o modo antigo de pacote local de áudio, com audio.yaml, script Python, setup, validação e pipeline, conforme pafe/audio.md.
 
 ---
 
@@ -67,6 +72,8 @@ REGRAS DE USO
 4. Se o comando mencionado não constar na lista, avisar antes de adivinhar.
 5. Se o arquivo de definição não estiver acessível: "não consigo validar sem
    o arquivo efetivamente anexado nesta conversa".
+6. Para áudio PAFE, ler pafe/audio_modos.md antes de pafe/audio.md. O arquivo
+   pafe/audio_modos.md prevalece e deixa o pipeline local desativado por padrão.
 
 ---
 
@@ -77,6 +84,7 @@ b) IA GEMINI / GPT = Google Drive → Meu Drive → Documentos → I.A. → Coma
 c) IA PERPLEXITY = GitHub Raw → https://raw.githubusercontent.com/dozzademiranda/ia-comandos/main/<nome-do-comando>.md
    Link humano: https://github.com/dozzademiranda/ia-comandos
 d) /pafe = GitHub Raw → https://raw.githubusercontent.com/dozzademiranda/ia-comandos/main/pafe/README.md
+e) Modos de áudio PAFE = GitHub Raw → https://raw.githubusercontent.com/dozzademiranda/ia-comandos/main/pafe/audio_modos.md
 
 REGRA DE PREVALÊNCIA:
 1. Se a IA tiver acesso ao Box, prevalece Box.
@@ -85,6 +93,7 @@ REGRA DE PREVALÊNCIA:
    limitação.
 4. Se eu anexar/colar uma versão mais recente na conversa, essa versão
    prevalece para a tarefa atual.
+5. Para áudio PAFE, pafe/audio_modos.md prevalece sobre pafe/audio.md, salvo pedido expresso de pacote/local/script/yaml.
 
 PRIVACIDADE GITHUB: o repositório só contém instruções sanitizadas, sem dados
 sensíveis. Conteúdo sensível vai só para Box, Drive, GitHub privado ou anexo
@@ -105,7 +114,8 @@ ARQUIVOS ATIVOS RECOMENDADOS
 10. id.md
 11. pafe/README.md
 12. pafe/html.md
-13. pafe/audio.md
+13. pafe/audio_modos.md
+14. pafe/audio.md — legado/pacote local, desativado por padrão
 
 ---
 
