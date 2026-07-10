@@ -1,11 +1,11 @@
 # audio.md — Módulo P.A.F.E. de Áudio para Disciplinas de Direito
 
-**Versão:** audio.md v6.1 MASTER  
+**Versão:** audio.md v6.2 MASTER  
 **Data:** 2026-07-10  
 **Escopo:** pipeline local/remoto, governança de motores TTS, auditoria e segurança de áudio jurídico-didático.  
 **Regra central:** não existe áudio gerado sem arquivo físico real, duração validada e cadeia mínima de rastreabilidade.
 
-> Para interpretar `/pafe audio`, `/pafe html audio` e `/pafe completo`, ler primeiro `pafe/audio_modos.md`. Este arquivo só regula pacote local, pipeline técnico, fallback, auditoria e motores TTS.
+> Para interpretar `/pafe audio`, `/pafe html audio` e `/pafe completo`, ler primeiro `pafe/audio_modos.md`. Este arquivo regula **como gerar** tecnicamente: pacote local, preflight, segurança, TTS, validação, manifesto e auditoria.
 
 ---
 
@@ -54,13 +54,14 @@ APIs externas como OpenAI TTS, Gemini TTS, ElevenLabs, Hume AI, Narakeet ou equi
 
 Regras:
 
-1. chave sempre em `.env` ou variável de ambiente;
+1. chave sempre em `.env`, variável de ambiente ou GitHub Secrets;
 2. criar `.env.example` sem segredo real;
 3. incluir `.env` no `.gitignore`;
 4. estimar custo/caracteres antes de API paga;
 5. declarar qual provedor externo receberá texto;
 6. nunca repetir chave no log;
-7. nunca colar chave no chat.
+7. nunca colar chave no chat;
+8. IA que pedir chave no chat está errada — recusar e orientar `.env`/Secrets.
 
 ---
 
@@ -183,16 +184,6 @@ Para Direito material: conceito, natureza, fundamento, requisitos, efeitos, exce
 
 Para Direito processual: cabimento, competência, legitimidade, prazo, procedimento, efeitos, recursos, nulidades, preclusões e pegadinhas.
 
-Para peças, recursos e fluxos processuais, usar matriz D.S.C.P.E. quando útil:
-
-```text
-D — Decisão
-S — Sistema
-C — Cabimento
-P — Prazo
-E — Efeitos
-```
-
 ---
 
 ## 10. Acessibilidade cognitiva
@@ -208,15 +199,7 @@ Obrigatório:
 7. retomadas periódicas;
 8. separação entre regra, exceção e pegadinha.
 
-Evitar:
-
-1. parede sonora;
-2. listas longas sem organização;
-3. leitura mecânica de tabela;
-4. latim sem tradução;
-5. excesso de siglas;
-6. tom motivacional vazio;
-7. dramatização excessiva.
+Evitar parede sonora, leitura mecânica de tabelas, latim sem tradução, excesso de siglas e tom motivacional vazio.
 
 ---
 
@@ -228,16 +211,7 @@ Antes da síntese, aplicar:
 sanitize_for_tts(texto)
 ```
 
-A função deve:
-
-1. remover Markdown pesado;
-2. converter `art.` em “artigo”;
-3. converter `§` em “parágrafo”;
-4. converter `inc.` em “inciso” quando cabível;
-5. narrar tabelas como texto contínuo;
-6. evitar leitura literal de URLs longas;
-7. preservar conteúdo jurídico;
-8. nunca alterar sentido.
+A função deve remover Markdown pesado, expandir abreviações jurídicas, narrar tabelas como texto contínuo, evitar leitura literal de URLs longas, preservar conteúdo jurídico e nunca alterar sentido.
 
 ---
 
@@ -257,12 +231,7 @@ Matriz de pausas:
 | Pausa pedagógica | 3000 a 3500 ms | fim de bloco |
 | Pausa de capítulo | 4000 a 6000 ms | mudança forte de tema |
 
-Tratamento anti-fadiga:
-
-1. aplicar `fade_in(50)` e `fade_out(50)` por chunk;
-2. aplicar fade inicial/final no master;
-3. evitar cortes abruptos;
-4. detectar silêncios longos acidentais quando possível.
+Tratamento anti-fadiga: fade curto por chunk, fade inicial/final no master, evitar cortes abruptos e detectar silêncios longos acidentais quando possível.
 
 ---
 
@@ -293,7 +262,47 @@ normalization_profile: study_long
 
 ---
 
-## 14. Dicionário fonético
+## 14. Preflight de áudio
+
+O preflight opera em três camadas independentes; cada camada tem correção própria. Nunca pular etapas nem trocar de motor sem terminar o diagnóstico.
+
+### 14.1. Camada 1 — rede/DNS
+
+Testar:
+
+```bash
+nslookup speech.platform.bing.com
+getent hosts speech.platform.bing.com
+```
+
+Correção: verificar conexão, DNS do sistema, proxy ou trocar ambiente.
+
+### 14.2. Camada 2 — SSL/certificado
+
+Sinais: `CERTIFICATE_VERIFY_FAILED`, `SSLCertVerificationError`, `self-signed certificate in certificate chain`.
+
+Correção padrão:
+
+1. tentar CA do sistema;
+2. tentar proxy configurado;
+3. no Claude, ver `pafe_claude.md` §2.2 para o código de referência;
+4. SSL relaxado somente como diagnóstico de última instância;
+5. SSL relaxado é proibido com credenciais, API keys, senhas, tokens, dados sensíveis ou material sigiloso.
+
+### 14.3. Camada 3 — endpoint/serviço
+
+Fazer síntese real de 1 frase com `pt-BR-FranciscaNeural` e validar por `ffprobe`.
+
+```bash
+edge-tts --voice pt-BR-FranciscaNeural --text "Teste PAFE." --write-media teste_pafe.mp3
+ffprobe -v error -show_entries format=duration,bit_rate,size -of default=noprint_wrappers=1 teste_pafe.mp3
+```
+
+Se DNS e SSL passarem, mas o teste real falhar, classificar como endpoint/serviço, autenticação, cota, dependência local ou indisponibilidade temporária.
+
+---
+
+## 15. Dicionário fonético
 
 Arquivos:
 
@@ -314,13 +323,13 @@ Fluxo:
 6. log registra substituições;
 7. `--no-phonetic` desativa.
 
-Exemplos de substituição: `art.` → artigo; `CC` → Código Civil; `STJ` → Superior Tribunal de Justiça; `REsp` → recurso especial; `ex tunc` → com efeitos retroativos.
+Exemplos: `art.` → artigo; `CC` → Código Civil; `STJ` → Superior Tribunal de Justiça; `REsp` → recurso especial; `ex tunc` → com efeitos retroativos.
 
 ---
 
-## 15. Motores TTS
+## 16. Motores TTS
 
-### 15.1. Padrão gratuito
+### 16.1. Padrão gratuito
 
 ```text
 edge-tts
@@ -334,107 +343,63 @@ pt-BR-AntonioNeural — fundamento legal e jurisprudência
 pt-BR-ThalitaNeural — pegadinhas e revisão
 ```
 
-### 15.2. APIs externas opcionais
+### 16.2. Motores premium via API
 
-1. OpenAI TTS;
-2. Gemini TTS;
-3. ElevenLabs;
-4. Hume AI;
-5. Narakeet;
-6. outro provedor autorizado.
+Motores premium (ElevenLabs, OpenAI TTS, Hume, Gemini TTS, Narakeet ou equivalente) são opcionais. Só usar se o usuário pedir expressamente. `edge-tts` permanece como motor gratuito preferencial.
 
-Regra: API paga nunca é padrão silencioso.
+Segurança transversal:
 
-### 15.3. ElevenReader
+1. nunca colar API key, senha ou token em prompt de nenhuma IA;
+2. chaves vivem em `.env` local, variável de ambiente ou GitHub Secrets;
+3. IA que pedir chave no chat está errada — recusar;
+4. não versionar `.env`;
+5. incluir `.env.example`.
 
-ElevenReader é modo manual de escuta/revisão, não API.
+Custo e privacidade:
 
-Regras:
+1. estimar custo por caractere antes de gerar;
+2. avisar que o texto é enviado a terceiro;
+3. permitir manter `edge-tts` como fallback gratuito;
+4. registrar no log a rota efetivamente usada.
 
-1. gerar roteiro textual limpo;
-2. evitar Markdown pesado, tabela, YAML, JSON e código;
-3. não presumir MP3 exportável;
-4. não presumir que plano ElevenReader inclui créditos de ElevenLabs API.
+### 16.3. ElevenReader
 
-### 15.4. ElevenLabs API
+ElevenReader é modo manual de escuta/revisão, não API. Gerar roteiro textual limpo, sem Markdown pesado, tabela, YAML, JSON ou código. Não presumir MP3 exportável nem créditos de ElevenLabs API.
 
-Usar apenas com autorização, cota e chave local em `.env`.
+### 16.4. Piper offline
 
-Metadados permitidos no manifesto: engine, voice_id, model_id, output_format, character_count, request_id, arquivo gerado e data.
+Plano B offline, sem chave. Qualidade inferior à neural online deve ser declarada; vozes pt-BR devem ser validadas na primeira execução local antes de virar padrão.
 
-### 15.5. Hume AI
-
-Usar script próprio; chave Hume não substitui chave ElevenLabs. Diferenciar API key de voice ID.
-
-### 15.6. Gemini TTS e tags
-
-Usar tags de estilo com moderação: `[serious]`, `[slowly]`, `[calm]`. Evitar teatralização.
-
-### 15.7. Piper offline
-
-Plano B offline, sem chave. Qualidade inferior à neural online deve ser declarada.
-
-### 15.8. Fallbacks proibidos
+### 16.5. Fallbacks proibidos
 
 Não usar como padrão: `espeak`, `espeak-ng`, `pyttsx3`, Festival, voz metálica local ou gTTS robótico.
 
 ---
 
-## 16. Diagnóstico de falhas
-
-### 16.1. DNS/rede
-
-Sinais: `Temporary failure in name resolution`, `getaddrinfo`, domínio não resolve.
-
-Conduta:
-
-1. classificar como DNS/rede;
-2. não tentar SSL relaxado;
-3. trocar ambiente para máquina local, Claude com execução, GitHub Actions ou Codespaces.
-
-### 16.2. Certificado/SSL
-
-Sinais: `CERTIFICATE_VERIFY_FAILED`, `SSLCertVerificationError`, `self-signed certificate in certificate chain`.
-
-Conduta:
-
-1. tentar CA do sistema ou proxy;
-2. SSL relaxado só como último recurso;
-3. registrar em log;
-4. vedar com segredos/dados sensíveis.
-
-### 16.3. Endpoint indisponível
-
-Sinais: HTTP 5xx, timeout persistente.
-
-Conduta: aguardar, repetir com limite ou migrar para motor autorizado.
-
-### 16.4. Autenticação/cota
-
-Sinais: HTTP 401, 402, 403, 429.
-
-Conduta: não pedir chave no chat; verificar `.env`, cota e custo.
-
----
-
 ## 17. Rotas remotas de contingência
+
+A decisão de rota pertence a `audio_modos.md`. Este arquivo só fixa requisitos mínimos das rotas técnicas.
 
 ### 17.1. GitHub Actions
 
-Usar quando sandbox local/chat não tem rede confiável.
+Usar quando ambiente local/chat não tem rede confiável ou quando se quer execução automatizada.
 
 Registrar:
 
 1. workflow usado;
 2. `ffprobe` do teste curto;
 3. `ffprobe` do master;
-4. `sha256sum`;
+4. `sha256sum` do MP3;
 5. log stdout/stderr;
 6. artifact digest quando disponível.
+
+Estado: documentado; exige primeira execução assistida antes de virar padrão.
 
 ### 17.2. Codespaces
 
 Usar como terminal remoto manual para testar dependências, rede, vozes e geração.
+
+Estado: documentado; exige primeira execução assistida antes de virar padrão.
 
 ---
 
@@ -457,55 +422,22 @@ Quando houver pacote local, o script deve:
 13. gerar `manifest_audio.json`;
 14. gerar `log_geracao_audio.txt`;
 15. validar com `ffprobe`;
-16. falhar se abaixo do mínimo;
-17. preservar partes, salvo `--clean-parts`.
+16. calcular `sha256_master` do `audio/master_audio.mp3` quando houver MP3;
+17. falhar se abaixo do mínimo;
+18. preservar partes, salvo `--clean-parts`.
 
-Argumentos obrigatórios:
-
-```text
---preflight
---resume
---force
---validate-only
---min-minutes
---chunk-words
---no-phonetic
---clean-parts
---normalization-profile
---engine
---dry-run
-```
+Argumentos esperados: `--preflight`, `--resume`, `--force`, `--validate-only`, `--min-minutes`, `--chunk-words`, `--no-phonetic`, `--clean-parts`, `--normalization-profile`, `--engine`, `--dry-run`.
 
 ---
 
-## 19. Preflight local
-
-```bash
-python3 --version
-ffmpeg -version
-ffprobe -version
-python3 -c "import edge_tts, pydub, yaml, mutagen; print('imports ok')"
-nslookup speech.platform.bing.com
-edge-tts --list-voices | grep pt-BR
-```
-
-Teste curto:
-
-```bash
-edge-tts --voice pt-BR-FranciscaNeural --text "Teste PAFE." --write-media teste_pafe.mp3
-ffprobe -v error -show_entries format=duration,bit_rate,size -of default=noprint_wrappers=1 teste_pafe.mp3
-```
-
----
-
-## 20. `audio.yaml`
+## 19. `audio.yaml`
 
 Campos mínimos:
 
 ```yaml
 metadata:
   projeto: "P.A.F.E."
-  audio_md_version: "v6.1 MASTER"
+  audio_md_version: "v6.2 MASTER"
   disciplina: "Nome da disciplina"
   escopo: "prova / bimestre / revisão"
   idioma: "pt-BR"
@@ -536,7 +468,7 @@ Cada bloco deve ter: `id`, `ordem`, `titulo`, `chapter_title`, `voz`, `texto`, `
 
 ---
 
-## 21. Manifesto e logs
+## 20. Manifesto e logs
 
 `manifest_audio.json` deve registrar:
 
@@ -554,14 +486,17 @@ Cada bloco deve ter: `id`, `ordem`, `titulo`, `chapter_title`, `voz`, `texto`, `
 12. LUFS/LRA/true peak quando disponível;
 13. `ffprobe`;
 14. `sha256sum`;
-15. artifact digest quando houver GitHub Actions;
-16. status final.
+15. `sha256_master` — hash SHA-256 do arquivo `audio/master_audio.mp3`;
+16. artifact digest quando houver GitHub Actions;
+17. status final.
+
+Finalidade do `sha256_master`: conferir integridade após transferência/download; independe do `ffprobe`.
 
 Nunca registrar segredo.
 
 ---
 
-## 22. HTML com áudio
+## 21. HTML com áudio
 
 Quando houver HTML:
 
@@ -579,7 +514,7 @@ Tag base:
 
 ---
 
-## 23. Critérios de aprovação
+## 22. Critérios de aprovação
 
 Aprovado somente se:
 
@@ -596,10 +531,17 @@ Aprovado somente se:
 
 ---
 
+## 23. Remissão ao roteador de modo
+
+Este arquivo define **como** gerar o áudio. Onde/quem gera é decisão do roteador em `audio_modos.md`: rota local, Claude em sessão, GitHub Actions, Codespaces, Piper offline e API premium. Consultar `audio_modos.md` antes de decidir a rota.
+
+---
+
 ## 24. Histórico
 
 | Versão | Data | Motivo |
 |---|---|---|
+| v6.2 MASTER | 2026-07-10 | Renomeia preflight para “preflight de áudio”, consolida 3 camadas DNS/SSL/endpoint, generaliza motores premium, inclui `sha256_master` e remete rotas para `audio_modos.md`. |
 | v6.1 MASTER | 2026-07-10 | Incorpora deltas do prompt anexado: Claude pode gerar MP3 direto; separa DNS × SSL × endpoint; adiciona GitHub Actions/Codespaces, artifact digest, checksums, launchers e fallback Piper; corrige regra local-only absoluta. |
 | v6.0 MASTER | 2026-07-08 | Sanitização pré-TTS, pausas, LUFS, governança fonética, manifesto avançado, rotas OpenAI/Gemini/ElevenLabs/Hume/NotebookLM/Make/n8n. |
 | v5.0 MASTER | 2026-07-06 | CODE vs DATA, roteiro externo, cadência didática, pausas pedagógicas, fade, loudness, retry, dicionário fonético e validação. |
