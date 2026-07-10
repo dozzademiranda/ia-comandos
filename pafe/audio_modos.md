@@ -1,15 +1,17 @@
 # audio_modos.md — Modos de áudio do P.A.F.E.
 
-**Versão:** audio_modos.md v1.1  
+**Versão:** audio_modos.md v1.2  
 **Data:** 2026-07-10  
 **Status:** ativo e prevalente sobre `pafe/audio.md` para interpretar `/pafe audio`, `/pafe html audio` e `/pafe completo`.
 
-Este arquivo separa quatro coisas que não podem ser confundidas:
+Este arquivo decide **onde/quem gera** o áudio. O arquivo `audio.md` decide **como gerar** tecnicamente.
 
-1. gerar MP3 real direto na plataforma;
-2. gerar roteiro textual falável;
-3. gerar pacote local com `audio.yaml`, script Python e pipeline;
-4. acionar rota remota/externa, como GitHub Actions, Codespaces ou API premium.
+Separar sempre:
+
+1. MP3 real direto na plataforma;
+2. roteiro textual falável;
+3. pacote local com `audio.yaml`, script Python e pipeline;
+4. rota externa/remota, como máquina local, Claude em sessão, GitHub Actions, Codespaces, Piper ou API premium.
 
 ---
 
@@ -208,20 +210,25 @@ Conduta:
 
 ---
 
-## 7. Rotas de execução
+## 7. Rotas de execução — matriz de decisão
 
-Ordem preferencial:
+| Rota | Onde roda | Motor | Quando usar | Estado |
+|---|---|---|---|---|
+| A · Local | máquina do Fábio | `edge-tts` | padrão preferencial quando houver pipeline local | padrão preferencial; validar por máquina |
+| B · Claude em sessão | ambiente do Claude | `edge-tts` com `preparar_ssl()` quando necessário | roteiro aprovado + Claude com execução ativa | validado em caso real; depende do ambiente |
+| C · GitHub Actions | runner Ubuntu | `edge-tts` | máquina local indisponível; automação | documentado; pendente de teste P.A.F.E. |
+| D · Codespaces | Ubuntu no navegador | `edge-tts` | contingência manual/remota | documentado; pendente de teste P.A.F.E. |
+| E · Piper offline | máquina local | Piper neural local | rede indisponível; `edge-tts` indisponível após preflight | plano B offline; vozes/qualidade pendentes |
+| F · Premium API | local/remota | ElevenLabs, OpenAI TTS, Hume, Gemini TTS, Narakeet ou equivalente | usuário pediu expressamente qualidade/API | opcional; exige chave, custo e privacidade |
 
-1. MP3 direto na plataforma, se houver capacidade real;
-2. Claude com execução ativa, quando disponível;
-3. máquina local do usuário com `edge-tts`;
-4. GitHub Actions para execução remota automatizada;
-5. Codespaces para shell remoto manual;
-6. API premium autorizada: OpenAI TTS, ElevenLabs, Gemini TTS, Hume AI, Narakeet ou equivalente;
-7. Piper offline como plano B, declarando qualidade inferior;
-8. roteiro textual, apenas como fallback autorizado.
+Regras de escolha:
 
-Proibido fallback robótico como padrão: `espeak`, `espeak-ng`, `pyttsx3`, Festival ou voz metálica local.
+1. começar pelo diagnóstico DNS × SSL × endpoint antes de trocar de rota;
+2. Claude em sessão só quando o agente for Claude com execução ativa, nos termos de `pafe_claude.md`;
+3. rotas com estado “pendente de teste” exigem primeira execução assistida antes de virar padrão;
+4. motor gratuito preferencial: `edge-tts`;
+5. premium exige pedido expresso, `.env` ou Secret, estimativa de custo e aviso de envio de texto a terceiro;
+6. fallback robótico é proibido como padrão: `espeak`, `espeak-ng`, `pyttsx3`, Festival, voz metálica local ou gTTS robótico.
 
 ---
 
@@ -278,6 +285,13 @@ O HTML é adendo de estudo. O áudio MP3 é artefato principal quando o usuário
 
 ## 10. Rodapé operacional
 
-Versão: audio_modos.md v1.1  
+Versão: audio_modos.md v1.2  
 Data: 2026-07-10  
-Regra central: `/pafe audio` tenta MP3 real por padrão. Claude com execução ativa deve gerar MP3 direto; pacote local fica desativado até pedido expresso. Falhas TTS exigem diagnóstico DNS × SSL × endpoint antes de contorno.
+Regra central: `/pafe audio` tenta MP3 real por padrão; a rota é decidida por capacidade real da plataforma. Claude com execução ativa deve tentar MP3 direto; pacote local fica desativado até pedido expresso; falhas TTS exigem diagnóstico DNS × SSL × endpoint antes de contorno.
+
+Histórico:
+
+| Versão | Data | Motivo |
+|---|---|---|
+| v1.2 | 2026-07-10 | Consolida matriz de rotas A–F, estado de validação e separação entre roteador (`audio_modos.md`) e técnica (`audio.md`). |
+| v1.1 | 2026-07-10 | Diferencia Claude com MP3 direto, GPT/Gemini/Perplexity como texto/pipeline e diagnóstico DNS × SSL × endpoint. |
