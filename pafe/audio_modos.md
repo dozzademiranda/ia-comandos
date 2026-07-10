@@ -1,30 +1,32 @@
 # audio_modos.md — Modos de áudio do P.A.F.E.
 
-STATUS: ativo e prevalente sobre `pafe/audio.md` para a interpretação dos comandos `/pafe audio`, `/pafe html audio` e `/pafe completo`.
+**Versão:** audio_modos.md v1.1  
+**Data:** 2026-07-10  
+**Status:** ativo e prevalente sobre `pafe/audio.md` para interpretar `/pafe audio`, `/pafe html audio` e `/pafe completo`.
 
-Este arquivo existe para separar três coisas que antes ficavam misturadas:
+Este arquivo separa quatro coisas que não podem ser confundidas:
 
-1. gerar um MP3 real;
-2. gerar apenas roteiro textual;
-3. gerar pacote local com `audio.yaml`, script Python e pipeline.
+1. gerar MP3 real direto na plataforma;
+2. gerar roteiro textual falável;
+3. gerar pacote local com `audio.yaml`, script Python e pipeline;
+4. acionar rota remota/externa, como GitHub Actions, Codespaces ou API premium.
+
+---
 
 ## 1. Regra central
 
-Por padrão, áudio significa **MP3 real**, não pacote local.
+Por padrão, quando o usuário pede áudio, a IA deve buscar **MP3 real**, não apenas roteiro.
 
-Se o usuário digitar apenas:
+A forma de gerar depende da capacidade real da plataforma:
 
-```text
-/pafe audio
-```
+1. se a plataforma consegue criar arquivo MP3 real no próprio turno, deve tentar gerar e validar;
+2. se a plataforma não consegue gerar MP3 real, deve declarar a limitação e só entregar roteiro se o usuário autorizou fallback textual;
+3. se o usuário pedir pacote local, aplicar `pafe/audio.md`;
+4. se o agente for Claude com ambiente de execução ativo, aplicar também `pafe/pafe_claude.md`.
 
-ou:
+Nunca afirmar MP3 gerado sem arquivo físico real.
 
-```text
-/pafe html audio
-```
-
-a IA deve tentar gerar arquivo MP3 real diretamente na plataforma, se a plataforma permitir.
+---
 
 ## 2. Modo MP3 direto — padrão
 
@@ -41,29 +43,60 @@ Invocações:
 Resultado esperado:
 
 1. gerar `audio/master_audio.mp3`, se a plataforma permitir;
-2. quando houver HTML, gerar `index.html` offline;
-3. quando houver HTML, incluir flashcards clicáveis embutidos;
-4. quando houver HTML, incluir quiz interativo embutido;
-5. quando houver HTML, incluir player apontando para `audio/master_audio.mp3`, se o MP3 existir;
+2. validar duração real com ferramenta técnica quando disponível;
+3. quando houver HTML, gerar `index.html` offline;
+4. incluir flashcards clicáveis e quiz embutido quando o comando exigir HTML;
+5. incluir player apontando para `audio/master_audio.mp3`, se o MP3 existir;
 6. não gerar pacote local por padrão.
 
-Neste modo é proibido gerar, salvo pedido expresso do usuário:
+Neste modo é proibido gerar, salvo pedido expresso:
 
 1. `audio.yaml`;
-2. qualquer arquivo `.yaml` de áudio;
-3. `roteiro_audio.txt`;
-4. qualquer arquivo `.txt` de roteiro de áudio;
-5. `gerar_audio.py`;
-6. `gerar_audio_v2.py`;
-7. `setup_audio.sh`;
-8. `validar_audio.sh`;
-9. `requirements_audio.txt`;
-10. `manifest_audio.json`;
-11. `chapters.json`;
-12. pipeline local de áudio;
-13. pacote local de geração de áudio.
+2. `roteiro_audio.txt`;
+3. `gerar_audio.py` ou `gerar_audio_v2.py`;
+4. `setup_audio.sh`;
+5. `validar_audio.sh`;
+6. `requirements_audio.txt`;
+7. `manifest_audio.json`;
+8. `chapters.json`;
+9. pipeline local completo.
 
-## 3. Modo roteiro — somente se pedido
+---
+
+## 3. Roteamento por capacidade da plataforma
+
+### 3.1. Claude com execução ativa
+
+Se Claude tiver bash, rede, criação de arquivos e entrega de binários, ele deve:
+
+1. tentar gerar MP3 real no próprio turno;
+2. fazer smoke test antes de declarar impossibilidade;
+3. aplicar `pafe/pafe_claude.md`;
+4. validar com `ffprobe` quando disponível;
+5. entregar o MP3 pronto.
+
+Neste caso, é errado impor a regra genérica “não tente gerar MP3 dentro da conversa”. Essa regra vale para plataformas sem execução confiável, não para Claude quando há capacidade real.
+
+### 3.2. GPT, Gemini, Perplexity e outras IAs sem geração confiável de arquivo
+
+Se a plataforma não provar capacidade de gerar MP3 real:
+
+1. não fingir geração;
+2. não usar voz robótica local como substituto;
+3. entregar roteiro limpo somente se o usuário aceitar fallback textual;
+4. encaminhar para geração local, GitHub Actions, Codespaces ou API externa autorizada.
+
+### 3.3. Ambiente incerto
+
+Se a IA não sabe se consegue gerar MP3:
+
+1. realizar teste curto quando houver ferramenta de execução;
+2. se não houver ferramenta de execução, declarar `[ARTEFATO: MP3 indisponível nesta plataforma]`;
+3. não prometer entrega futura.
+
+---
+
+## 4. Modo roteiro — somente se pedido ou autorizado
 
 Invocação expressa:
 
@@ -81,15 +114,16 @@ Resultado esperado:
 
 Fallback:
 
-Se o usuário pediu MP3 real e a plataforma não conseguir gerar MP3, só entregar roteiro se o usuário tiver autorizado fallback textual ou se o prompt específico permitir roteiro em caso de falha.
+1. se o usuário pediu MP3 real e a plataforma não conseguir, só entregar roteiro se houver autorização para fallback textual;
+2. se o usuário disser “quero áudio, não roteiro”, não substituir por roteiro sem autorização.
 
-Se o usuário disser “quero áudio, não roteiro”, não entregar roteiro como substituto, salvo se ele autorizar fallback.
+---
 
-## 4. Modo pacote local — desativado por padrão
+## 5. Modo pacote local — desativado por padrão
 
-STATUS: DESATIVADO POR PADRÃO.
+STATUS: desativado por padrão.
 
-Este modo preserva o comportamento antigo do `pafe/audio.md`, mas só pode ser acionado por pedido expresso.
+Este modo preserva o pipeline técnico de `pafe/audio.md`, mas só é acionado por pedido expresso.
 
 Invocações que ativam este modo:
 
@@ -101,7 +135,7 @@ Invocações que ativam este modo:
 /pafe audio yaml
 ```
 
-Também ativa se o usuário pedir expressamente qualquer um destes itens:
+Também ativa se o usuário pedir expressamente:
 
 1. `audio.yaml`;
 2. script Python;
@@ -115,72 +149,111 @@ Também ativa se o usuário pedir expressamente qualquer um destes itens:
 
 Neste modo, aplicar `pafe/audio.md`.
 
-## 5. Como reativar o modo antigo em urgência
+---
 
-Para reativar o modo antigo, usar:
+## 6. Diagnóstico obrigatório de falha TTS
 
-```text
-/pafe audio pacote
+Se `edge-tts` ou motor equivalente falhar, diagnosticar a classe antes de qualquer contorno.
+
+### 6.1. DNS/rede
+
+Sinais: `Temporary failure in name resolution`, falha de `getaddrinfo`, domínio não resolve, egress bloqueado.
+
+Interpretação:
+
+1. ambiente sem rede externa real ou DNS bloqueado;
+2. típico de sandbox de IA;
+3. não é corrigível por SSL relaxado;
+4. trocar ambiente: máquina local, Claude com rede real, GitHub Actions ou Codespaces.
+
+Teste sugerido:
+
+```bash
+nslookup speech.platform.bing.com
+getent hosts speech.platform.bing.com
 ```
 
-ou:
+### 6.2. Certificado/SSL
 
-```text
-/pafe audio local
-```
+Sinais: `CERTIFICATE_VERIFY_FAILED`, `SSLCertVerificationError`, `self-signed certificate in certificate chain`.
 
-Isso permite gerar `audio.yaml`, script Python, arquivos `.sh`, manifesto, capítulos e demais peças do pipeline local.
+Regra:
 
-## 6. Pesquisa profunda
+1. tentar CA do sistema ou proxy configurado antes de relaxar SSL;
+2. SSL relaxado é último recurso;
+3. nunca usar SSL relaxado com senha, token, API key, dados sensíveis ou material sigiloso;
+4. nunca tratar SSL relaxado como padrão;
+5. registrar no log quando usado.
 
-`/pafe html audio` é modo de artefato, não modo de pesquisa.
+### 6.3. Endpoint indisponível
 
-Não fazer pesquisa profunda, nem navegar na web, salvo se o usuário pedir expressamente pesquisa, atualização, jurisprudência nova, fontes recentes ou validação externa.
+Sinais: HTTP 5xx, serviço indisponível, timeout persistente no provedor.
 
-A pesquisa profunda pertence a comandos como:
+Conduta:
 
-```text
-/pafe
-/pafe completo
-/pafe pesquisa
-/pafe aprofundado
-```
+1. aguardar e repetir com limite;
+2. migrar para motor alternativo autorizado;
+3. não insistir em loop infinito.
 
-ou a pedidos expressos de busca externa.
+### 6.4. Autenticação, cota e custo
 
-## 7. Revisões emergencial e relâmpago
+Sinais: HTTP 401, 402, 403, 429.
 
-Não gerar revisão emergencial, revisão de 2 horas, revisão relâmpago ou checklist de véspera por padrão dentro de `/pafe html audio`.
+Conduta:
 
-Gerar essas revisões apenas quando:
+1. não pedir chave no chat;
+2. orientar `.env` ou variável de ambiente;
+3. verificar cota/créditos localmente;
+4. não repetir chamadas pagas em loop.
 
-1. o usuário pedir expressamente;
-2. o material anexado já exigir isso;
-3. o comando usado for `/pafe completo` e o objetivo for estudo integral.
+---
 
-## 8. Declaração de artefato
+## 7. Rotas de execução
 
-Nunca afirmar que MP3 foi gerado sem arquivo físico real.
+Ordem preferencial:
 
-Declarações permitidas:
+1. MP3 direto na plataforma, se houver capacidade real;
+2. Claude com execução ativa, quando disponível;
+3. máquina local do usuário com `edge-tts`;
+4. GitHub Actions para execução remota automatizada;
+5. Codespaces para shell remoto manual;
+6. API premium autorizada: OpenAI TTS, ElevenLabs, Gemini TTS, Hume AI, Narakeet ou equivalente;
+7. Piper offline como plano B, declarando qualidade inferior;
+8. roteiro textual, apenas como fallback autorizado.
+
+Proibido fallback robótico como padrão: `espeak`, `espeak-ng`, `pyttsx3`, Festival ou voz metálica local.
+
+---
+
+## 8. Declarações de artefato
+
+Permitidas:
 
 ```text
 [ARTEFATO: MP3 gerado]
 ```
 
-somente se `audio/master_audio.mp3` existir.
+Somente se `audio/master_audio.mp3` existir.
 
 ```text
 [ARTEFATO: MP3 indisponível nesta plataforma]
 ```
 
-quando a plataforma não puder gerar MP3 real.
+Quando não houver capacidade de gerar MP3 real.
 
 ```text
 [ARTEFATO: execução local necessária]
 ```
 
-somente se o usuário tiver pedido ou autorizado pacote local ou fallback de geração local.
+Somente se o usuário pediu ou autorizou pacote local/fallback técnico.
+
+```text
+[ARTEFATO: roteiro falável gerado]
+```
+
+Somente quando o entregável real for texto para posterior síntese.
+
+---
 
 ## 9. HTML com áudio
 
@@ -196,12 +269,15 @@ gerar:
 2. flashcards clicáveis dentro do HTML;
 3. quiz interativo dentro do HTML;
 4. `audio/master_audio.mp3`, se possível;
-5. player no HTML apontando para `audio/master_audio.mp3`, se o MP3 existir.
+5. player no HTML apontando para `audio/master_audio.mp3`, se o MP3 existir;
+6. aviso claro se o MP3 não existir.
 
-O HTML é adendo de estudo. O áudio MP3 é o artefato principal quando o usuário pedir áudio.
+O HTML é adendo de estudo. O áudio MP3 é artefato principal quando o usuário pede áudio.
+
+---
 
 ## 10. Rodapé operacional
 
-Versão: audio_modos.md v1.0  
-Data: 06/07/2026  
-Regra central: `/pafe audio` e `/pafe html audio` tentam MP3 direto por padrão; pacote local fica desativado até pedido expresso.
+Versão: audio_modos.md v1.1  
+Data: 2026-07-10  
+Regra central: `/pafe audio` tenta MP3 real por padrão. Claude com execução ativa deve gerar MP3 direto; pacote local fica desativado até pedido expresso. Falhas TTS exigem diagnóstico DNS × SSL × endpoint antes de contorno.
