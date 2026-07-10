@@ -1,6 +1,6 @@
 # audio_modos.md — Modos de áudio do P.A.F.E.
 
-**Versão:** audio_modos.md v1.2  
+**Versão:** audio_modos.md v1.3  
 **Data:** 2026-07-10  
 **Status:** ativo e prevalente sobre `pafe/audio.md` para interpretar `/pafe audio`, `/pafe html audio` e `/pafe completo`.
 
@@ -232,7 +232,87 @@ Regras de escolha:
 
 ---
 
-## 8. Declarações de artefato
+## 8. Menu adaptativo de áudio
+
+Invocações:
+
+```text
+/pafe menu audio
+/pafe audio menu
+```
+
+Também pode aparecer automaticamente quando houver duas ou mais rotas materialmente diferentes ou quando a capacidade de gerar MP3 estiver incerta.
+
+### 8.1. Handshake silencioso de capacidade
+
+Verificar apenas o necessário:
+
+1. criação de arquivo real;
+2. shell ou ferramenta equivalente;
+3. rede externa;
+4. Python e motor TTS;
+5. FFmpeg/ffprobe ou validador equivalente;
+6. entrega de binário ao usuário;
+7. GitHub Actions/Codespaces disponíveis;
+8. API premium configurada, sem revelar chave.
+
+Não presumir capacidade pelo nome da IA. A mesma plataforma pode ter ferramentas diferentes conforme o ambiente.
+
+### 8.2. Regra de exibição
+
+1. Se houver uma única rota adequada ou uma rota claramente superior, executar diretamente.
+2. Se o usuário pedir `/pafe menu audio`, exibir o menu mesmo que haja rota recomendada.
+3. Menu com no máximo cinco opções.
+4. Marcar uma opção como `[RECOMENDADO]`.
+5. Não oferecer como disponível uma rota que não possa ser executada e validada.
+6. Rota indisponível pode aparecer em uma linha, com o motivo.
+7. API paga e envio de texto a terceiro exigem autorização expressa.
+
+### 8.3. Modelo — ambiente com MP3 direto
+
+```text
+P.A.F.E. — ÁUDIO
+
+1. [RECOMENDADO] Gerar MP3 real agora
+   Smoke test → geração → ffprobe → entrega.
+
+2. Gerar HTML offline + MP3
+   index.html, player, flashcards, quiz e áudio real.
+
+3. Gerar apenas roteiro falável
+   Sem MP3 e sem pacote técnico.
+
+4. Gerar pacote local completo
+   roteiro, audio.yaml, script, setup, validação e manifesto.
+
+5. Usar API premium
+   Exige autorização, chave fora do chat, custo e privacidade.
+```
+
+### 8.4. Modelo — ambiente sem MP3 direto
+
+```text
+P.A.F.E. — ÁUDIO
+
+1. [RECOMENDADO] Gerar roteiro falável + audio.yaml
+   Pronto para síntese posterior.
+
+2. Gerar HTML offline de estudo
+   Player preparado para audio/master_audio.mp3.
+
+3. Gerar pacote técnico para execução local
+   Script, YAML, setup e validação.
+
+4. Preparar execução por GitHub Actions/Codespaces
+   Somente quando a rota estiver disponível e autorizada.
+
+MP3 direto: indisponível neste ambiente.
+Motivo: não há geração e validação comprovadas de arquivo MP3.
+```
+
+---
+
+## 9. Declarações de artefato
 
 Permitidas:
 
@@ -262,7 +342,7 @@ Somente quando o entregável real for texto para posterior síntese.
 
 ---
 
-## 9. HTML com áudio
+## 10. HTML com áudio
 
 Quando o comando for:
 
@@ -283,15 +363,16 @@ O HTML é adendo de estudo. O áudio MP3 é artefato principal quando o usuário
 
 ---
 
-## 10. Rodapé operacional
+## 11. Rodapé operacional
 
-Versão: audio_modos.md v1.2  
+Versão: audio_modos.md v1.3  
 Data: 2026-07-10  
-Regra central: `/pafe audio` tenta MP3 real por padrão; a rota é decidida por capacidade real da plataforma. Claude com execução ativa deve tentar MP3 direto; pacote local fica desativado até pedido expresso; falhas TTS exigem diagnóstico DNS × SSL × endpoint antes de contorno.
+Regra central: `/pafe audio` tenta MP3 real por padrão; a rota é decidida por capacidade real da plataforma. Claude com execução ativa deve tentar MP3 direto; pacote local fica desativado até pedido expresso; falhas TTS exigem diagnóstico DNS × SSL × endpoint antes de contorno. O menu aparece apenas sob comando, incerteza real ou múltiplas rotas relevantes.
 
 Histórico:
 
 | Versão | Data | Motivo |
 |---|---|---|
+| v1.3 | 2026-07-10 | Adiciona handshake silencioso, `/pafe menu audio`, menu curto por capacidade e execução direta quando a rota for óbvia. |
 | v1.2 | 2026-07-10 | Consolida matriz de rotas A–F, estado de validação e separação entre roteador (`audio_modos.md`) e técnica (`audio.md`). |
 | v1.1 | 2026-07-10 | Diferencia Claude com MP3 direto, GPT/Gemini/Perplexity como texto/pipeline e diagnóstico DNS × SSL × endpoint. |
