@@ -1,6 +1,6 @@
 # /pafe — Overlay Claude
 
-**Versão:** 1.1  
+**Versão:** 1.2  
 **Data:** 2026-07-10  
 **Escopo:** P.A.F.E. transversal — regras exclusivas para Claude com ambiente de execução ativo.
 
@@ -192,6 +192,7 @@ sha256sum audio/master_audio.mp3 > logs/checksums.sha256
 | `audio.md` | Se usar `edge-tts`, preparar SSL/CA antes da primeira síntese quando o ambiente exigir. |
 | `html.md` | Player deve apontar para MP3 real quando entregue. Se não houver MP3, mostrar aviso. |
 | `README.md` | `[ARTEFATO: execução local necessária]` é exceção no Claude, não regra. |
+| `README.md` | `/pafe menu` deve refletir ferramentas e permissões reais do turno, não o nome Claude isoladamente. |
 
 ---
 
@@ -208,9 +209,72 @@ sha256sum audio/master_audio.mp3 > logs/checksums.sha256
 
 ---
 
-## 9. Histórico
+## 9. Menu adaptativo no Claude
+
+### 9.1. Regra
+
+Claude não deve exibir um menu longo por padrão. Primeiro identifica silenciosamente as capacidades do ambiente atual.
+
+Verificar, conforme a tarefa:
+
+1. bash/shell;
+2. rede externa;
+3. criação e leitura de arquivos;
+4. entrega de binários;
+5. Python;
+6. FFmpeg/ffprobe;
+7. conectores GitHub, Google Drive e Box;
+8. API premium configurada, sem revelar segredo.
+
+### 9.2. Quando executar diretamente
+
+1. Se o usuário pediu MP3 e o ambiente comprova geração/validação, tentar MP3 direto sem perguntar qual rota usar.
+2. Se o usuário pediu apenas análise, pesquisa, HTML ou revisão, executar o entregável pedido sem apresentar menu irrelevante.
+3. Se uma única rota é possível, usar essa rota e declarar a limitação apenas quando afetar o resultado.
+
+### 9.3. Quando mostrar menu
+
+Mostrar menu quando:
+
+1. o usuário digitar `/pafe menu` ou `/pafe audio menu`;
+2. houver duas ou mais rotas materialmente diferentes;
+3. o ambiente estiver incerto após verificação segura;
+4. a escolha envolver API paga, envio de conteúdo a terceiro ou escrita em drive;
+5. houver diferença relevante entre gerar artefato agora e preparar pipeline local.
+
+Menu com no máximo cinco opções e uma marcada `[RECOMENDADO]`.
+
+### 9.4. Modelo Claude com execução ativa
+
+```text
+P.A.F.E. — OPÇÕES DISPONÍVEIS
+
+1. [RECOMENDADO] Gerar o artefato completo agora
+   Execução, validação técnica e entrega no próprio turno.
+
+2. Gerar HTML offline + MP3
+   index.html, player, flashcards, quiz e áudio validado.
+
+3. Gerar somente conteúdo/roteiro
+   Sem execução técnica nem binário.
+
+4. Gerar pacote local completo
+   Script, YAML, setup, validação e manifesto.
+
+5. Usar rota externa ou API premium
+   Exige autorização, custo/privacidade e segredo fora do chat.
+```
+
+### 9.5. Escrita em conectores
+
+Mesmo que GitHub, Drive ou Box estejam disponíveis, qualquer criação, substituição, exclusão ou sincronização de arquivo exige autorização expressa. Leitura e análise não equivalem a autorização de escrita.
+
+---
+
+## 10. Histórico
 
 | Versão | Data | Motivo |
 |---|---|---|
+| 1.2 | 2026-07-10 | Adiciona handshake silencioso, execução direta quando a rota é óbvia, `/pafe menu` e autorização expressa para escrita/custo/envio a terceiro. |
 | 1.1 | 2026-07-10 | Preserva a particularidade do Claude: geração de MP3 direto quando há ambiente ativo; adiciona diagnóstico DNS × SSL × endpoint, validação e checksums. |
 | 1.0 | 2026-06-09 | Criação. Deriva da análise comparativa entre entrega com MP3 gerado em sessão e entrega sem MP3 por ausência de tratamento SSL/smoke test. |
