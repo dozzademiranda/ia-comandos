@@ -1,6 +1,6 @@
 # pafe_governanca_overlays.md — Governança de overlays, deltas e capacidades por IA
 
-**Versão:** 1.0  
+**Versão:** 1.1  
 **Data:** 2026-07-10  
 **Escopo:** P.A.F.E. transversal — preservação de regras específicas por plataforma/IA  
 **Status:** ativo e canônico para impedir apagamento indevido de deltas úteis.
@@ -27,12 +27,12 @@ Nunca converter “não consigo executar” em “deve ser apagado”.
 
 O P.A.F.E. deve ser lido em camadas:
 
-1. `README.md` — núcleo transversal do comando `/pafe`.
-2. `audio_modos.md` — roteamento entre MP3 direto, roteiro textual e pacote local.
-3. `audio.md` — governança técnica de áudio, validação, manifesto, TTS, segurança e auditoria.
-4. `html.md` — governança do HTML offline.
-5. `pafe_claude.md` — overlay exclusivo do Claude quando houver ambiente de execução ativo.
-6. `pafe_prompt_outras_ias.md` — prompt/launcher para GPT, Gemini, Perplexity e outras IAs sem execução confiável de MP3.
+1. `README.md` — núcleo transversal do comando `/pafe`;
+2. `audio_modos.md` — roteamento entre MP3 direto, roteiro textual, pacote local e rotas externas;
+3. `audio.md` — governança técnica de áudio, validação, manifesto, TTS, segurança e auditoria;
+4. `html.md` — governança do HTML offline;
+5. `pafe_claude.md` — overlay exclusivo do Claude quando houver ambiente de execução ativo;
+6. `pafe_prompt_outras_ias.md` — prompt/launcher para GPT, Gemini, Perplexity e outras IAs sem overlay Claude;
 7. `pafe_governanca_overlays.md` — regra de preservação de deltas por IA, origem e escopo.
 
 Em conflito aparente, aplicar a regra mais específica sem apagar a regra geral.
@@ -80,7 +80,18 @@ Nunca apagar silenciosamente:
 
 ---
 
-## 5. Matriz de plataformas
+## 5. Cláusula anti-apagamento de overlay alheio
+
+1. Nenhuma IA remove regra específica de outra plataforma alegando que “não consegue executar aquela regra”.
+2. Incapacidade de executar não equivale a invalidade da regra.
+3. IA que não é titular do overlay pode sinalizar dúvida ou propor nota de escopo.
+4. IA que não é titular do overlay não pode apagar, simplificar ou consolidar a regra para dentro dos próprios limites.
+5. Toda alteração em overlay alheio exige autorização expressa do Fábio no turno.
+6. Exemplo concreto: GPT/Gemini/Perplexity não removem `pafe_claude.md`, nem suas remissões nos módulos comuns, por não terem execução em sessão.
+
+---
+
+## 6. Matriz de plataformas
 
 | Ambiente | Pode gerar MP3 direto? | Conduta P.A.F.E. |
 |---|---:|---|
@@ -93,7 +104,7 @@ Nunca apagar silenciosamente:
 
 ---
 
-## 6. Regra específica de áudio
+## 7. Regra específica de áudio
 
 O fluxo de áudio deve preservar simultaneamente estas verdades:
 
@@ -108,7 +119,7 @@ O fluxo de áudio deve preservar simultaneamente estas verdades:
 
 ---
 
-## 7. Metadados obrigatórios para dica de IA
+## 8. Metadados obrigatórios para dica de IA
 
 Toda dica preciosa trazida de outra IA deve ser preservada com estes campos, quando disponíveis:
 
@@ -129,7 +140,22 @@ Se faltar modelo/data, registrar “não informado”.
 
 ---
 
-## 8. Como pedir nova rodada à IA de origem
+## 9. Cabeçalho padrão de origem da dica
+
+Toda regra portada de uma conversa/IA para um arquivo do P.A.F.E. registra, em comentário próximo à regra:
+
+```text
+Origem: [IA + modelo, ex.: Claude Opus 4.8]
+Data: [AAAA-MM-DD]
+Contexto/projeto: [ex.: PAFE | consolidacao-prompt-launcher | FDM-039]
+Risco se apagado: [1 linha]
+```
+
+Finalidade: permitir auditar por que a regra existe, quando surgiu e o que se perde ao removê-la. Uma futura revisão que não entenda o motivo deve consultar esse cabeçalho antes de propor exclusão.
+
+---
+
+## 10. Como pedir nova rodada à IA de origem
 
 Quando uma dica veio de modelo antigo, a próxima consulta à mesma IA deve perguntar:
 
@@ -142,9 +168,9 @@ Explique o motivo técnico e indique o arquivo P.A.F.E. afetado.
 
 ---
 
-## 9. Histórico de origem incorporado
+## 11. Histórico de origem incorporado
 
-### 9.1. Claude Opus 4.8 Extra — 2026-05-29
+### 11.1. Claude Opus 4.8 Extra — 2026-05-29
 
 Origem identificada em prompt anexado:
 
@@ -160,7 +186,7 @@ Deltas preciosos:
 4. launcher enxuto para plataforma com Bloco A instalado;
 5. launcher autossuficiente para plataforma sem instrução persistente.
 
-### 9.2. IA GPT — relatório comparativo posterior
+### 11.2. IA GPT — relatório comparativo posterior
 
 Origem identificada no mesmo anexo como “IA GPT”.
 
@@ -172,11 +198,30 @@ Deltas preciosos:
 4. logs, `ffprobe`, checksums e artifact digest;
 5. versão enxuta de arranque P.A.F.E. v11.4.1.
 
+### 11.3. Claude Opus 4.7 alto — análise de consolidação — 2026-07-10
+
+Origem informada pelo usuário: resposta da IA Claude com modelo Opus 4.7 alto.
+
+Deltas preciosos:
+
+1. reconhecer que `audio_modos.md` é roteador de modo e `audio.md` define técnica;
+2. corrigir a linha de versionamento para `audio.md v6.x MASTER`;
+3. propor `audio.md v6.2 MASTER`, `audio_modos.md v1.2`, `pafe_prompt_outras_ias.md v1.2` e `pafe_governanca_overlays.md v1.1`;
+4. separar v11.4.2 de v11.4.3: agora atualiza arquivos canônicos; depois implementar `sha256_master` no script e testar rotas Actions/Codespaces;
+5. reforçar que Fable/novo modelo pode atuar como auditor posterior, não como condição para avançar.
+
 ---
 
-## 10. Rodapé operacional
+## 12. Rodapé operacional
 
-Versão: `pafe_governanca_overlays.md v1.0`  
+Versão: `pafe_governanca_overlays.md v1.1`  
 Data: 2026-07-10  
 Regra central: preservar deltas específicos por IA; incapacidade local não autoriza apagar regra canônica ou overlay de outra plataforma.  
 Arquivos relacionados: `README.md`, `audio_modos.md`, `audio.md`, `html.md`, `pafe_claude.md`, `pafe_prompt_outras_ias.md`.
+
+Histórico:
+
+| Versão | Data | Motivo |
+|---|---|---|
+| v1.1 | 2026-07-10 | Adiciona cláusula antiapagamento de overlay alheio, cabeçalho padrão de origem da dica e origem Claude Opus 4.7 alto. |
+| v1.0 | 2026-07-10 | Criação do controle de governança de overlays e deltas úteis. |
