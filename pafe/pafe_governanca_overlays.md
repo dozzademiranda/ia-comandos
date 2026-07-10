@@ -1,6 +1,6 @@
 # pafe_governanca_overlays.md — Governança de overlays, deltas e capacidades por IA
 
-**Versão:** 1.1  
+**Versão:** 1.2  
 **Data:** 2026-07-10  
 **Escopo:** P.A.F.E. transversal — preservação de regras específicas por plataforma/IA  
 **Status:** ativo e canônico para impedir apagamento indevido de deltas úteis.
@@ -76,7 +76,8 @@ Nunca apagar silenciosamente:
 2. regras GPT/Gemini/Perplexity de roteiro textual, HTML, YAML ou pesquisa;
 3. regras de segurança de API key;
 4. regras de diagnóstico DNS × SSL × endpoint;
-5. regras de auditoria por `ffprobe`, hash, checksum, manifesto ou artifact digest.
+5. regras de auditoria por `ffprobe`, hash, checksum, manifesto ou artifact digest;
+6. opções de menu que pertençam a outro overlay, apenas porque estão indisponíveis no ambiente atual.
 
 ---
 
@@ -119,7 +120,71 @@ O fluxo de áudio deve preservar simultaneamente estas verdades:
 
 ---
 
-## 8. Metadados obrigatórios para dica de IA
+## 8. Governança do menu adaptativo
+
+### 8.1. Capacidade é aferida por turno
+
+1. O menu deve refletir ferramentas, conectores, permissões e recursos disponíveis naquele ambiente e naquele turno.
+2. Não presumir capacidade permanente pelo nome do modelo, da empresa ou da plataforma.
+3. Uma capacidade declarada deve ser comprovável por ferramenta, conector, teste seguro ou artefato real.
+4. A ausência atual de ferramenta não altera os arquivos canônicos nem invalida outro overlay.
+
+### 8.2. Snapshot mínimo de capacidades
+
+A IA pode manter internamente, sem expor tudo ao usuário:
+
+```text
+WEB_PESQUISA: sim | não
+ANEXOS_LEITURA: sim | não
+ARQUIVOS_CRIACAO: sim | não
+SHELL: sim | não
+REDE_EXTERNA: sim | não
+PYTHON: sim | não
+FFMPEG: sim | não
+FFPROBE: sim | não
+MP3_DIRETO: sim | não | não testado
+HTML_ARQUIVO: sim | não
+GITHUB_LEITURA: sim | não
+GITHUB_ESCRITA: sim | não
+DRIVE_LEITURA: sim | não
+DRIVE_ESCRITA: sim | não
+BOX_LEITURA: sim | não
+BOX_ESCRITA: sim | não
+API_PREMIUM_CONFIGURADA: sim | não | não verificar
+INSTRUCAO_PERSISTENTE: sim | não
+```
+
+### 8.3. Regra de eficiência
+
+1. Quando houver uma única rota adequada ou uma rota claramente superior, executar diretamente.
+2. Mostrar menu apenas sob `/pafe menu`, incerteza real, múltiplas rotas materialmente diferentes ou decisão com custo/consequência relevante.
+3. Menu com no máximo cinco opções e uma marcada `[RECOMENDADO]`.
+4. Não oferecer como disponível ação que não possa ser executada e validada.
+5. Uma indisponibilidade relevante pode ser informada em uma linha, com o motivo.
+6. O menu não pode virar etapa obrigatória, questionário recorrente ou transferência indevida de decisão técnica ao usuário.
+
+### 8.4. Autorizações obrigatórias
+
+Exigem autorização expressa:
+
+1. criar, substituir, mover, sincronizar ou excluir arquivo em GitHub, Google Drive ou Box;
+2. usar API paga;
+3. enviar conteúdo sensível ou sigiloso a terceiro;
+4. usar segredo, token ou credencial fora do ambiente já configurado;
+5. executar ação destrutiva ou irreversível.
+
+Leitura, análise e recomendação não equivalem a autorização de escrita.
+
+### 8.5. Antiapagamento aplicado ao menu
+
+1. Opção indisponível no ambiente atual permanece documentada no overlay correto.
+2. Outra IA pode ocultar a opção no menu local, mas não removê-la dos arquivos canônicos.
+3. Menu local e verdade canônica são camadas distintas.
+4. Falha de uma rota não autoriza apagar a rota; deve atualizar apenas seu estado: validada, indisponível neste turno, pendente de teste ou depreciada com justificativa.
+
+---
+
+## 9. Metadados obrigatórios para dica de IA
 
 Toda dica preciosa trazida de outra IA deve ser preservada com estes campos, quando disponíveis:
 
@@ -140,7 +205,7 @@ Se faltar modelo/data, registrar “não informado”.
 
 ---
 
-## 9. Cabeçalho padrão de origem da dica
+## 10. Cabeçalho padrão de origem da dica
 
 Toda regra portada de uma conversa/IA para um arquivo do P.A.F.E. registra, em comentário próximo à regra:
 
@@ -151,11 +216,11 @@ Contexto/projeto: [ex.: PAFE | consolidacao-prompt-launcher | FDM-039]
 Risco se apagado: [1 linha]
 ```
 
-Finalidade: permitir auditar por que a regra existe, quando surgiu e o que se perde ao removê-la. Uma futura revisão que não entenda o motivo deve consultar esse cabeçalho antes de propor exclusão.
+Finalidade: permitir auditar por que a regra existe, quando surgiu e o que se perde ao removê-la. Uma futura “revisão” que não entenda o motivo deve consultar esse cabeçalho antes de propor exclusão.
 
 ---
 
-## 10. Como pedir nova rodada à IA de origem
+## 11. Como pedir nova rodada à IA de origem
 
 Quando uma dica veio de modelo antigo, a próxima consulta à mesma IA deve perguntar:
 
@@ -168,9 +233,9 @@ Explique o motivo técnico e indique o arquivo P.A.F.E. afetado.
 
 ---
 
-## 11. Histórico de origem incorporado
+## 12. Histórico de origem incorporado
 
-### 11.1. Claude Opus 4.8 Extra — 2026-05-29
+### 12.1. Claude Opus 4.8 Extra — 2026-05-29
 
 Origem identificada em prompt anexado:
 
@@ -186,7 +251,7 @@ Deltas preciosos:
 4. launcher enxuto para plataforma com Bloco A instalado;
 5. launcher autossuficiente para plataforma sem instrução persistente.
 
-### 11.2. IA GPT — relatório comparativo posterior
+### 12.2. IA GPT — relatório comparativo posterior
 
 Origem identificada no mesmo anexo como “IA GPT”.
 
@@ -198,7 +263,7 @@ Deltas preciosos:
 4. logs, `ffprobe`, checksums e artifact digest;
 5. versão enxuta de arranque P.A.F.E. v11.4.1.
 
-### 11.3. Claude Opus 4.7 alto — análise de consolidação — 2026-07-10
+### 12.3. Claude Opus 4.7 alto — análise de consolidação — 2026-07-10
 
 Origem informada pelo usuário: resposta da IA Claude com modelo Opus 4.7 alto.
 
@@ -210,18 +275,30 @@ Deltas preciosos:
 4. separar v11.4.2 de v11.4.3: agora atualiza arquivos canônicos; depois implementar `sha256_master` no script e testar rotas Actions/Codespaces;
 5. reforçar que Fable/novo modelo pode atuar como auditor posterior, não como condição para avançar.
 
+### 12.4. ChatGPT GPT-5.6 Thinking — menu adaptativo — 2026-07-10
+
+Deltas incorporados:
+
+1. detecção silenciosa de capacidades;
+2. menu apenas sob comando, incerteza ou múltiplas rotas relevantes;
+3. no máximo cinco opções com uma recomendada;
+4. proibição de oferecer ação impossível como disponível;
+5. autorização expressa para escrita, custo, envio a terceiro e ação destrutiva;
+6. separação entre menu local e verdade canônica do overlay.
+
 ---
 
-## 12. Rodapé operacional
+## 13. Rodapé operacional
 
-Versão: `pafe_governanca_overlays.md v1.1`  
+Versão: `pafe_governanca_overlays.md v1.2`  
 Data: 2026-07-10  
-Regra central: preservar deltas específicos por IA; incapacidade local não autoriza apagar regra canônica ou overlay de outra plataforma.  
+Regra central: preservar deltas específicos por IA; incapacidade local não autoriza apagar regra canônica ou overlay de outra plataforma. O menu reflete capacidades do turno, mas não redefine a verdade canônica dos arquivos.  
 Arquivos relacionados: `README.md`, `audio_modos.md`, `audio.md`, `html.md`, `pafe_claude.md`, `pafe_prompt_outras_ias.md`.
 
 Histórico:
 
 | Versão | Data | Motivo |
 |---|---|---|
+| v1.2 | 2026-07-10 | Adiciona governança do menu adaptativo, snapshot de capacidades, eficiência, autorizações e antiapagamento aplicado às opções. |
 | v1.1 | 2026-07-10 | Adiciona cláusula antiapagamento de overlay alheio, cabeçalho padrão de origem da dica e origem Claude Opus 4.7 alto. |
 | v1.0 | 2026-07-10 | Criação do controle de governança de overlays e deltas úteis. |
