@@ -1,7 +1,7 @@
 COMANDO: /pafe
 
 ARQUIVO: pafe/README.md
-VERSÃO: 2026-07-17.3
+VERSÃO: 2026-07-17.4
 STATUS: canônico
 
 O QUE É
@@ -31,7 +31,7 @@ REGRA DE ÁUDIO
 4. Se um assunto exceder limite técnico, usar partes numeradas.
 5. Falha em um assunto não invalida os demais.
 6. A exclusão de um MP3 estudado é comportamento normal.
-7. Regeneração seletiva deve existir por `--only`.
+7. Regeneração seletiva deve existir por `--only` quando houver script local.
 
 COMANDO COMBINADO
 
@@ -40,30 +40,46 @@ COMANDO COMBINADO
 1. um HTML independente, sem qualquer áudio, player ou referência a MP3;
 2. N MP3 independentes, um por assunto;
 3. nenhum master unificado;
-4. nenhum ZIP, YAML, manifesto, TXT ou pacote técnico por padrão.
+4. nenhum ZIP, YAML, manifesto, TXT ou pacote técnico por padrão, salvo quando o artifact remoto for necessariamente entregue como ZIP pelo provedor.
 
 ROTEAMENTO
 
-Ordem obrigatória:
+Ordem geral:
 
 1. MP3 neural direto;
-2. script local mínimo automático;
-3. pacote local completo, somente sob pedido;
-4. GitHub Actions/Codespaces, somente se local indisponível ou pedido;
+2. script local mínimo automático quando a máquina local puder executar;
+3. GitHub Actions/Codespaces quando a execução direta ou local não puder ser concluída pela conversa;
+4. pacote local completo, somente sob pedido;
 5. API paga, somente com autorização.
 
-Quando a síntese direta falhar e o ambiente Linux local conhecido for compatível, gerar imediatamente o script local mínimo. Não pedir nova autorização, não exigir outro comando e não apresentar GitHub como única rota.
+Para Claude com execução ativa, aplicar `pafe_claude.md`.
+
+Para ChatGPT/GPT com acesso ao GitHub, aplicar `pafe_gpt.md`. Se o sandbox direto falhar por DNS e a rota GitHub estiver disponível, não encerrar apenas com diagnóstico: executar a rota autorizada e entregar o artifact validado.
+
+OVERLAYS DE PLATAFORMA
+
+1. `pafe_claude.md` — Claude com bash, rede, arquivos e entrega de binários.
+2. `pafe_gpt.md` — ChatGPT/GPT com conectores e rota GitHub Actions.
+3. Overlays ampliam capacidades, mas não afastam `html.md`, `audio_modos.md`, `audio.md` ou `pafe_governanca_overlays.md`.
 
 AUTORIZAÇÃO
 
-O pedido para “gerar os arquivos” já autoriza criar artefatos para download nesta conversa.
+O pedido para gerar artefatos já autoriza criar arquivos para download dentro da conversa.
 
-Autorização adicional só é necessária para escrita externa, API paga, envio sensível a terceiro ou ação destrutiva.
+Fábio Dozza de Miranda concedeu autorização permanente ao ChatGPT/GPT para usar branches temporárias e GitHub Actions em `dozzademiranda/ia-comandos` para geração de áudio P.A.F.E., nos limites de `pafe_gpt.md`. Não solicitar novamente essa autorização.
+
+Continuam exigindo autorização específica:
+
+- merge no ramo principal;
+- API paga;
+- envio de conteúdo sensível a terceiro;
+- alteração destrutiva;
+- escrita externa fora da autorização delimitada no overlay.
 
 CONFIABILIDADE
 
 1. Não fingir MP3.
-2. Não usar eSpeak, eSpeak-NG, MBROLA, pyttsx3, Festival ou gTTS robótico.
+2. Não usar eSpeak, eSpeak-NG, MBROLA, pyttsx3, Festival, Piper não autorizado ou gTTS robótico.
 3. Não declarar conformidade sem validação.
 4. Existência do arquivo não equivale a conformidade.
 5. Em falha bloqueante: `BLOQUEADO — requisito obrigatório não pôde ser validado; nenhum fallback inferior foi utilizado.`
