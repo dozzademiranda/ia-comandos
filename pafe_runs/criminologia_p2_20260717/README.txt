@@ -1,0 +1,1 @@
+Execução temporária para gerar vinte MP3 da P2 de Criminologia com edge-tts.
