@@ -1,174 +1,522 @@
 COMANDO: /pafe html
 ARQUIVO: pafe/html.md
 PARENTE: pafe/README.md
+VERSÃO CANÔNICA: 2026-07-17.2
 
-O QUE É: política técnica e visual do HTML de estudo gerado pelo P.A.F.E.
+O QUE É
 
-QUANDO USAR: acionar quando o usuário pedir HTML, index.html, pacote de estudo, interface de revisão, flashcards em HTML, quiz, SRS, ScrollSpy, página offline ou usar /pafe html.
+Política técnica, visual e funcional para geração de HTML de estudo pelo P.A.F.E.
 
-1. ESCOPO
+REGRA CENTRAL
 
-1.1. Este arquivo regula HTML de estudo, executado em navegador, localmente ou em pasta de disciplina.
+/pafe html gera exatamente um arquivo HTML de estudo, autocontido, offline, responsivo, acessível, sem qualquer execução de áudio e sem arquivos auxiliares por padrão.
 
-1.2. HTML de e-mail tem escopo separado e só deve ser gerado a pedido expresso.
+1. ESCOPO E PRECEDÊNCIA
 
-1.3. Não misturar regras de HTML de estudo com HTML de e-mail.
+1.1. Este arquivo regula HTML de estudo executado em navegador, localmente ou em pasta de disciplina.
 
-2. REQUISITOS DE ARQUIVO
+1.2. HTML de e-mail possui escopo separado e só deve ser produzido mediante pedido expresso.
 
-2.1. Gerar um único arquivo index.html, offline e autossuficiente, salvo pedido expresso em contrário.
+1.3. A ordem atual do usuário prevalece sobre instruções antigas, anexos, relatórios e respostas de outras IAs.
 
-2.2. O arquivo deve conter HTML completo, de <!doctype html> a </html>.
+1.4. Esta versão substitui integralmente as versões anteriores de pafe/html.md.
 
-2.3. CSS e JS devem ser internos.
+1.5. Em dúvida, aplicar a interpretação mais restritiva:
 
-2.4. Não usar CDN, fontes externas obrigatórias, bibliotecas externas obrigatórias, imagens externas obrigatórias ou links externos obrigatórios.
+/pafe html = um único HTML completo, offline, acessível, responsivo, sem áudio, sem impressão e sem arquivos auxiliares.
 
-2.5. O HTML deve continuar funcional sem internet.
+2. PROIBIÇÃO ABSOLUTA DE ÁUDIO
 
-2.6. Recursos externos opcionais só podem ser usados se:
-2.6.1. o usuário pedir expressamente;
-2.6.2. houver fallback local;
-2.6.3. a dependência externa for declarada.
+2.1. É proibido inserir, controlar, reproduzir, sincronizar, referenciar ou simular áudio no HTML.
 
-3. ACESSIBILIDADE COGNITIVA
+2.2. É proibido inserir:
 
-3.1. Priorizar legibilidade para adulto com TDAH, autismo nível 1, burnout e ansiedade moderada.
+- <audio>;
+- <video>;
+- <source>;
+- player;
+- MP3, WAV, OGG, FLAC, M4A ou outra mídia;
+- botões de reprodução, pausa, volume ou velocidade;
+- new Audio();
+- .play();
+- .pause();
+- currentTime;
+- playbackRate;
+- Media Session API;
+- MediaMetadata;
+- AudioContext;
+- Web Audio API;
+- speechSynthesis;
+- síntese de voz;
+- capítulos por timestamp;
+- transcrição sincronizada;
+- notas ou bookmarks temporais;
+- referência a arquivo de áudio ausente;
+- espaço reservado para futuro player.
 
-3.2. Usar fonte sans-serif no corpo.
+2.3. /pafe html não gera como consequência:
 
-3.3. Texto alinhado à esquerda; nunca justificar texto longo.
+- MP3;
+- roteiro de áudio;
+- texto TTS;
+- TXT;
+- script de geração de áudio;
+- manifesto de áudio;
+- pacote com áudio;
+- pasta de mídia.
 
-3.4. line-height mínimo de 1.5.
+2.4. A existência de áudio em outra conversa, pasta ou etapa não autoriza sua integração ao HTML.
 
-3.5. Usar contraste confortável; evitar preto puro sobre branco puro quando possível.
+3. PROIBIÇÃO DE IMPRESSÃO
 
-3.6. Evitar poluição visual, excesso de animação, piscadas, transições agressivas e elementos que desviem a atenção.
+3.1. Não inserir botão Imprimir.
 
-3.7. Cor nunca deve ser o único veículo de significado.
+3.2. Não inserir opção Imprimir/PDF.
 
-3.8. Importância deve ser indicada com texto, badge ou rótulo, como [ALTO], [MÉDIO], [BAIXO] ou [PEGADINHA].
+3.3. Não usar window.print(), onclick="print()" ou chamadas equivalentes.
 
-3.9. Controles interativos devem ter rótulos claros e, quando cabível, atributos ARIA.
+3.4. Não criar folha @media print por padrão.
 
-4. HIERARQUIA VISUAL
+3.5. Impressão só poderá ser acrescentada mediante pedido expresso posterior do usuário, específico para aquele HTML.
 
-4.1. Usar hierarquia visual clara entre:
-4.1.1. disciplina;
-4.1.2. módulo;
-4.1.3. tema;
-4.1.4. subtópico;
-4.1.5. pegadinha;
-4.1.6. revisão.
+4. ARTEFATO ÚNICO
 
-4.2. Usar separadores visíveis entre seções.
+4.1. Gerar por padrão somente um arquivo .html completo.
 
-4.3. Usar cards, callouts, tabelas comparativas e blocos de revisão quando melhorarem a compreensão.
+4.2. CSS, JavaScript e dados textuais devem ficar incorporados no próprio HTML.
 
-4.4. Callouts recomendados:
-4.4.1. crit — erro grave, prova, pegadinha forte;
-4.4.2. warn — atenção, exceção, risco de confusão;
-4.4.3. good — síntese correta, fórmula segura, chave de memória;
-4.4.4. info — contexto, definição, explicação.
+4.3. Não usar CDN, fonte externa obrigatória, biblioteca externa obrigatória, API remota, analytics, banco remoto ou recurso remoto necessário ao funcionamento.
 
-4.5. Mapas, panoramas e revisões gerais devem preferir cards ou grids responsivos, não tabelas extensas quando isso prejudicar leitura.
+4.4. O HTML deve funcionar sem internet e, quando tecnicamente possível, diretamente por file://.
 
-5. NAVEGAÇÃO E RECURSOS DE ESTUDO
+4.5. Não criar por padrão:
 
-5.1. Menu lateral, sumário interno ou navegação fixa são recomendados quando houver mais de quatro seções.
+- ZIP;
+- README;
+- TXT;
+- JSON separado;
+- manifesto;
+- YAML;
+- hash;
+- pasta auxiliar;
+- relatório técnico;
+- script separado;
+- CSS separado;
+- JavaScript separado.
 
-5.2. Busca textual interna pode ser incluída quando o conteúdo for extenso.
+4.6. Não incluir exportação ou importação de progresso por arquivo, JSON ou download, salvo pedido expresso.
 
-5.3. ScrollSpy pode ser incluído quando houver navegação lateral ou sumário fixo.
+4.7. Persistência local por localStorage é permitida quando útil, sem gerar arquivo externo.
 
-5.4. Flashcards clicáveis podem ser incluídos quando úteis para memorização.
+5. FILTRO DE RELEVÂNCIA VISÍVEL
 
-5.5. Quiz com gabarito comentado pode ser incluído quando houver treino de prova.
+5.1. Cada bloco visível deve ajudar a:
 
-5.6. SRS ou Leitner podem ser incluídos quando o usuário pedir revisão ativa ou persistência de estudo.
+1. entender o conteúdo;
+2. diferenciar conceitos;
+3. memorizar;
+4. resolver questões;
+5. revisar erros; ou
+6. executar estratégia de estudo pedida.
 
-5.7. Modo claro/escuro pode ser incluído quando útil.
+5.2. Se não cumprir nenhuma função acima, remover.
 
-5.8. Persistência em localStorage pode ser incluída em HTML local, mas deve:
-5.8.1. não depender de servidor;
-5.8.2. não exigir login;
-5.8.3. não armazenar dado sensível;
-5.8.4. permitir reiniciar progresso quando possível.
+5.3. Não exibir no fluxo principal:
 
-5.9. Busca, ScrollSpy, flashcards, quiz, SRS e localStorage não são obrigatórios em todo HTML; devem ser proporcionais ao pedido e ao tamanho do conteúdo.
+- nomes de IAs, modelos ou plataformas;
+- comparação entre IAs;
+- erros de outras IAs;
+- inventário de anexos;
+- histórico de elaboração;
+- decisões internas de layout;
+- ferramentas utilizadas;
+- detalhes de validação;
+- Python, FFmpeg, TTS, bibliotecas ou scripts;
+- hashes;
+- caminhos internos;
+- justificativas sobre o processo de geração.
 
-6. PLAYER DE ÁUDIO MASTER
+5.4. Quando fontes ou funcionamento forem realmente necessários, colocar tudo em seção discreta denominada “Fontes e funcionamento”, fechada por padrão e situada ao final.
 
-6.1. Quando houver áudio master, usar um único player apontando para:
-audio/master_audio.mp3
+6. TELA INICIAL E CABEÇALHO
 
-6.2. O player deve ficar visível e acessível, preferencialmente em posição sticky no topo ou em área claramente identificada.
+6.1. A tela inicial deve abrir diretamente no estudo, sem página técnica intermediária.
 
-6.3. Referência recomendada: <audio controls loop preload="metadata" src="audio/master_audio.mp3" style="width:100%;"></audio>
+6.2. O cabeçalho visível deve ser compacto e conter somente:
 
-6.4. O loop é responsabilidade do HTML.
+- disciplina ou tema;
+- avaliação ou objetivo;
+- resumo curto do escopo, quando necessário;
+- progresso atual;
+- Retomar;
+- Buscar;
+- Opções.
 
-6.5. Jamais multiplicar o MP3 no Python apenas para simular loop.
+6.3. Não exibir diretamente na barra principal:
 
-6.6. Se o arquivo audio/master_audio.mp3 não existir, não afirmar que o player está funcional; declarar que depende da geração local do áudio.
+- Tema;
+- A−;
+- A+;
+- Foco;
+- filtros;
+- navegação extensa;
+- limpar progresso;
+- notas;
+- glossário;
+- configurações;
+- informações técnicas.
 
-7. HTML DE E-MAIL
+6.4. Todos os controles secundários devem ficar em submenus, painéis, drawers, popovers ou <details> fechados por padrão.
 
-7.1. HTML de e-mail só deve ser gerado sob pedido expresso.
+6.5. Não usar barra lateral permanentemente aberta como padrão.
 
-7.2. Quando o pedido for HTML de e-mail:
-7.2.1. usar CSS inline;
-7.2.2. priorizar compatibilidade com Gmail e Outlook;
-7.2.3. usar tabelas estruturais com role="presentation" quando necessário;
-7.2.4. evitar CSS moderno incompatível;
-7.2.5. observar limite de tamanho do Gmail.
+6.6. No celular, navegação, filtros e configurações devem permanecer ocultos até ação do usuário; nunca devem aparecer antes do conteúdo principal.
 
-7.3. Não aplicar automaticamente regras de HTML de e-mail ao HTML de estudo.
+7. MENU OPÇÕES
 
-8. PROIBIÇÕES
+7.1. O botão Opções deve abrir painel fechado por padrão e agrupar apenas ferramentas úteis.
 
-8.1. Proibido usar CDN como dependência obrigatória.
+7.2. Grupo Visualização:
 
-8.2. Proibido usar fonte externa obrigatória.
+- Automático;
+- Celular;
+- Desktop;
+- tamanho do texto;
+- espaçamento;
+- tema;
+- modo foco;
+- baixa estimulação.
 
-8.3. Proibido usar imagem externa obrigatória.
+7.3. Grupo Estudo:
 
-8.4. Proibido usar biblioteca externa obrigatória.
+- flashcards;
+- revisar erros;
+- notas;
+- glossário;
+- limpar progresso, mediante confirmação.
 
-8.5. Proibido justificar texto longo.
+7.4. Grupo Navegação:
 
-8.6. Proibido usar cor como único sinal de significado.
+- módulos;
+- pegadinhas;
+- questões;
+- flashcards;
+- quiz;
+- revisão final.
 
-8.7. Proibido gerar design plano sem hierarquia visual quando o conteúdo for complexo.
+7.5. Não incluir Imprimir/PDF.
 
-8.8. Proibido misturar HTML de estudo e HTML de e-mail sem pedido expresso.
+7.6. Não incluir exportar ou importar progresso, salvo pedido expresso.
 
-8.9. Proibido afirmar que o index.html foi gerado sem arquivo real ou sem entregar o conteúdo integral.
+7.7. O menu deve:
 
-9. VALIDAÇÃO ANTES DE AFIRMAR QUE O ARQUIVO FOI GERADO
+- fechar por clique fora;
+- fechar por Esc;
+- devolver o foco ao botão de origem;
+- permanecer navegável por teclado;
+- permitir rolagem interna em telas estreitas;
+- não causar overflow horizontal geral.
 
-9.1. Se a plataforma permitir criar arquivo, só afirmar geração depois de confirmar o caminho efetivo do arquivo.
+8. BUSCA
 
-9.2. Se a plataforma não permitir criar arquivo, declarar:
-[ARTEFATO: indisponível nesta plataforma]
+8.1. Buscar deve abrir campo ou painel somente após acionamento.
 
-9.3. Se entregar apenas o código para o usuário salvar, declarar:
-[ARTEFATO: código gerado]
+8.2. A busca deve funcionar offline e pesquisar por palavra, tema, conceito, referência e questão.
 
-9.4. Se o funcionamento depender de pasta, áudio, imagens ou execução local, declarar:
-[ARTEFATO: execução local necessária]
+8.3. Deve permitir limpar o filtro, informar ausência de resultados e preservar navegação por teclado.
 
-9.5. Quando houver pacote com HTML e áudio, explicar a estrutura esperada:
-9.5.1. index.html;
-9.5.2. audio/master_audio.mp3;
-9.5.3. demais arquivos, se expressamente pedidos.
+8.4. O campo de busca não deve ocupar permanentemente a tela inicial.
 
-10. SAÍDA
+9. RETOMADA E PROGRESSO
 
-10.1. Entregar o HTML inteiro, completo, sem truncamento.
+9.1. O HTML deve facilitar retomada após distração.
 
-10.2. Não entregar patch, trecho solto ou instrução do tipo "insira aqui".
+9.2. Salvar em localStorage, quando aplicável:
 
-10.3. Se o arquivo for longo demais para uma resposta segura, dividir por partes apenas após avisar e manter controle claro de continuidade.
+- última seção significativa;
+- módulos concluídos;
+- questão atual;
+- respostas dadas;
+- erros;
+- flashcards revisados;
+- dificuldade;
+- notas;
+- modo de visualização;
+- tema;
+- escala;
+- espaçamento;
+- baixa estimulação.
 
-10.4. Em pedido de correção de HTML existente, carregar o original integral antes de editar.
+9.3. Usar namespace por conteúdo e versão.
+
+9.4. Não salvar qualquer campo relacionado a áudio, mídia ou impressão.
+
+9.5. O botão Retomar deve levar ao último ponto significativo, não apenas à última posição bruta de rolagem.
+
+9.6. Limpar progresso deve ficar dentro de Opções e exigir confirmação clara.
+
+10. RESPONSIVIDADE E TIPOGRAFIA
+
+10.1. Implementar modos Automático, Celular e Desktop, persistidos em localStorage quando úteis.
+
+10.2. Celular:
+
+- uma coluna;
+- margens reduzidas;
+- cabeçalho compacto;
+- textos longos recolhíveis;
+- rolagem horizontal somente dentro de tabelas ou menus;
+- nenhum overflow horizontal da página;
+- nenhum painel secundário aberto por padrão.
+
+10.3. Desktop:
+
+- largura máxima controlada;
+- cards em duas ou três colunas somente quando melhorarem leitura;
+- conteúdo principal centralizado;
+- nenhuma barra lateral obrigatória.
+
+10.4. Tipografia padrão:
+
+html { font-size: 16px; }
+body { line-height: 1.6; }
+
+10.5. Em telas estreitas, não reduzir normalmente abaixo de 15,5 px.
+
+10.6. Regras obrigatórias:
+
+- fonte sans-serif do sistema;
+- texto alinhado à esquerda;
+- texto de estudo nunca justificado;
+- largura principal preferencial de 72ch, dentro do intervalo de 68ch a 80ch;
+- line-height entre 1,55 e 1,70;
+- parágrafos curtos;
+- negrito seletivo;
+- evitar caixa alta em blocos longos;
+- suportar zoom de 200% sem perda de conteúdo ou função.
+
+11. BOTÕES E ÁREAS DE TOQUE
+
+11.1. Controles interativos devem possuir área mínima de 48 × 48 CSS px.
+
+11.2. Ícone visual pode ser menor, desde que a área clicável total preserve 48 × 48 px.
+
+11.3. Ações destrutivas, opostas ou irreversíveis devem ter separação adequada.
+
+11.4. Cancelar, excluir, reiniciar e apagar progresso não devem ficar colados à ação principal.
+
+11.5. Botões devem ter rótulos claros e aparência hierárquica distinta:
+
+- ação principal;
+- ação secundária;
+- navegação;
+- confirmação;
+- destrutiva.
+
+11.6. Evitar muitos botões com aparência equivalente.
+
+12. CORES E HIERARQUIA VISUAL
+
+12.1. Não existe paleta universal comprovada para TDAH.
+
+12.2. Priorizar poucos estímulos concorrentes, paleta curta, baixa saturação, contraste verificável, consistência e personalização.
+
+12.3. Usar:
+
+- uma cor estrutural discreta para navegação e ação principal;
+- verde para correto, concluído ou seguro;
+- âmbar para atenção, exceção ou pegadinha;
+- vermelho para erro material, resposta incorreta ou ação destrutiva;
+- superfícies neutras para o conteúdo comum.
+
+12.4. Diferenciar módulos sem transformar cada um em cor intensa distinta.
+
+12.5. A diferenciação pode usar variações discretas de matiz e luminosidade em:
+
+- borda superior;
+- faixa lateral;
+- cabeçalho da seção;
+- badge textual;
+- fundo suave.
+
+12.6. Cor nunca deve ser o único veículo de significado.
+
+12.7. Evitar que todas as seções e todos os botões pareçam visualmente idênticos.
+
+13. BAIXA ESTIMULAÇÃO E DIVULGAÇÃO PROGRESSIVA
+
+13.1. Priorizar legibilidade para adulto com TDAH, autismo nível 1, burnout e ansiedade moderada.
+
+13.2. Implementar modo de baixa estimulação que reduza sombras, bordas decorativas, cores não essenciais, elementos periféricos, animações e informações simultâneas.
+
+13.3. Implementar modo foco quando útil, mostrando apenas o bloco atual e controles essenciais.
+
+13.4. Usar divulgação progressiva:
+
+- respostas inicialmente ocultas;
+- aprofundamentos em <details>;
+- notas recolhidas;
+- questões uma por vez;
+- flashcards inicialmente fechados;
+- ferramentas secundárias ocultas por padrão;
+- Fontes e funcionamento fechado por padrão.
+
+13.5. Respeitar prefers-reduced-motion.
+
+13.6. Proibir animação contínua, piscar, transições longas, rolagem forçada, foco inesperado e decoração obrigatória.
+
+14. QUESTÕES, FLASHCARDS E REVISÃO
+
+14.1. Questões devem ser apresentadas uma por vez.
+
+14.2. Não antecipar gabarito.
+
+14.3. Após a resposta, mostrar em blocos curtos:
+
+- resposta correta;
+- fundamento;
+- pegadinha;
+- como reconhecer na prova.
+
+14.4. Permitir revisar somente erros e refazer questões quando isso fizer parte do pedido.
+
+14.5. Flashcards devem permanecer fechados até ação, permitir marcar dificuldade e evitar abertura automática de todos.
+
+15. ACESSIBILIDADE, SEGURANÇA E PRIVACIDADE
+
+15.1. Obrigatório:
+
+- HTML semântico;
+- hierarquia correta de títulos;
+- link “Ir para o conteúdo”;
+- foco visível;
+- navegação por teclado;
+- contraste suficiente;
+- prefers-reduced-motion;
+- conteúdo compreensível sem depender de cor;
+- mensagens de estado acessíveis;
+- modais ou painéis acessíveis quando usados;
+- nenhuma restrição ao zoom do navegador.
+
+15.2. Não usar ARIA para substituir semântica HTML nativa disponível.
+
+15.3. Não enviar conteúdo jurídico a serviço externo sem autorização.
+
+15.4. Não usar analytics por padrão.
+
+15.5. Evitar innerHTML com dados não confiáveis.
+
+15.6. Preferir textContent, createElement e atributos explicitamente controlados.
+
+15.7. Proibir eval() e new Function().
+
+15.8. Não registrar conteúdo sensível no console.
+
+16. IMAGENS, SVG E DIAGRAMAS
+
+16.1. Não inserir imagem, ilustração, SVG ou diagrama sem pedido expresso.
+
+16.2. Se o usuário pedir exclusão de imagem, remover img, picture, figure, svg, legendas e textos derivados, sem substituir silenciosamente por outro elemento visual.
+
+17. VALIDAÇÃO BLOQUEANTE
+
+17.1. Conteúdo visível:
+
+- nenhum nome de IA no fluxo principal;
+- nenhuma auditoria visível;
+- nenhum histórico de criação;
+- nenhuma informação técnica irrelevante;
+- somente conteúdo útil ao estudo;
+- Fontes e funcionamento fechado por padrão.
+
+17.2. Ausência de áudio:
+
+Buscar e bloquear:
+
+<audio
+<video
+<source
+new Audio
+.play(
+.pause(
+currentTime
+playbackRate
+mediaSession
+MediaMetadata
+AudioContext
+speechSynthesis
+.mp3
+.wav
+.ogg
+.flac
+.m4a
+
+17.3. Ausência de impressão:
+
+Buscar e bloquear:
+
+window.print
+onclick="print()
+>Imprimir<
+Imprimir/PDF
+@media print
+
+17.4. Ausência de arquivos auxiliares e exportação não solicitada:
+
+- nenhum JSON separado;
+- nenhum manifesto;
+- nenhum download automático;
+- nenhuma função exportar/importar progresso sem pedido expresso;
+- nenhum ZIP por padrão.
+
+17.5. Estrutura:
+
+- IDs únicos;
+- links internos válidos;
+- títulos em ordem;
+- cabeçalho compacto;
+- apenas Retomar, Buscar e Opções como ferramentas principais;
+- navegação secundária recolhida;
+- nenhum sidebar permanente por padrão;
+- no celular, nenhum painel secundário antes do conteúdo;
+- busca funcional;
+- progresso funcional;
+- localStorage funcional;
+- nenhuma imagem não solicitada;
+- nenhum overflow horizontal geral.
+
+17.6. JavaScript:
+
+- extrair e executar node --check em cada bloco JavaScript;
+- console sem erros não tratados;
+- ausência de eval, new Function e innerHTML inseguro.
+
+17.7. Responsividade:
+
+Testar celular, tablet quando possível, desktop, modo claro, modo escuro, zoom de 200%, teclado, foco, redução de movimento e texto ampliado.
+
+17.8. Persistência:
+
+Testar salvar, recarregar, retomar, reiniciar com confirmação e mudança de versão.
+
+17.9. Não declarar teste em Android físico, TalkBack ou leitor de tela humano se ele não ocorreu.
+
+18. ENTREGA
+
+18.1. Entregar sempre o HTML inteiro e completo.
+
+18.2. Nunca entregar patch, diff, trecho solto ou instrução do tipo “insira aqui”.
+
+18.3. Em correção de HTML existente, carregar o original integral antes de editar.
+
+18.4. Gerar exatamente um arquivo .html, salvo pedido expresso em contrário.
+
+18.5. Não gerar áudio, impressão, JSON, manifesto, ZIP, README, TXT, script, hash ou pasta auxiliar por padrão.
+
+18.6. Nome recomendado:
+
+<IA>_<MODELO>_<MATERIA>_HTML_ESTUDO_<CONVERSA>_<DATA>_vN.html
+
+18.7. O nome do arquivo pode conter proveniência; o corpo visível não deve exibir IA, modelo ou processo de geração.
+
+18.8. Só afirmar que o arquivo foi criado depois de confirmar sua existência e fornecer o artefato.
