@@ -1,7 +1,7 @@
 # audio_modos.md — Modos de áudio do P.A.F.E.
 
-**Versão:** v2.0
-**Data:** 2026-07-17
+**Versão:** v2.1  
+**Data:** 2026-07-17  
 **Status:** ativo e prevalente sobre `pafe/audio.md` para decidir onde e como iniciar a geração.
 
 ## 1. Regra central
@@ -60,21 +60,31 @@ Usar quando a plataforma consegue sintetizar, validar e entregar os arquivos.
 
 ### Rota 2 — script local mínimo automático
 
-Usar automaticamente quando:
+Usar quando:
 
 - a rota direta falhar;
-- o ambiente Linux local conhecido for compatível;
-- não houver custo, escrita externa ou envio sensível a terceiro.
+- a máquina local do usuário puder ser efetivamente usada para concluir a geração;
+- não houver rota remota já autorizada que entregue diretamente os MP3 solicitados.
 
-Não pedir nova autorização. Não exigir `/pafe audio local`. Não encerrar apenas com explicação.
+Não pedir nova autorização para gerar o script quando o usuário já pediu áudio e a execução local for a única rota prática.
 
-### Rota 3 — pacote técnico completo
+### Rota 3 — GitHub Actions ou Codespaces
+
+Usar quando:
+
+- a execução direta falhar;
+- a conversa não puder executar na máquina local do usuário;
+- houver conector GitHub com permissão;
+- a rota estiver autorizada;
+- o conteúdo puder ser processado com segurança no repositório escolhido.
+
+Para ChatGPT/GPT, aplicar `pafe_gpt.md`.
+
+Fábio Dozza de Miranda concedeu autorização permanente ao ChatGPT/GPT para branches temporárias e GitHub Actions em `dozzademiranda/ia-comandos` para áudio P.A.F.E. dentro dos limites daquele overlay. Não solicitar novamente essa autorização.
+
+### Rota 4 — pacote técnico completo
 
 Somente sob pedido expresso de pacote, YAML, setup, manifesto, pipeline ou auditoria completa.
-
-### Rota 4 — GitHub Actions ou Codespaces
-
-Somente quando a execução local estiver indisponível/inadequada ou quando o usuário pedir automação remota. Exige autorização para escrita externa.
 
 ### Rota 5 — API paga
 
@@ -108,14 +118,24 @@ Não gerar README, YAML, TXT, JSON, manifesto, requirements, setup, ZIP ou hash 
 2. Gerar MP3 neural direto quando possível.
 3. Gerar um MP3 por assunto.
 4. Nunca gerar master único por padrão.
-5. Se falhar, aplicar a rota local mínima ou outra rota autorizada.
+5. Se falhar, aplicar `pafe_claude.md` e a rota compatível.
 
-### GPT, Gemini, Perplexity e outras
+### ChatGPT/GPT com conectores
+
+1. Fazer smoke test do ambiente direto quando houver execução.
+2. Não presumir incapacidade apenas porque o sandbox bloqueou DNS.
+3. Se a síntese direta falhar e GitHub estiver acessível, aplicar `pafe_gpt.md`.
+4. Criar branch e workflow temporários, gerar, validar e baixar o artifact.
+5. Fechar o pull request sem merge.
+6. Não usar voz robótica.
+7. Não encerrar apenas com diagnóstico quando a rota GitHub autorizada puder entregar os arquivos reais.
+
+### Gemini, Perplexity e outras
 
 1. Não fingir geração.
 2. Não usar voz robótica.
-3. Se o ambiente direto falhar e o Linux local for conhecido, gerar automaticamente o script local mínimo.
-4. GitHub não é rota obrigatória nem preferencial sobre a máquina local.
+3. Usar apenas rotas efetivamente disponíveis e autorizadas.
+4. Entregar script local se essa for a única rota capaz de concluir a tarefa.
 
 ## 7. Diagnóstico de falha
 
@@ -137,10 +157,11 @@ edge-tts
 pt-BR-AntonioNeural
 ```
 
-Fallback masculino pt-BR neural pode ser descoberto dinamicamente.
+Vozes adicionais devem ser descobertas ou testadas no ambiente real.
 
 Proibido como fallback final:
 
+- Piper não autorizado;
 - eSpeak;
 - eSpeak-NG;
 - MBROLA;
@@ -150,27 +171,31 @@ Proibido como fallback final:
 - voz metálica;
 - motor não rastreável.
 
-## 9. Teste de regressão bloqueante
+## 9. Testes de regressão bloqueantes
+
+### 9.1. GPT com sandbox sem rede e GitHub autorizado
 
 Entrada:
 
 ```text
 /pafe audio
-Conforme informação anterior, gere esses 28 arquivos.
+Gere os arquivos por assunto.
 ```
 
-Contexto conhecido: Linux, `edge-tts`, FFmpeg e FFprobe locais; geração direta falhou; um MP3 por assunto.
+Contexto: síntese direta falha por DNS; conector GitHub disponível; autorização permanente registrada.
 
 Saída obrigatória:
 
-- um script Python físico;
-- 28 MP3s independentes;
-- `--list`;
-- `--only`;
-- sem GitHub;
-- sem nova autorização;
-- sem master único;
-- sem voz robótica;
-- um único comando real para executar.
+- aplicar `pafe_gpt.md`;
+- gerar branch e workflow temporários;
+- um MP3 por assunto;
+- `edge-tts` neural;
+- validação por `ffprobe`;
+- artifact físico baixado;
+- pull request fechado sem merge;
+- nenhum pedido repetido de autorização;
+- nenhum fallback robótico.
 
-Reprovar se a IA apenas explicar, pedir outro comando ou pedir autorização para o script local.
+### 9.2. Execução local realmente disponível
+
+Quando a máquina local puder ser efetivamente usada para concluir a tarefa e GitHub não for necessário, o script mínimo continua válido. Reprovar se a IA apenas explicar, exigir comando adicional ou entregar master único.
