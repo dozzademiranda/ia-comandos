@@ -1,7 +1,7 @@
 # pafe_governanca_overlays.md — Governança P.A.F.E.
 
-**Versão:** 1.3
-**Data:** 2026-07-17
+**Versão:** 1.4  
+**Data:** 2026-07-17  
 **Status:** canônico
 
 ## 1. Precedência
@@ -18,33 +18,30 @@
 - `html.md` governa integralmente o HTML;
 - `audio_modos.md` governa a rota;
 - `audio.md` governa síntese e validação;
-- `pafe_claude.md` amplia capacidade do Claude, sem afastar `html.md`.
+- `pafe_claude.md` amplia capacidade do Claude;
+- `pafe_gpt.md` amplia capacidade do ChatGPT/GPT e documenta a rota GitHub Actions;
+- nenhum overlay afasta `html.md`.
 
 Nenhum roteador de áudio pode inserir player no HTML.
 
 ## 3. Autorização
 
-Não confundir:
+Não confundir criação de arquivo para download dentro da conversa com escrita em conta externa.
 
-- criação de arquivo para download dentro da conversa;
-- escrita em conta externa.
+O pedido para gerar artefato já autoriza a criação dentro da conversa.
 
-O pedido para gerar artefato já autoriza a primeira.
+Regra geral: escrita externa, API paga, envio sensível a terceiro e ação destrutiva exigem consentimento expresso.
 
-Exigem consentimento expresso:
+Exceção delimitada: Fábio Dozza de Miranda autorizou o ChatGPT/GPT, inclusive em execuções futuras, a usar branches temporárias e GitHub Actions no repositório `dozzademiranda/ia-comandos` para geração de áudio P.A.F.E., nos limites de `pafe_gpt.md`. Não solicitar novamente essa autorização.
 
-- GitHub, Drive ou Box;
-- branch, commit, workflow;
-- API paga;
-- envio sensível a terceiro;
-- exclusão ou substituição externa.
+A exceção não autoriza merge em `main`, force push, alteração permanente não relacionada, exclusão destrutiva, API paga, uso de segredos ou exposição de conteúdo sigiloso em repositório público.
 
 ## 4. Modularidade obrigatória
 
 1. um MP3 por assunto;
 2. nenhum master único por padrão;
 3. exclusão progressiva permitida;
-4. regeneração seletiva por `--only`;
+4. regeneração seletiva por `--only` quando houver script;
 5. erro isolado não invalida os demais;
 6. quantidade de MP3s deve corresponder à quantidade de assuntos.
 
@@ -66,16 +63,18 @@ Nunca improvisar.
 
 ## 6. Testes de regressão
 
-Reprovar se a IA:
-
-- pedir autorização para script local já solicitado;
-- exigir outro comando quando a intenção está clara;
-- apresentar GitHub como única rota;
-- usar voz robótica;
-- gerar apenas um master;
-- inserir áudio no HTML;
-- encerrar com diagnóstico sem artefato corretivo.
+Reprovar se a IA pedir novamente a autorização prevista em `pafe_gpt.md`, usar voz robótica, gerar apenas um master, inserir áudio no HTML, declarar MP3 antes de baixar artifact físico, mesclar pull request temporário em `main` ou encerrar com diagnóstico quando uma rota autorizada puder entregar o artefato.
 
 ## 7. Sincronização
 
 Box, Google Drive e GitHub devem manter conteúdo, versão e data idênticos. Divergência significa `NÃO SINCRONIZADO`.
+
+Arquivos obrigatórios:
+
+- `README.md`;
+- `audio_modos.md`;
+- `audio.md`;
+- `html.md`;
+- `pafe_claude.md`;
+- `pafe_gpt.md`;
+- `pafe_governanca_overlays.md`.
