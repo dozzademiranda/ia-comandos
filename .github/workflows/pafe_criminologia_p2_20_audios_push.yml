@@ -1,0 +1,39 @@
+name: PAFE Criminologia P2 - Gerar 20 MP3 por push
+
+on:
+  push:
+    branches:
+      - pafe-criminologia-p2-audios-20260717
+
+permissions:
+  contents: read
+
+jobs:
+  gerar-audios:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install --upgrade pip
+          pip install edge-tts==7.2.3
+
+      - name: Gerar e validar 20 MP3
+        run: python pafe_runs/criminologia_p2_20260717/gerar_20_audios.py
+
+      - name: Publicar artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: CHATGPT_GPT56_CRIMINOLOGIA_P2_20_AUDIOS_v1.0_20260717
+          path: pafe_runs/criminologia_p2_20260717/output/
+          if-no-files-found: error
+          retention-days: 30
