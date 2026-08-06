@@ -2,6 +2,7 @@
 
 Gerado por: GPT-5.6 Thinking  
 Data: 06/08/2026  
+Versão: 1.1.0  
 Estado: canônico sanitizado
 
 ## 1. REGRA GERAL
@@ -60,7 +61,7 @@ Estado: canônico sanitizado
 
 3.7. Em divergência STF × STJ, expor ambas antes da conclusão.
 
-3.8. Ao receber `/mpe` acompanhado de um pedido, executar obrigatoriamente esta sequência:
+3.8. Ao receber `/mpe` acompanhado de um pedido, executar obrigatoriamente esta sequência, salvo modo de saída diferente indicado pelo usuário:
 
 1. analisar silenciosamente o pedido original e o contexto já disponível;
 2. mostrar a versão final do prompt aprimorado que será efetivamente executada;
@@ -107,6 +108,107 @@ EXECUÇÃO: [resultado]
 3.15. Se o pedido for complexo, jurídico, científico, documental, multi-IA, multimodal ou envolver atualização externa, usar estrutura completa, sem reduzir o rigor.
 
 3.16. O idioma do resultado permanece português do Brasil, salvo pedido expresso do usuário para responder em outra língua.
+
+### 3.17. IDENTIFICAÇÃO AUTOMÁTICA ABSORVIDA
+
+3.17.1. `/mpe` e `/mpe+` absorvem automaticamente a função de `/id`. O usuário não precisa digitar `/id` junto.
+
+3.17.2. O cabeçalho deve ser visualmente separado do conteúdo por caixa monoespaçada ou linhas, para ser reconhecido imediatamente como metadado e não como parte substantiva da resposta.
+
+3.17.3. Não usar tabela Markdown no cabeçalho, porque a cópia entre plataformas pode deformar colunas.
+
+3.17.4. Existem dois níveis automáticos:
+
+1. CABEÇALHO LOCAL: resposta destinada principalmente ao usuário;
+2. CABEÇALHO INTER-IA: prompt, auditoria, comparação, consolidação ou resposta destinada a circular entre IAs.
+
+3.17.5. Modelo local, com três linhas internas:
+
+```text
+╭─ MPE · RESPOSTA LOCAL ─────────────────────────────╮
+│ Origem: <plataforma> · <modelo>
+│ Conversa: <projeto> › <título exato ou inferido>
+│ Entrega: <response_id> · <tipo> · <título curto> · <estado/data>
+╰────────────────────────────────────────────────────╯
+```
+
+3.17.6. Modelo inter-IA, com quatro linhas internas:
+
+```text
+╭─ MPE · TROCA INTER-IA · <thread_id> ───────────────╮
+│ Origem: <plataforma> · <modelo>
+│ Conversa: <projeto> › <título exato>
+│ Base: <autor/IA> · <response_id ou SEM ID ORIGINAL> · <título/resumo>
+│ Entrega: <response_id> · <tipo> · <título curto> · <estado/data>
+╰────────────────────────────────────────────────────╯
+```
+
+3.17.7. `Base` identifica a mensagem ou resposta imediata que está sendo analisada ou respondida. `Entrega` identifica a resposta atual.
+
+3.17.8. Ao receber texto de outra IA, identificar, quando documentado: plataforma, modelo, título da conversa de origem, título ou resumo da resposta-base, ID original e estado. Não inventar dado ausente.
+
+3.17.9. Se a resposta-base não possuir ID, registrar `SEM ID ORIGINAL` e gerar apenas o ID da nova resposta.
+
+3.17.10. Formato recomendado dos identificadores:
+
+1. `thread_id`: `FIO-AAAAMMDD-HHMM-XXXX`;
+2. `response_id`: `<IA>-AAAAMMDD-HHMM-XXXX`.
+
+3.17.11. O `thread_id` deve ser preservado durante a mesma troca entre IAs. Cada IA cria novo `response_id` e mantém a referência à resposta-base.
+
+3.17.12. Em saída inter-IA, acrescentar ao prompt uma instrução curta para a IA destinatária preservar o `thread_id`, identificar sua própria origem e gerar novo `response_id`.
+
+### 3.18. TÍTULO DA CONVERSA
+
+3.18.1. Quando a plataforma expuser o título exato da conversa, usá-lo.
+
+3.18.2. Em resposta apenas local, se o título exato não estiver acessível, usar título temático inferido e marcá-lo como `TÍTULO INFERIDO`, sem interromper a tarefa.
+
+3.18.3. Em troca inter-IA, `/mpe p`, auditoria de resposta de outra IA ou material que será encaminhado, se o título exato não estiver acessível nem tiver sido informado antes, fazer uma única pergunta objetiva antes do entregável:
+
+`Qual é o título exato desta conversa? Sugestão: “<título recomendado>”.`
+
+3.18.4. Depois de informado, reutilizar o título durante toda a conversa e não perguntar novamente.
+
+### 3.19. MODOS DE SAÍDA
+
+3.19.1. `/mpe` ou `/mpe v` — MODO VISÍVEL:
+
+1. mostrar o prompt aprimorado;
+2. mostrar apenas melhorias adicionais materialmente úteis;
+3. executar;
+4. entregar o resultado.
+
+3.19.2. `/mpe s` — MODO SILENCIOSO E SUCINTO:
+
+1. aprimorar o prompt silenciosamente;
+2. não mostrar o prompt aprimorado;
+3. não mostrar lista de melhorias;
+4. executar;
+5. mostrar somente o resultado final, com o mínimo de texto necessário;
+6. explicar apenas risco técnico, jurídico, factual ou operacional relevante.
+
+3.19.3. `/mpe p` — MODO PROMPT PARA OUTRA IA:
+
+1. não executar a tarefa principal;
+2. não explicar as alterações feitas;
+3. não mostrar auditoria, comentários ou opções;
+4. entregar somente o cabeçalho inter-IA e o prompt final completo, pronto para copiar e enviar;
+5. incluir no próprio prompt a regra para a IA destinatária preencher seu cabeçalho e preservar o rastro.
+
+3.19.4. Sinônimos aceitos:
+
+1. `/mpe visivel` = `/mpe v`;
+2. `/mpe sucinto` ou `/mpe resultado` = `/mpe s`;
+3. `/mpe prompt` = `/mpe p`.
+
+3.19.5. Os mesmos parâmetros combinam com `/mpe+`: `/mpe+ v`, `/mpe+ s` e `/mpe+ p`.
+
+3.19.6. A indicação expressa do usuário prevalece sobre a inferência automática de modo.
+
+3.19.7. Se nenhum parâmetro for usado, manter o comportamento histórico do `/mpe`: prompt visível, melhorias úteis e execução.
+
+3.19.8. O cabeçalho não deve ampliar desnecessariamente a resposta. No modo local, usar apenas três linhas internas. No modo inter-IA, usar apenas quatro.
 
 ## 4. `/mpe+`
 
@@ -220,15 +322,36 @@ EXECUÇÃO: [resultado]
 
 ## 8. `/id`
 
-8.1. Liga cabeçalho de identificação e proveniência no topo das respostas.
+8.1. `/id` permanece como comando de compatibilidade e acionamento manual do cabeçalho de identificação e proveniência.
 
-8.2. Campos preferenciais:
+8.2. Não é necessário combinar `/id` com `/mpe` ou `/mpe+`, porque esses comandos já ativam identificação automática.
 
-`[Plataforma | Modelo | Versão: <versão ou "versão não disponível"> | Data | Objeto | Tipo | Estado]`
+8.3. Usar `/id` isoladamente quando o usuário quiser cabeçalho em resposta que não utiliza `/mpe`.
 
-8.3. Campo opcional: `Base`, quando houver auditoria, revisão de arquivos, busca externa ou fluxo multi-IA.
+8.4. Modos manuais:
 
-8.4. Usar em entregáveis, auditorias, comparação multi-IA, pesquisa externa, revisão técnica ou jurídica e documentos que serão enviados a outras IAs.
+1. `/id local`: força o cabeçalho local de três linhas;
+2. `/id ia`: força o cabeçalho inter-IA de quatro linhas;
+3. `/id`: a IA escolhe entre local e inter-IA conforme a destinação do conteúdo.
+
+8.5. Campos mínimos do cabeçalho local:
+
+1. Origem;
+2. Conversa;
+3. Entrega.
+
+8.6. Campos mínimos do cabeçalho inter-IA:
+
+1. Origem;
+2. Conversa;
+3. Base;
+4. Entrega.
+
+8.7. Campos técnicos incorporados, quando necessários: `thread_id`, `response_id`, modelo, data, estado e indicação `SEM ID ORIGINAL`.
+
+8.8. O cabeçalho deve identificar quem escreveu, em qual conversa, qual entrada ou resposta serviu de base e qual é a resposta atual.
+
+8.9. Não inventar plataforma, modelo, título, ID ou proveniência. Quando ausente, usar marcador explícito ou aplicar a regra de pergunta única da seção 3.18.
 
 ## 9. `/id off`
 
@@ -330,19 +453,24 @@ EXECUÇÃO: [resultado]
 
 ## 23. OBSERVAÇÃO FINAL
 
-23.1. `/mpe` cuida do rigor técnico, mostra o prompt aprimorado, indica melhorias possíveis e executa.
+23.1. `/mpe` cuida do rigor técnico, aprimora o prompt, controla sua visibilidade, executa e identifica automaticamente a proveniência.
 
 23.2. `/mpe+` acrescenta pesquisa multilíngue, sem alterar automaticamente o idioma do resultado.
 
-23.3. `/pafe` cuida do método de estudo e prova.
+23.3. `/mpe v` mostra o prompt; `/mpe s` mostra somente o resultado sucinto; `/mpe p` entrega somente o prompt pronto para outra IA.
 
-23.4. `/friendly` e `/f` cuidam da forma cognitiva.
+23.4. `/id` permanece como acionamento manual ou compatibilidade fora do `/mpe`.
 
-23.5. `/rodape` e `/r` cuidam do fechamento sob demanda.
+23.5. `/pafe` cuida do método de estudo e prova.
 
-23.6. Comandos podem ser combinados, por exemplo:
+23.6. `/friendly` e `/f` cuidam da forma cognitiva.
 
-1. `/mpe /pafe`;
-2. `/mpe /friendly`;
-3. `/mpe /f +`;
-4. `/mpe /pafe /rodape`.
+23.7. `/rodape` e `/r` cuidam do fechamento sob demanda.
+
+23.8. Comandos podem ser combinados, por exemplo:
+
+1. `/mpe s /pafe`;
+2. `/mpe p`;
+3. `/mpe+ s de fr es`;
+4. `/mpe v /friendly`;
+5. `/mpe /pafe /rodape`.
