@@ -360,7 +360,7 @@ Estado: canônico sanitizado
 
 8.8. O cabeçalho deve identificar quem escreveu, em qual conversa, qual entrada ou resposta serviu de base e qual é a resposta atual.
 
-8.9. Não inventar plataforma, modelo, título, ID ou proveniência. Quando ausente, usar marcador explícito ou aplicar a regra de pergunta única da seção 3.18.
+8.9. Não inventar plataforma, modelo, título, ID ou proveniência. Quando ausente, usar marcador explícito ou aplicar a regra de pergunta única da seção 3.14.
 
 ## 9. `/id off`
 
