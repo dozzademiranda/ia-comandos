@@ -1,7 +1,7 @@
 ---
 Gerado por: GPT-5.6 Sol
 Data de geração: 07/08/2026
-Versão: 2.1.0
+Versão: 2.2.0
 Estado: canônico sanitizado
 ---
 
@@ -98,6 +98,32 @@ Ao receber /consolidar, gerar UM ÚNICO BLOCO DE CÓDIGO, autocontido e pronto p
 - indicar a primeira ação concreta que a nova conversa deve executar;
 - ao receber o consolidado como primeira mensagem, a nova IA deve assimilá-lo e iniciar essa ação, salvo nova ordem expressa do usuário na conversa nova.
 
+PERSISTÊNCIA E DESCOBERTA INTERCONVERSAS
+
+1. Se /consolidar for executado DENTRO DE UM PROJETO e houver repositório persistente gravável já configurado para esse projeto, salvar automaticamente UMA cópia do consolidado na área preexistente equivalente a `Consolidados`, `Continuidade` ou `Resultados IA/Consolidados`.
+2. Não criar uma árvore paralela se já existir destino equivalente.
+3. Nome recomendado: `<PROJECT_ID>__CONSOLIDADO__CONTINUIDADE__<AAAAMMDD-HHMM>__v<versao_comando>`.
+4. Registrar no próprio consolidado, quando a gravação ocorrer: nome, ID/link, data, origem e escopo.
+5. Se o projeto possuir fila, manifesto, índice ou rotina de monitoramento de continuidade, registrar ou tornar descobrível o novo consolidado por esse mecanismo, sem duplicar o conteúdo integral.
+6. Conversas futuras devem procurar o consolidado recente/relevante do projeto quando precisarem recuperar continuidade não presente no contexto atual.
+7. Se houver múltiplos consolidados, não presumir que o mais recente é automaticamente o mais autoritativo: escolher pelo escopo, data, artefatos governantes e relevância para a tarefa.
+8. Fora de projeto, seguir a política de persistência vigente; não salvar automaticamente se o padrão do ambiente for não persistir.
+9. Se não houver permissão de escrita, entregar normalmente o bloco e registrar `PERSISTÊNCIA: NÃO EXECUTADA — <motivo real>`.
+10. Não afirmar que outra conversa ou IA verá o consolidado automaticamente apenas porque ele foi salvo: a recuperação depende de busca, índice, fila, tarefa agendada ou conector disponível.
+
+RELAÇÃO COM A BÍBLIA CANÔNICA
+
+1. Consolidado NÃO é Bíblia Canônica e NÃO deve ser promovido integralmente ao mestre.
+2. Não escrever automaticamente na Bíblia apenas porque uma informação apareceu em /consolidar.
+3. Do consolidado podem emergir CANDIDATOS CANÔNICOS, por exemplo:
+   - decisão humana material;
+   - erro corrigido material;
+   - mudança de estado epistêmico;
+   - nova regra de governança;
+   - fato dinâmico relevante já verificado em fonte primária.
+4. Candidato canônico deve seguir o protocolo do projeto: verificar fonte/autoridade, gerar delta quando necessário e obter aprovação humana quando a mudança for material ou contestada.
+5. Informação operacional, preferências transitórias, resultados brutos de IA e histórico de conversa permanecem fora da Bíblia, salvo razão específica documentada.
+
 REGRA CRÍTICA — CONTROLES TRANSITÓRIOS NÃO MIGRAM
 
 Ordens temporárias da conversa de origem como:
@@ -163,5 +189,7 @@ G. Não produzir dois blocos separados "resumo" e "prompt".
 H. Não gastar caracteres com explicações genéricas, separadores ornamentais ou repetição.
 I. Não transformar pausas históricas em novas ordens de pausa.
 J. A última seção operacional deve ser RETOMADA IMEDIATA, com ação executável.
+K. Dentro de projeto com armazenamento gravável, persistir o consolidado automaticamente e informar o ID/link.
+L. Nunca promover o consolidado inteiro diretamente à Bíblia Canônica.
 
 FIM DA DEFINIÇÃO.
