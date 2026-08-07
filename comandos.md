@@ -2,7 +2,7 @@
 
 Gerado por: GPT-5.6 Sol  
 Data: 07/08/2026  
-Versão: 1.5.0  
+Versão: 1.6.0  
 Estado: canônico sanitizado
 
 ## 1. Regra geral
@@ -66,25 +66,6 @@ Pesquisa externa:
 
 `/mpe`, `/mpe+` e `/mpe-` absorvem `/id`, salvo `/id off`.
 
-Cabeçalho local:
-```text
-╭─ MPE · RESPOSTA LOCAL ─╮
-│ Origem: <plataforma> · <modelo>
-│ Conversa: <projeto> › <título>
-│ Entrega: <response_id> · <tipo> · <estado/data>
-╰─────────────────────────╯
-```
-
-Cabeçalho inter-IA:
-```text
-╭─ MPE · TROCA INTER-IA · <thread_id> ─╮
-│ Origem: <plataforma> · <modelo>
-│ Conversa: <projeto> › <título>
-│ Base: <origem> · <id ou SEM ID ORIGINAL> · <resumo>
-│ Entrega: <response_id> · <tipo> · <estado/data>
-╰───────────────────────────────────────╯
-```
-
 Não inventar plataforma, modelo, título ou IDs. Quando dado indispensável ao cabeçalho não estiver disponível, fazer uma única pergunta curta; depois reutilizar o dado confirmado.
 
 ## 4. `/pafe`
@@ -105,7 +86,7 @@ Em Direito, priorizar base legal, doutrina, jurisprudência, divergências e peg
 
 ## 5. `/consolidar`
 
-Definição detalhada vigente: `consolidar.md`, versão 2.1.0 ou posterior.
+Definição detalhada vigente: `consolidar.md`, versão 2.2.0 ou posterior.
 
 Função: gerar UM bloco único que sirva simultaneamente como:
 1. resumo auditável da conversa; e
@@ -114,13 +95,14 @@ Função: gerar UM bloco único que sirva simultaneamente como:
 Regras críticas:
 1. não gerar segunda etapa `/nova-conversa`;
 2. diferenciar histórico documentado de instruções ativas;
-3. CONTROLES TRANSITÓRIOS NÃO MIGRAM: `pause`, `aguarde`, `não execute ainda`, `espere confirmação`, `aguarde tecla` e equivalentes pertencentes à conversa de origem não podem reaparecer como ordens ativas na nova conversa, salvo pedido expresso para preservar a pausa;
-4. terminar com `RETOMADA IMEDIATA`, indicando ação executável;
-5. executar TESTE DE BOOTSTRAP: uma IA que receba apenas o bloco deve saber o que fazer imediatamente, sem pedir confirmação já dada nem esperar tecla;
-6. usar formato máquina-a-máquina compacto;
-7. evitar linhas decorativas repetidas (`====`, `----`, caixas extensas), redundância e reprodução de prompts já persistidos;
-8. priorizar caracteres informacionais, especialmente para Claude e outros ambientes com contexto limitado/caro;
-9. nunca incluir valores de secrets.
+3. controles transitórios (`pause`, `aguarde`, `não execute ainda`, `espere confirmação`, `aguarde tecla`) não migram, salvo pedido expresso;
+4. terminar com `RETOMADA IMEDIATA` e passar pelo TESTE DE BOOTSTRAP;
+5. usar formato máquina-a-máquina compacto, sem ornamentação inútil;
+6. nunca incluir valores de secrets;
+7. dentro de projeto com repositório persistente gravável, salvar automaticamente uma cópia em `Consolidados`, `Continuidade` ou equivalente já existente e informar ID/link;
+8. tornar o consolidado descobrível por índice/fila/rotina existente quando houver, sem duplicar conteúdo integral;
+9. consolidado não é Bíblia Canônica: não promover integralmente ao mestre;
+10. extrair apenas candidatos canônicos materiais e submetê-los ao protocolo de verificação/delta/aprovação do projeto.
 
 ## 6. `/nova-conversa`
 
@@ -178,8 +160,6 @@ Não precisa reproduzir este arquivo inteiro salvo pedido expresso.
 - `consolidar.md`;
 - `nconversa.md`.
 
-Arquivos antigos de friendly/rodapé/id podem permanecer históricos quando suas funções já estiverem absorvidas por este índice.
-
 ## 12. Segurança
 
 1. nunca persistir valores de credenciais;
@@ -193,7 +173,9 @@ Arquivos antigos de friendly/rodapé/id podem permanecer históricos quando suas
 - `/mpe` melhora e executa;
 - `/mpe+` melhora, mostra mais e executa;
 - `/mpe-` melhora, executa e mostra menos;
-- `/consolidar` resume + prepara retomada numa única peça;
+- `/consolidar` resume + prepara retomada + persiste dentro de projeto quando houver repositório gravável;
 - `/nova-conversa` é alias de `/consolidar`;
-- pausas históricas não migram para a nova conversa;
+- pausas históricas não migram;
+- consolidado não entra inteiro na Bíblia;
+- candidatos canônicos materiais seguem verificação, delta e aprovação;
 - em artefatos inter-IA, conteúdo útil tem prioridade sobre ornamentação visual.
