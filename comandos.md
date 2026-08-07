@@ -1,8 +1,8 @@
 # COMANDOS — ÍNDICE E DEFINIÇÕES OPERACIONAIS
 
-Gerado por: GPT-5.6 Thinking  
-Data: 06/08/2026  
-Versão: 1.3.0  
+Gerado por: GPT-5.6 Sol  
+Data: 07/08/2026  
+Versão: 1.4.0  
 Estado: canônico sanitizado
 
 ## 1. REGRA GERAL
@@ -312,44 +312,51 @@ Estado: canônico sanitizado
 
 ## 6. `/consolidar`
 
-6.1. Gera resumo de continuidade da conversa em bloco único, pronto para copiar em nova conversa ou outra IA.
+6.1. Gera UM bloco único de continuidade que serve simultaneamente como:
+
+1. resumo auditável da conversa atual; e
+2. prompt autocontido de retomada, pronto para colar como primeira mensagem de uma nova conversa ou em outra IA.
 
 6.2. Usar em conversas longas, muitos anexos, muitas decisões, várias versões, testes, correções, prompts, documentos ou risco de perda de continuidade.
 
-6.3. Estrutura recomendada:
+6.3. A saída deve ser UMA única peça híbrida, pronta para copiar, que diferencie claramente HISTÓRICO DOCUMENTADO de INSTRUÇÕES PARA RETOMADA.
 
-1. identidade e estilo;
-2. objeto da conversa;
-3. fontes e arquivos efetivamente usados;
-4. decisões tomadas;
-5. artefatos criados;
-6. dificuldades e soluções;
-7. pendências;
-8. regras para a próxima IA;
-9. segurança;
-10. objetivo imediato.
+6.4. Estrutura recomendada, quando pertinente:
 
-6.4. Não prometer memória futura. Registrar apenas o que está documentado no histórico disponível.
+1. identificação e proveniência;
+2. identidade e estilo;
+3. contexto, objeto e objetivo;
+4. arquitetura e governança;
+5. fontes e arquivos efetivamente usados;
+6. decisões tomadas e justificativas;
+7. artefatos criados ou modificados;
+8. erros corrigidos e escolhas rejeitadas;
+9. respostas de outras IAs analisadas e conclusão comparativa;
+10. dificuldades e soluções;
+11. pendências;
+12. regras para a próxima IA;
+13. segurança e secrets apenas por NOME, nunca valores;
+14. objetivo imediato / próximo passo.
+
+6.5. Não prometer memória futura. Registrar apenas o que estiver documentado no histórico disponível.
+
+6.6. Não inventar decisões, arquivos, leituras, IDs, capacidades ou resultados. Onde algo for incerto, escrever: `não documentado no histórico disponível`.
+
+6.7. Não gerar dois blocos separados “resumo” e “prompt”. O próprio consolidado deve servir para leitura humana e para inicialização de nova conversa.
+
+6.8. Ao final, NÃO perguntar se o usuário deseja gerar `/nova-conversa`. Essa etapa foi absorvida por `/consolidar`.
 
 ## 7. `/nova-conversa`
 
-7.1. Gera prompt de inicialização para nova conversa.
+7.1. Alias de compatibilidade de `/consolidar`.
 
-7.2. Deve permitir que outra IA continue sem o usuário redigitar o contexto.
+7.2. Ao receber `/nova-conversa`, executar a definição vigente de `/consolidar` e produzir o mesmo formato híbrido de continuidade.
 
-7.3. Formato preferencial:
+7.3. Não exigir `/consolidar` prévio e não produzir uma segunda etapa redundante.
 
-1. identidade e estilo;
-2. arquitetura;
-3. secrets;
-4. decisões;
-5. dificuldades e soluções;
-6. pendências;
-7. regras para a próxima IA;
-8. segurança;
-9. objetivo imediato.
+7.4. Pode dar ênfase ligeiramente maior ao objetivo imediato e às instruções de retomada, mas sem alterar fatos, decisões ou pendências documentadas.
 
-7.4. Não incluir credenciais, tokens, senhas ou dados sensíveis desnecessários.
+7.5. Não incluir credenciais, tokens, senhas, cookies ou dados sensíveis desnecessários.
 
 ## 8. `/id`
 
