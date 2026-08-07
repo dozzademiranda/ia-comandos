@@ -1,34 +1,28 @@
 ---
-Gerado por: Claude (Anthropic) — modelo Opus 4.7
-Data de geração: 01/06/2026
+Gerado por: GPT-5.6 Sol
+Data de geração: 07/08/2026
+Versão: 2.0.0
+Estado: alias de compatibilidade
 ---
 
 COMANDO: /nova-conversa
 
-O QUE É: gera o prompt de inicialização da próxima conversa, estruturado para
-ser colado como primeira mensagem de uma nova conversa (mesma IA ou outra).
+O QUE É: alias de compatibilidade de /consolidar.
 
-QUANDO USAR: depois de /consolidar, ou ao iniciar uma nova conversa que
-precise herdar o contexto da anterior.
+A partir desta versão, /consolidar já gera uma peça única que funciona simultaneamente como resumo da conversa e prompt autocontido de inicialização da próxima conversa.
 
-POR QUE USAR: arranca a nova conversa já com identidade, arquitetura, decisões
-e pendências, sem refazer explicação.
-
-NÃO CONFUNDIR COM: /consolidar. /consolidar resume o que passou; /nova-conversa
-prepara o que vem.
-
----
+QUANDO USAR: apenas por preferência do usuário, hábito ou compatibilidade com fluxos antigos.
 
 DEFINIÇÃO OPERACIONAL
 
-Ao receber /nova-conversa, gerar UM bloco único com as seções:
-1. IDENTIDADE E ESTILO;
-2. ARQUITETURA;
-3. SECRETS (apenas nomes de variáveis/credenciais necessárias, nunca valores);
-4. DECISÕES;
-5. DIFICULDADES E SOLUÇÕES;
-6. PENDÊNCIAS;
-7. REGRAS PARA A PRÓXIMA IA;
-8. SEGURANÇA.
+Ao receber /nova-conversa:
+1. executar a definição vigente de /consolidar;
+2. gerar o mesmo formato híbrido de continuidade;
+3. não exigir /consolidar prévio;
+4. não inventar conteúdo ausente;
+5. não produzir uma segunda etapa ou um segundo bloco redundante;
+6. não incluir valores de credenciais, tokens, senhas, cookies ou API keys.
 
-Não inventar. Onde algo for incerto: "não documentado no histórico disponível".
+Se houver conflito entre este arquivo e a definição vigente de /consolidar, prevalece /consolidar.
+
+FIM DA DEFINIÇÃO.
