@@ -1,32 +1,12 @@
----
-Gerado por: GPT-5.6 Sol
-Data de geração: 07/08/2026
-Versão: 2.1.0
-Estado: alias de compatibilidade
----
+# nconversa.md — REDIRECIONADOR DE COMPATIBILIDADE
 
-COMANDO: /nova-conversa
+Data: 07/08/2026
+Estado: ALIAS DE COMPATIBILIDADE
 
-O QUE É: alias de compatibilidade de /consolidar.
+`/nova-conversa` é apenas alias de `/consolidar`.
 
-/consolidar já gera uma peça única que funciona simultaneamente como resumo auditável e prompt autocontido de retomada.
+Ao receber `/nova-conversa`, executar integralmente a definição vigente de **`consolidar.md`**. Não existe segunda etapa, segundo bloco ou protocolo independente.
 
-QUANDO USAR: apenas por preferência do usuário, hábito ou compatibilidade com fluxos antigos.
+Se este arquivo divergir de `consolidar.md` ou `comandos.md`, prevalecem as fontes canônicas.
 
-DEFINIÇÃO OPERACIONAL
-
-Ao receber /nova-conversa:
-1. executar integralmente a definição vigente de /consolidar;
-2. gerar o mesmo formato híbrido de continuidade;
-3. não exigir /consolidar prévio;
-4. não produzir segunda etapa ou segundo bloco redundante;
-5. aplicar a regra CONTROLES TRANSITÓRIOS NÃO MIGRAM;
-6. tratar pausas/esperas da conversa anterior como histórico já consumido, salvo ordem expressa para preservá-las também na nova conversa;
-7. terminar com RETOMADA IMEDIATA executável;
-8. aplicar o TESTE DE BOOTSTRAP antes da entrega;
-9. usar formato compacto máquina-a-máquina, sem linhas ornamentais repetidas ou desperdício de tokens;
-10. nunca incluir valores de credenciais, tokens, senhas, cookies ou API keys.
-
-Se houver conflito entre este arquivo e a definição vigente de /consolidar, prevalece /consolidar.
-
-FIM DA DEFINIÇÃO.
+Não reutilizar definições históricas anteriores deste arquivo como regra ativa.
