@@ -1,42 +1,84 @@
 # ia-comandos — governança multi-IA
 
-Revisão de governança: 1.7.0
+Versão da arquitetura: 1.8.0
 Data: 07/08/2026
+Estado: canônico sanitizado
 
-## Objetivo
+## 1. Objetivo
 
-Sistema portátil de instruções e comandos para uso em múltiplas IAs, com baixa fricção operacional, rastreabilidade e espelhos em Box, Google Drive e GitHub.
+Manter um conjunto pequeno de fontes governantes que possa ser consultado por diferentes IAs sem duplicar regras, exigir memorização do usuário ou permitir que arquivos históricos vençam versões ativas.
 
-## Fontes ativas
+## 2. Localizações equivalentes
 
-- `instrucoes-universais.md` — comportamento global, segurança e continuidade de uma tecla.
-- `comandos.md` — significado canônico dos comandos iniciados por `/`.
-- `consolidar.md` — definição detalhada vigente de `/consolidar`.
-- `nconversa.md` — alias/compatibilidade de `/nova-conversa`.
-- `pafe/` — material especializado do P.A.F.E., quando aplicável.
+- GitHub público: `dozzademiranda/ia-comandos`, branch `main`;
+- Google Drive: `Meu Drive → Documentos → I.A. → Comandos`;
+- Box: `Recursos-IA → Comandos`.
 
-`mpe.md` e `id.md` permanecem somente como redirecionadores de compatibilidade para links antigos. **Nunca prevalecem sobre `comandos.md`.**
+A localização preferencial depende da plataforma e serve para descoberta. Autoridade é determinada por instrução atual do usuário, versão interna, estado e conteúdo, conforme `comandos.md`.
 
-## Prevalência operacional
+## 3. Árvore lógica ativa
 
-1. definição explicitamente fornecida pelo usuário na conversa;
-2. Box, quando acessível;
-3. Google Drive, quando acessível;
-4. GitHub Raw;
-5. histórico consolidado.
+```text
+Comandos/
+├── README.md
+├── instrucoes-universais.md
+├── comandos.md
+├── consolidar.md
+├── pafe/
+└── prompts/
+```
 
-Localização preferencial:
-- Claude: Box → Recursos-IA → Comandos;
-- Gemini/GPT: Google Drive → Documentos → I.A. → Comandos;
-- Perplexity/sem conector: GitHub Raw.
+### Função
 
-Se espelhos divergirem, comparar versão interna e conteúdo antes de executar.
+- `instrucoes-universais.md` — comportamento global, reconciliação de espelhos, privacidade e continuidade por uma tecla;
+- `comandos.md` — significado e execução dos comandos iniciados por `/`;
+- `consolidar.md` — definição integral de `/consolidar`;
+- `pafe/` — módulos especializados do P.A.F.E.;
+- `prompts/` — biblioteca de prompts reutilizáveis; `prompts/README.md` é o catálogo.
 
-## Duas regras que não podem regredir
+## 4. Compatibilidade
 
-1. `/mpe`, `/mpe+` e `/mpe-` geram cabeçalho automaticamente; `/id` não é necessário. `/id` serve para cabeçalho fora da família MPE, e `/id off` o desativa quando solicitado.
-2. Toda resposta substantiva deve oferecer, quando houver continuidade útil, um menu de até três opções acionáveis por **uma única tecla**. Um `1`, `2` ou `3` isolado executa a opção correspondente do menu mais recente.
+Os seguintes caminhos podem permanecer para preservar links antigos, mas são apenas redirecionadores e nunca fontes autônomas:
 
-## Privacidade
+- `mpe.md`;
+- `id.md`;
+- `friendly.md`;
+- `rodape.md`;
+- `nconversa.md`;
+- configurações provider-specific marcadas como legadas, como `instrucoes-universais-GEMINI.md` e `instrucoes-personalizadas-gpt.md`.
 
-O GitHub público contém apenas material global sanitizado. Conteúdo privado ou específico de projeto permanece em armazenamento privado ou sob a governança do próprio projeto.
+Se um redirecionador divergir de uma fonte ativa, a fonte ativa prevalece.
+
+## 5. Histórico e limpeza
+
+- `archive/`, `old/`, `*.old*`, `(OLD)` e `intermediario_*` são históricos;
+- não entram no bootstrap;
+- não são consultados por padrão;
+- só devem ser lidos para auditoria, recuperação ou comparação de versões;
+- GitHub normalmente usa o próprio histórico de commits em vez de manter snapshots ativos.
+
+## 6. Privacidade
+
+GitHub público contém somente núcleo global sanitizado.
+
+Drive e Box podem conter extensões privadas, inclusive autorizações operacionais ou materiais específicos, quando isso for necessário. Essas extensões não devem ser copiadas ao GitHub apenas para obter identidade byte a byte.
+
+O critério entre espelhos é equivalência semântica do núcleo público e preservação deliberada das extensões privadas.
+
+## 7. Biblioteca de prompts
+
+- `/prompt` abre o catálogo;
+- `/prompt <alias>` carrega e executa o prompt vigente;
+- `/prompt <alias> não execute` apenas carrega/devolve;
+- `/prompt promover <alias>` incorpora melhoria material, atualiza versão interna e catálogo e sincroniza somente os destinos apropriados.
+
+Nome de prompt canônico é estável; número de versão não entra no nome do arquivo.
+
+## 8. Regra operacional
+
+1. carregar a fonte ativa adequada;
+2. ignorar histórico salvo pedido específico;
+3. executar ações já autorizadas;
+4. não publicar informação privada em espelho público;
+5. reler e validar após alteração;
+6. quando houver continuação útil, oferecer opções executáveis por uma tecla.
