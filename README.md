@@ -1,43 +1,42 @@
-# ia-comandos — Sistema de comandos multi-IA (Fábio)
+# ia-comandos — governança multi-IA
+
+Revisão de governança: 1.7.0
+Data: 07/08/2026
 
 ## Objetivo
-Conjunto de arquivos .md que definem um sistema de comandos portável, usado
-em várias IAs (Claude, GPT, Gemini, Perplexity). Padroniza perfil, postura,
-estrutura de resposta e comandos, para reduzir retrabalho e sobrecarga
-cognitiva no fluxo multi-IA.
 
-## Arquivos principais
-- README.md
-- instrucoes-universais.md — núcleo permanente para colar no Perfil da IA.
-- instrucoes-personalizadas-gpt.md
-- comandos.md — índice operacional dos comandos ativos.
-- friendly.md — comando adaptativo de acessibilidade cognitiva (/friendly).
-- rodape.md — comando de rodapé estendido sob demanda (/rodape).
-- consolidar.md — definição do /consolidar.
-- nconversa.md — definição do /nconversa.
-- id.md — definição do /id (identificação e proveniência).
-- mpe.md
-- pafe.md
+Sistema portátil de instruções e comandos para uso em múltiplas IAs, com baixa fricção operacional, rastreabilidade e espelhos em Box, Google Drive e GitHub.
 
-## Como usar
-Cada comando tem um arquivo .md próprio. Quando a IA tiver acesso ao arquivo,
-deve ler a definição completa antes de executar o comando.
+## Fontes ativas
 
-## Localização canônica por IA
-- Claude → Box → Recursos-IA → Comandos → <nome-do-comando>.md
-- Gemini / GPT → Google Drive → Meu Drive → Documentos → I.A. → Comandos → <nome-do-comando>.md
-- Perplexity → GitHub Raw → https://raw.githubusercontent.com/dozzademiranda/ia-comandos/main/<nome-do-comando>.md
+- `instrucoes-universais.md` — comportamento global, segurança e continuidade de uma tecla.
+- `comandos.md` — significado canônico dos comandos iniciados por `/`.
+- `consolidar.md` — definição detalhada vigente de `/consolidar`.
+- `nconversa.md` — alias/compatibilidade de `/nova-conversa`.
+- `pafe/` — material especializado do P.A.F.E., quando aplicável.
 
-## Regra de prevalência
-1. Se a IA tiver acesso ao Box, prevalece a versão do Box.
-2. Se não, usar a fonte acessível na plataforma atual.
-3. Se eu anexar/colar uma versão mais recente na conversa, essa versão
-   prevalece para a tarefa atual.
+`mpe.md` e `id.md` permanecem somente como redirecionadores de compatibilidade para links antigos. **Nunca prevalecem sobre `comandos.md`.**
 
-## Privacidade no GitHub
-1. Não presumir que GitHub público é seguro.
-2. Este repositório só pode conter instruções sanitizadas: sem dados
-   pessoais sensíveis, sem chaves, sem detalhes de casos jurídicos, sem
-   estratégias confidenciais.
-3. Conteúdo sensível vai apenas para Box, Google Drive, GitHub privado ou
-   arquivo anexado direto na conversa.
+## Prevalência operacional
+
+1. definição explicitamente fornecida pelo usuário na conversa;
+2. Box, quando acessível;
+3. Google Drive, quando acessível;
+4. GitHub Raw;
+5. histórico consolidado.
+
+Localização preferencial:
+- Claude: Box → Recursos-IA → Comandos;
+- Gemini/GPT: Google Drive → Documentos → I.A. → Comandos;
+- Perplexity/sem conector: GitHub Raw.
+
+Se espelhos divergirem, comparar versão interna e conteúdo antes de executar.
+
+## Duas regras que não podem regredir
+
+1. `/mpe`, `/mpe+` e `/mpe-` geram cabeçalho automaticamente; `/id` não é necessário. `/id` serve para cabeçalho fora da família MPE, e `/id off` o desativa quando solicitado.
+2. Toda resposta substantiva deve oferecer, quando houver continuidade útil, um menu de até três opções acionáveis por **uma única tecla**. Um `1`, `2` ou `3` isolado executa a opção correspondente do menu mais recente.
+
+## Privacidade
+
+O GitHub público contém apenas material global sanitizado. Conteúdo privado ou específico de projeto permanece em armazenamento privado ou sob a governança do próprio projeto.
