@@ -1,7 +1,7 @@
 # audio_modos.md — Modos de áudio do P.A.F.E.
 
-**Versão:** v2.1  
-**Data:** 2026-07-17  
+**Versão:** v2.2  
+**Data:** 2026-08-07  
 **Status:** ativo e prevalente sobre `pafe/audio.md` para decidir onde e como iniciar a geração.
 
 ## 1. Regra central
@@ -61,7 +61,6 @@ Usar quando a plataforma consegue sintetizar, validar e entregar os arquivos.
 ### Rota 2 — script local mínimo automático
 
 Usar quando:
-
 - a rota direta falhar;
 - a máquina local do usuário puder ser efetivamente usada para concluir a geração;
 - não houver rota remota já autorizada que entregue diretamente os MP3 solicitados.
@@ -71,7 +70,6 @@ Não pedir nova autorização para gerar o script quando o usuário já pediu á
 ### Rota 3 — GitHub Actions ou Codespaces
 
 Usar quando:
-
 - a execução direta falhar;
 - a conversa não puder executar na máquina local do usuário;
 - houver conector GitHub com permissão;
@@ -80,7 +78,7 @@ Usar quando:
 
 Para ChatGPT/GPT, aplicar `pafe_gpt.md`.
 
-Fábio Dozza de Miranda concedeu autorização permanente ao ChatGPT/GPT para branches temporárias e GitHub Actions em `dozzademiranda/ia-comandos` para áudio P.A.F.E. dentro dos limites daquele overlay. Não solicitar novamente essa autorização.
+Se existir autorização persistente para rota remota documentada em fonte privada governante ou no contexto atual, reutilizá-la estritamente dentro dos limites registrados. Não republicar identidade, redação ou detalhes privados dessa autorização. Na ausência de autorização documentada, seguir `pafe_governanca_overlays.md`.
 
 ### Rota 4 — pacote técnico completo
 
@@ -93,7 +91,6 @@ Somente com autorização, custo estimado e segredo fora do chat.
 ## 5. Script local mínimo
 
 Entregar um único `.py`, autossuficiente, com:
-
 - assuntos e textos;
 - nomes dos MP3s;
 - `edge-tts`;
@@ -125,10 +122,11 @@ Não gerar README, YAML, TXT, JSON, manifesto, requirements, setup, ZIP ou hash 
 1. Fazer smoke test do ambiente direto quando houver execução.
 2. Não presumir incapacidade apenas porque o sandbox bloqueou DNS.
 3. Se a síntese direta falhar e GitHub estiver acessível, aplicar `pafe_gpt.md`.
-4. Criar branch e workflow temporários, gerar, validar e baixar o artifact.
-5. Fechar o pull request sem merge.
-6. Não usar voz robótica.
-7. Não encerrar apenas com diagnóstico quando a rota GitHub autorizada puder entregar os arquivos reais.
+4. Só iniciar escrita externa se houver autorização aplicável documentada.
+5. Quando a rota GitHub estiver autorizada, usar branch/workflow temporários, gerar, validar e baixar o artifact.
+6. Fechar o pull request sem merge.
+7. Não usar voz robótica.
+8. Não encerrar apenas com diagnóstico quando uma rota autorizada puder entregar os arquivos reais.
 
 ### Gemini, Perplexity e outras
 
@@ -140,7 +138,6 @@ Não gerar README, YAML, TXT, JSON, manifesto, requirements, setup, ZIP ou hash 
 ## 7. Diagnóstico de falha
 
 Classificar:
-
 - DNS/rede;
 - certificado/SSL;
 - endpoint/serviço;
@@ -160,7 +157,6 @@ pt-BR-AntonioNeural
 Vozes adicionais devem ser descobertas ou testadas no ambiente real.
 
 Proibido como fallback final:
-
 - Piper não autorizado;
 - eSpeak;
 - eSpeak-NG;
@@ -173,7 +169,7 @@ Proibido como fallback final:
 
 ## 9. Testes de regressão bloqueantes
 
-### 9.1. GPT com sandbox sem rede e GitHub autorizado
+### 9.1. GPT com sandbox sem rede e rota GitHub autorizada
 
 Entrada:
 
@@ -182,18 +178,17 @@ Entrada:
 Gere os arquivos por assunto.
 ```
 
-Contexto: síntese direta falha por DNS; conector GitHub disponível; autorização permanente registrada.
+Contexto: síntese direta falha por DNS; conector GitHub disponível; autorização aplicável documentada.
 
 Saída obrigatória:
-
 - aplicar `pafe_gpt.md`;
-- gerar branch e workflow temporários;
+- usar branch e workflow temporários conforme autorização;
 - um MP3 por assunto;
 - `edge-tts` neural;
 - validação por `ffprobe`;
-- artifact físico baixado;
+- artifact físico baixado quando suportado;
 - pull request fechado sem merge;
-- nenhum pedido repetido de autorização;
+- nenhum pedido repetido de autorização já documentada;
 - nenhum fallback robótico.
 
 ### 9.2. Execução local realmente disponível
