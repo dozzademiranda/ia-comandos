@@ -1,8 +1,8 @@
 # pafe_governanca_overlays.md — Governança P.A.F.E.
 
-**Versão:** 1.4  
-**Data:** 2026-07-17  
-**Status:** canônico
+**Versão:** 1.5  
+**Data:** 2026-08-07  
+**Status:** canônico sanitizado
 
 ## 1. Precedência
 
@@ -19,22 +19,20 @@
 - `audio_modos.md` governa a rota;
 - `audio.md` governa síntese e validação;
 - `pafe_claude.md` amplia capacidade do Claude;
-- `pafe_gpt.md` amplia capacidade do ChatGPT/GPT e documenta a rota GitHub Actions;
+- `pafe_gpt.md` amplia capacidade do ChatGPT/GPT;
 - nenhum overlay afasta `html.md`.
 
 Nenhum roteador de áudio pode inserir player no HTML.
 
 ## 3. Autorização
 
-Não confundir criação de arquivo para download dentro da conversa com escrita em conta externa.
-
-O pedido para gerar artefato já autoriza a criação dentro da conversa.
-
-Regra geral: escrita externa, API paga, envio sensível a terceiro e ação destrutiva exigem consentimento expresso.
-
-Exceção delimitada: Fábio Dozza de Miranda autorizou o ChatGPT/GPT, inclusive em execuções futuras, a usar branches temporárias e GitHub Actions no repositório `dozzademiranda/ia-comandos` para geração de áudio P.A.F.E., nos limites de `pafe_gpt.md`. Não solicitar novamente essa autorização.
-
-A exceção não autoriza merge em `main`, force push, alteração permanente não relacionada, exclusão destrutiva, API paga, uso de segredos ou exposição de conteúdo sigiloso em repositório público.
+1. Não confundir criação de arquivo para download dentro da conversa com escrita em conta externa.
+2. O pedido para gerar artefato já autoriza a criação dentro da conversa.
+3. Escrita externa, API paga, envio sensível a terceiro e ação destrutiva exigem consentimento aplicável.
+4. Se existir autorização persistente documentada em fonte privada governante ou no contexto atual, reutilizá-la somente dentro de seus limites.
+5. O repositório público não deve reproduzir identidade, redação ou detalhes privados dessa autorização.
+6. Na ausência de autorização documentada, não presumir permissão.
+7. Autorização delimitada não se expande automaticamente para merge em ramo principal, force push, exclusão destrutiva, API paga, uso de segredos ou publicação de material sigiloso.
 
 ## 4. Modularidade obrigatória
 
@@ -63,18 +61,30 @@ Nunca improvisar.
 
 ## 6. Testes de regressão
 
-Reprovar se a IA pedir novamente a autorização prevista em `pafe_gpt.md`, usar voz robótica, gerar apenas um master, inserir áudio no HTML, declarar MP3 antes de baixar artifact físico, mesclar pull request temporário em `main` ou encerrar com diagnóstico quando uma rota autorizada puder entregar o artefato.
+Reprovar se a IA:
+- repetir pedido de autorização já documentada em fonte governante acessível;
+- usar voz robótica;
+- gerar apenas um master;
+- inserir áudio no HTML;
+- declarar MP3 antes de validar arquivo físico;
+- realizar merge não autorizado;
+- encerrar apenas com diagnóstico quando uma rota autorizada puder entregar o artefato.
 
-## 7. Sincronização
+## 7. Sincronização e privacidade
 
-Box, Google Drive e GitHub devem manter conteúdo, versão e data idênticos. Divergência significa `NÃO SINCRONIZADO`.
+1. GitHub contém somente núcleo global sanitizado.
+2. Drive e Box podem conter extensões privadas necessárias à operação.
+3. A exigência entre os três provedores é de **equivalência semântica do núcleo público**, não identidade byte a byte quando houver informação privada legitimamente excluída do GitHub.
+4. Dados privados nunca devem ser copiados para o GitHub apenas para obter simetria.
+5. Divergência material das regras públicas significa `NÃO SINCRONIZADO`.
+6. Arquivos em `archive/` são históricos e não participam do bootstrap nem da resolução de conflitos.
 
-Arquivos obrigatórios:
-
+Arquivos ativos:
 - `README.md`;
 - `audio_modos.md`;
 - `audio.md`;
 - `html.md`;
 - `pafe_claude.md`;
 - `pafe_gpt.md`;
-- `pafe_governanca_overlays.md`.
+- `pafe_governanca_overlays.md`;
+- `pafe_prompt_outras_ias.md`.
