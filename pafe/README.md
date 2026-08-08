@@ -1,8 +1,8 @@
 COMANDO: /pafe
 
 ARQUIVO: pafe/README.md
-VERSÃO: 2026-07-17.4
-STATUS: canônico
+VERSÃO: 2026-08-07.1
+STATUS: canônico sanitizado
 
 O QUE É
 
@@ -54,27 +54,26 @@ Ordem geral:
 
 Para Claude com execução ativa, aplicar `pafe_claude.md`.
 
-Para ChatGPT/GPT com acesso ao GitHub, aplicar `pafe_gpt.md`. Se o sandbox direto falhar por DNS e a rota GitHub estiver disponível, não encerrar apenas com diagnóstico: executar a rota autorizada e entregar o artifact validado.
+Para ChatGPT/GPT com acesso ao GitHub, aplicar `pafe_gpt.md`. Se o sandbox direto falhar por DNS e uma rota remota autorizada estiver disponível, não encerrar apenas com diagnóstico: aplicar a rota governada e entregar o artefato validado.
 
 OVERLAYS DE PLATAFORMA
 
 1. `pafe_claude.md` — Claude com bash, rede, arquivos e entrega de binários.
 2. `pafe_gpt.md` — ChatGPT/GPT com conectores e rota GitHub Actions.
 3. Overlays ampliam capacidades, mas não afastam `html.md`, `audio_modos.md`, `audio.md` ou `pafe_governanca_overlays.md`.
+4. `pafe_prompt_outras_ias.md` — instrução mínima para outras plataformas.
 
 AUTORIZAÇÃO
 
-O pedido para gerar artefatos já autoriza criar arquivos para download dentro da conversa.
+1. O pedido para gerar artefatos já autoriza criar arquivos para download dentro da conversa.
+2. Escrita externa e rotas remotas são governadas por `pafe_governanca_overlays.md` e pela instrução atual do usuário.
+3. Se existir autorização persistente documentada em fonte privada governante ou no contexto atual, reutilizá-la estritamente dentro de seus limites; não copiá-la para repositório público.
+4. Na ausência de autorização documentada, não presumir permissão para escrita externa.
+5. Merge em ramo principal, API paga, envio de conteúdo sensível a terceiro e alteração destrutiva não são presumidos como autorizados.
 
-Fábio Dozza de Miranda concedeu autorização permanente ao ChatGPT/GPT para usar branches temporárias e GitHub Actions em `dozzademiranda/ia-comandos` para geração de áudio P.A.F.E., nos limites de `pafe_gpt.md`. Não solicitar novamente essa autorização.
+ARQUIVAMENTO
 
-Continuam exigindo autorização específica:
-
-- merge no ramo principal;
-- API paga;
-- envio de conteúdo sensível a terceiro;
-- alteração destrutiva;
-- escrita externa fora da autorização delimitada no overlay.
+Arquivos dentro de `archive/` são históricos e nunca prevalecem sobre os arquivos ativos deste diretório.
 
 CONFIABILIDADE
 
