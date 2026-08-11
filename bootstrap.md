@@ -1,7 +1,7 @@
 ---
 Gerado por: GPT-5.6 Sol
 Data de geração: 11/08/2026
-Versão: 1.0.0
+Versão: 1.0.1
 Estado: canônico sanitizado
 ---
 
@@ -57,6 +57,20 @@ Não alegar que o bootstrap está atualizado quando a verificação canônica n�
 
 `NÃO LOCALIZADO NESTA IA` não significa `INEXISTENTE`: se houver referência documentada a versão/arquivo posterior que não pôde ser acessado, registrar `REFERÊNCIA DOCUMENTADA — ACESSO NÃO CONFIRMADO NESTA IA` e não substituir silenciosamente por snapshot antigo.
 
+### 4.1. Arquivo identificado, mas corpo textual não materializado
+
+Alguns conectores conseguem confirmar repositório, caminho, SHA, tamanho, commit, download ou existência do arquivo, mas não entregam o **corpo textual legível** à IA.
+
+Nesse caso:
+1. registrar `FONTE CANÔNICA: IDENTIFICADA — CONTEÚDO NÃO MATERIALIZADO`;
+2. tratar SHA, tamanho, commit e confirmação de download apenas como metadados de identidade/proveniência, não como leitura semântica;
+3. não afirmar que o arquivo foi lido;
+4. não executar comando especializado a partir de memória, interpretação aproximada ou versão anterior como se fosse a definição vigente;
+5. não pedir ao usuário que cole o arquivo canônico inteiro se um bootstrap menor puder transportar com segurança a semântica necessária;
+6. preferir que outra IA/ambiente com acesso real gere `/bootstrap <destino>` e que o usuário cole esse bloco diretamente na IA limitada;
+7. depois de receber o bootstrap diretamente do usuário, aplicá-lo como instrução daquela conversa, respeitadas as regras superiores da plataforma;
+8. se nem a definição canônica nem um bootstrap vigente estiverem disponíveis, declarar recuperação parcial e não alegar conformidade integral.
+
 ## 5. Conteúdo obrigatório do bootstrap gerado
 
 O bootstrap deve transmitir, de forma compacta e autocontida:
@@ -71,7 +85,7 @@ O bootstrap deve transmitir, de forma compacta e autocontida:
 8. continuidade de uma tecla, se vigente e útil;
 9. estados epistêmicos e distinção entre acesso real, referência e fonte não conferida;
 10. regra `NÃO LOCALIZADO NESTA IA ≠ INEXISTENTE`;
-11. comportamento quando fonte externa estiver inacessível;
+11. comportamento quando fonte externa estiver inacessível ou apenas identificada por metadados;
 12. regra de não transferir trabalho manual ao usuário quando houver alternativa técnica razoável;
 13. quando a tarefa envolver documentos paginados, não converter índice técnico do PDF/parser/visualizador em paginação acadêmica sem conferir a página impressa;
 14. demais comandos essenciais que caibam razoavelmente no perfil selecionado.
@@ -103,6 +117,8 @@ Quando houver `<destino>`:
 6. não alterar a semântica canônica dos comandos.
 
 Se a plataforma de destino rejeitar regras operacionais recuperadas de fonte externa, o bootstrap deve deixar claro que **a ordem de aplicá-las vem da própria mensagem do usuário**, e que GitHub/Drive/Box são apenas repositórios/versionamento.
+
+Se a plataforma consegue recuperar somente metadados do arquivo, mas não seu texto, adaptar explicitamente para o estado `FONTE CANÔNICA: IDENTIFICADA — CONTEÚDO NÃO MATERIALIZADO` e não sugerir execução aproximada da definição especializada.
 
 ## 9. Formato de saída
 
@@ -142,6 +158,8 @@ Antes de entregar, verificar:
 6. Há redundância removível sem perda operacional?
 7. Alguma ausência de fonte foi promovida indevidamente a inexistência?
 8. Alguma paginação técnica foi tratada como página bibliográfica sem conferência?
+9. Algum SHA/tamanho/download foi confundido com leitura do corpo textual?
+10. Quando a fonte só foi identificada por metadados, o bootstrap evita execução aproximada e orienta transporte direto da semântica?
 
 Se qualquer resposta crítica for negativa, corrigir antes da entrega.
 
