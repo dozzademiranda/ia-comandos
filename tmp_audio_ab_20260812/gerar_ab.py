@@ -41,13 +41,15 @@ Faça uma pequena pausa mental.
 
 Agora prossiga para a resposta."""
 
-CASES = [
-    ("A1", "pt-BR-AntonioNeural", "-10%"),
-    ("A2", "pt-BR-AntonioNeural", "-12%"),
-    ("B1", "pt-BR-FranciscaNeural", "-10%"),
-    ("B2", "pt-BR-FranciscaNeural", "-12%"),
-    ("C1", "pt-BR-ThalitaNeural", "-10%"),
-    ("C2", "pt-BR-ThalitaNeural", "-12%"),
+PRIMARY_VOICES = [
+    "pt-BR-AntonioNeural",
+    "pt-BR-FranciscaNeural",
+]
+
+THIRD_VOICE_PREFERENCE = [
+    "pt-BR-ThalitaNeural",
+    "pt-BR-ThalitaMultilingualNeural",
+    "pt-BR-MacerioMultilingualNeural",
 ]
 
 
@@ -129,18 +131,39 @@ async def main():
     print("edge-tts version:", edge_version)
 
     voices = await edge_tts.list_voices()
-    names = {v.get("ShortName") for v in voices}
-    needed = {voice for _, voice, _ in CASES}
-    missing = sorted(needed - names)
-    if missing:
-        raise RuntimeError(f"vozes não disponíveis no ambiente real: {missing}")
+    ptbr = sorted(v.get("ShortName") for v in voices if (v.get("ShortName") or "").startswith("pt-BR-"))
+    print("vozes pt-BR disponíveis:", json.dumps(ptbr, ensure_ascii=False))
+    names = set(ptbr)
+
+    missing_primary = [v for v in PRIMARY_VOICES if v not in names]
+    if missing_primary:
+        raise RuntimeError(f"vozes primárias não disponíveis: {missing_primary}")
+
+    third_voice = next((v for v in THIRD_VOICE_PREFERENCE if v in names), None)
+    if third_voice is None:
+        other_ptbr = [v for v in ptbr if v not in PRIMARY_VOICES]
+        if not other_ptbr:
+            raise RuntimeError("nenhuma terceira voz pt-BR disponível para o teste")
+        third_voice = other_ptbr[0]
+
+    cases = [
+        ("A1", PRIMARY_VOICES[0], "-10%"),
+        ("A2", PRIMARY_VOICES[0], "-12%"),
+        ("B1", PRIMARY_VOICES[1], "-10%"),
+        ("B2", PRIMARY_VOICES[1], "-12%"),
+        ("C1", third_voice, "-10%"),
+        ("C2", third_voice, "-12%"),
+    ]
+    print("terceira voz selecionada:", third_voice)
 
     results = []
-    for case in CASES:
+    for case in cases:
         results.append(await synth(*case))
 
     manifest = {
         "edge_tts_version": edge_version,
+        "available_ptbr_voices": ptbr,
+        "third_voice_selected": third_voice,
         "text_tts": TEXT,
         "results": results,
     }
