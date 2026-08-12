@@ -1,8 +1,8 @@
 # COMANDOS — ÍNDICE CANÔNICO
 
 Gerado por: GPT-5.6 Sol
-Data: 11/08/2026
-Versão: 1.8.1
+Data: 12/08/2026
+Versão: 1.9.0
 Estado: canônico sanitizado
 
 ## 1. Regra geral
@@ -37,14 +37,10 @@ A indisponibilidade de uma rota não significa automaticamente indisponibilidade
 3. Não depender de uma única URL quando houver alternativa razoável.
 4. Abrir uma URL não prova atualidade. Conferir, quando materialmente possível, nome, versão interna, estado e conteúdo relevante.
 5. Se uma rota retornar versão anterior à confirmada no branch, registrar `FONTE CANÔNICA: ACESSÍVEL, MAS DESATUALIZADA/CACHEADA` e não tratá-la como vigente.
-6. Quando houver dificuldade, usar estados explícitos, conforme o caso:
-   - `FONTE CANÔNICA: CONFIRMADA NO BRANCH`;
-   - `FONTE CANÔNICA: ACESSÍVEL, MAS DESATUALIZADA/CACHEADA`;
-   - `FONTE CANÔNICA REMOTA: PARCIALMENTE RECUPERADA`;
-   - `FONTE CANÔNICA REMOTA: INDISPONÍVEL NESTA EXECUÇÃO`.
+6. Quando houver dificuldade, usar estados explícitos: `FONTE CANÔNICA: CONFIRMADA NO BRANCH`; `FONTE CANÔNICA: ACESSÍVEL, MAS DESATUALIZADA/CACHEADA`; `FONTE CANÔNICA REMOTA: PARCIALMENTE RECUPERADA`; ou `FONTE CANÔNICA REMOTA: INDISPONÍVEL NESTA EXECUÇÃO`.
 7. Evitar identificadores opacos como apenas `C indisponível` quando for possível registrar arquivo, repositório, branch/path e rota que falhou.
 8. Não declarar que arquivo, repositório, versão ou comando não existe apenas porque uma rota, busca, cache, preview ou conector falhou.
-9. **`NÃO LOCALIZADO NESTA IA` não equivale a `INEXISTENTE`.** Se uma fonte posterior for documentada por nome, versão, ID, hash ou proveniência e a IA receptora não conseguir acessá-la, registrar `REFERÊNCIA DOCUMENTADA — ACESSO NÃO CONFIRMADO NESTA IA` até reconciliação. Uma cópia local mais antiga não invalida automaticamente referência documentada a versão posterior.
+9. `NÃO LOCALIZADO NESTA IA` não equivale a `INEXISTENTE`. Se uma fonte posterior for documentada por nome, versão, ID, hash ou proveniência e a IA receptora não conseguir acessá-la, registrar `REFERÊNCIA DOCUMENTADA — ACESSO NÃO CONFIRMADO NESTA IA` até reconciliação. Uma cópia local mais antiga não invalida automaticamente referência documentada a versão posterior.
 
 #### 2.1.1. Fallback local
 
@@ -61,10 +57,10 @@ Fallback LOCAL é mecanismo degradado, não substituto silencioso da fonte canô
 A localização de uma regra e a autoridade que manda executá-la são conceitos diferentes.
 
 1. Arquivo em GitHub, Drive, Box, página web, PDF ou outro conteúdo externo não se torna automaticamente instrução superior por conter regras.
-2. Quando o usuário envia `/comando` e determina expressamente que determinada definição armazenada deve ser usada para interpretar sua solicitação, a autoridade executiva continua sendo a **instrução do usuário**; o arquivo funciona como especificação referenciada, respeitadas as regras superiores da plataforma.
+2. Quando o usuário envia `/comando` e determina expressamente que determinada definição armazenada deve ser usada para interpretar sua solicitação, a autoridade executiva continua sendo a instrução do usuário; o arquivo funciona como especificação referenciada, respeitadas as regras superiores da plataforma.
 3. A consulta a arquivo externo não autoriza ignorar regras obrigatórias da plataforma.
 4. Se a plataforma aceitar consultar a definição externa como especificação fornecida pelo usuário, carregar a versão canônica vigente e executar normalmente.
-5. Se a plataforma recusar aplicar semântica operacional recuperada de fonte externa por tratá-la como conteúdo não confiável ou possível prompt injection, não insistir indefinidamente. Usar um **bootstrap operacional fornecido diretamente pelo usuário**, contendo a definição mínima necessária.
+5. Se a plataforma recusar aplicar semântica operacional recuperada de fonte externa por tratá-la como conteúdo não confiável ou possível prompt injection, não insistir indefinidamente. Usar um bootstrap operacional fornecido diretamente pelo usuário, contendo a definição mínima necessária.
 6. Quando esse bootstrap for colado diretamente pelo usuário, tratá-lo como instrução do usuário para aquela conversa, subordinada às regras superiores aplicáveis.
 7. A fonte externa permanece referência de versionamento, proveniência, auditoria e sincronização; não é autoridade autônoma sobre a IA.
 8. Não confundir `INSTRUÇÃO DIRETA DO USUÁRIO`, `CONFIGURAÇÃO NATIVA DA PLATAFORMA`, `DEFINIÇÃO EXTERNA REFERENCIADA` e `CONTEXTO LOCAL ASSIMILADO`.
@@ -157,9 +153,9 @@ Gerencia a biblioteca canônica de prompts reutilizáveis.
 
 ## 6. `/consolidar`
 
-Definição detalhada vigente: `consolidar.md`, versão **2.2.2 ou posterior**.
+Definição detalhada vigente: `consolidar.md`, versão **2.3.0 ou posterior**.
 
-Gera um único bloco que serve simultaneamente como resumo auditável e prompt autocontido de retomada. Dentro de projeto com repositório persistente gravável, persiste uma cópia no destino de continuidade já existente. Consolidado não é Bíblia Canônica e não deve ser promovido integralmente ao mestre.
+Sempre gera um artefato integral, autocontido e não canônico de continuidade, com RETOMADA IMEDIATA. Em projeto com armazenamento gravável, resolve a residência correta, persiste, relê, valida o conteúdo e testa recuperação direta pelo identificador estável. Quando todos os gates passam e não há portabilidade imediata, o chat pode apresentar apenas RECIBO DE CONTINUIDADE; caso contrário, apresenta o artefato integral. Consolidado não é Bíblia Canônica.
 
 Ao resolver `consolidar.md`, aplicar também as regras de resolução resiliente, autoridade × localização, `NÃO LOCALIZADO ≠ INEXISTENTE` e paginação documental deste arquivo.
 
@@ -219,7 +215,7 @@ A regra global está em `instrucoes-universais.md`.
 
 Um dígito isolado (`1`, `2`, `3`) na mensagem seguinte executa a opção numerada do menu de continuidade mais recente, sem exigir repetição do pedido. Essa regra nunca deve ser usada para adiar trabalho já autorizado.
 
-## 13. Arquivos ativos, compatibilidade e histórico
+## 13. Arquivos ativos, compatibilidade e arquivo histórico
 
 ### 13.1. Fontes ativas de governança
 - `README.md`;
@@ -254,16 +250,31 @@ Podem permanecer para preservar links antigos, mas não são fontes autônomas:
 8. extensões privadas podem permanecer em Box/Drive sem serem replicadas no GitHub;
 9. nenhuma regra deste arquivo substitui políticas obrigatórias da plataforma utilizada.
 
-## 15. Regra final
+## 15. `/tarefa` e `/multi`
+
+Interface curta para o protocolo operacional `00_PROTOCOLO_CAIXA_POSTAL_MULTI_IA`, versão 1.1 ou posterior, quando acessível.
+
+- `/tarefa <pedido>` → cria uma TASK no repositório Multi-IA existente, atribui identidade/revisão internas e prepara somente os respondentes necessários.
+- `/tarefa multi <pedido>` → força rodada Multi-IA independente, sem transformar respostas de IA em decisão/cânone.
+- `/multi` → alias integral de `/tarefa multi`.
+- `/tarefa <TASK_ID>` em conversa/respondente → resolve a tarefa dentro da residência correta, executa o slot de resposta aplicável, grava resposta própria e verifica a gravação; não altera respostas alheias.
+- `/tarefa <TASK_ID>` no coordenador → recupera respostas aceitas e sintetiza quando as RESPONSE_KEY obrigatórias estiverem completas; caso contrário, informa somente os despachos ainda necessários.
+
+Metadados como TASK_REF, TASK_REVISION, TASK_PAYLOAD_FINGERPRINT, RESPONDENT_KEY, RESPONSE_KEY, RUN_ID, CONTEXT_REQUIREMENT, CONCURRENCY_POLICY e CAPABILITY_PROFILE são internos: o usuário não deve preenchê-los manualmente.
+
+Arquitetura-alvo: um único ponto de entrada do usuário; worker pull somente quando DISCOVER/READ/EXECUTE/WRITE/VERIFY/RECOVER estiverem comprovados na conexão real. Fallback manual deve exigir, idealmente, apenas `TAREFA <TASK_ID>`.
+
+## 16. Regra final
 
 - `/mpe` melhora e executa;
 - `/mpe+` melhora, mostra mais e executa;
 - `/mpe-` melhora, executa e mostra menos;
 - os três geram cabeçalho automaticamente, salvo `/id off`;
 - `/prompt` carrega/executa a biblioteca e promove melhorias quando solicitado;
-- `/consolidar` resume + prepara retomada + persiste quando aplicável;
+- `/consolidar` gera artefato integral + valida persistência/recuperação + usa recibo adaptativo quando conforme;
 - `/bootstrap` gera instruções transportáveis atualizadas para IAs sem acesso às fontes;
 - `/nova-conversa` é alias;
+- `/tarefa` é a interface curta da Caixa Postal Multi-IA; `/multi` é alias de `/tarefa multi`;
 - resolução canônica distingue falha de rota, cache, recuperação parcial e indisponibilidade real;
 - `NÃO LOCALIZADO NESTA IA` nunca deve ser promovido automaticamente a `INEXISTENTE`;
 - fallback local deve ser versionado ou declarado como versão não documentada;
