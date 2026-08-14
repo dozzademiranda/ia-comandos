@@ -1,7 +1,7 @@
 COMANDO: /pafe
 
 ARQUIVO: pafe/README.md
-VERSÃO: 2026-08-07.1
+VERSÃO: 2026-08-14.1
 STATUS: canônico sanitizado
 
 O QUE É
@@ -21,40 +21,48 @@ INVOCAÇÕES
 
 REGRA DE HTML
 
-`/pafe html` gera exatamente um HTML autocontido, offline, acessível, responsivo, sem áudio, sem player, sem impressão e sem arquivos auxiliares.
+`/pafe html` gera exatamente um HTML autocontido, offline, acessível, responsivo, sem áudio, sem player, sem `speechSynthesis`, sem impressão e sem arquivos auxiliares.
+
+HTML ou TTS nativo do navegador nunca substituem MP3 real quando áudio foi solicitado.
 
 REGRA DE ÁUDIO
 
-1. Áudio significa MP3 real por assunto.
+1. Áudio significa MP3 neural real por assunto.
 2. Um assunto principal gera um MP3 independente.
-3. `master_audio.mp3` é proibido por padrão.
-4. Se um assunto exceder limite técnico, usar partes numeradas.
-5. Falha em um assunto não invalida os demais.
-6. A exclusão de um MP3 estudado é comportamento normal.
-7. Regeneração seletiva deve existir por `--only` quando houver script local.
+3. Cada MP3 usa uma única voz; não alternar vozes dentro do mesmo assunto apenas por variedade.
+4. `master_audio.mp3` é proibido por padrão.
+5. Se um assunto exceder limite técnico, usar partes numeradas.
+6. Falha em um assunto não invalida os demais.
+7. A exclusão de um MP3 estudado é comportamento normal.
+8. Regeneração seletiva deve existir por `--only` quando houver script local.
+9. A voz deve ser descoberta/testada na rota real; Antonio e Francisca são `LAST_RESORT`, não padrão.
+10. Cache/hash de MP3 válido prevalece sobre ressintetização apenas para cumprir rotação.
 
 COMANDO COMBINADO
 
 `/pafe html audio` e `/pafe audio html` geram:
 
-1. um HTML independente, sem qualquer áudio, player ou referência a MP3;
+1. um HTML independente, sem áudio, player, `speechSynthesis` ou referência a MP3;
 2. N MP3 independentes, um por assunto;
 3. nenhum master unificado;
-4. nenhum ZIP, YAML, manifesto, TXT ou pacote técnico por padrão, salvo quando o artifact remoto for necessariamente entregue como ZIP pelo provedor.
+4. MP3s individuais como entrega primária quando a superfície suportar;
+5. ZIP opcional como conveniência adicional ou transporte técnico obrigatório de um provedor.
 
 ROTEAMENTO
 
 Ordem geral:
 
 1. MP3 neural direto;
-2. script local mínimo automático quando a máquina local puder executar;
-3. GitHub Actions/Codespaces quando a execução direta ou local não puder ser concluída pela conversa;
+2. script local mínimo automático quando a máquina local puder efetivamente executar;
+3. GitHub Actions/Codespaces quando a execução direta ou local não puder ser concluída pela conversa e houver autorização aplicável;
 4. pacote local completo, somente sob pedido;
 5. API paga, somente com autorização.
 
+Falha de DNS/rede/egress no sandbox encerra somente a rota direta. Não declarar impossibilidade global enquanto houver rota neural autorizada capaz de concluir.
+
 Para Claude com execução ativa, aplicar `pafe_claude.md`.
 
-Para ChatGPT/GPT com acesso ao GitHub, aplicar `pafe_gpt.md`. Se o sandbox direto falhar por DNS e uma rota remota autorizada estiver disponível, não encerrar apenas com diagnóstico: aplicar a rota governada e entregar o artefato validado.
+Para ChatGPT/GPT com acesso ao GitHub, aplicar `pafe_gpt.md`. Se o sandbox direto falhar e uma rota remota autorizada estiver disponível, não encerrar apenas com diagnóstico: aplicar a rota governada e entregar o artefato validado.
 
 OVERLAYS DE PLATAFORMA
 
@@ -71,6 +79,13 @@ AUTORIZAÇÃO
 4. Na ausência de autorização documentada, não presumir permissão para escrita externa.
 5. Merge em ramo principal, API paga, envio de conteúdo sensível a terceiro e alteração destrutiva não são presumidos como autorizados.
 
+ENTREGA
+
+1. Quando possível, disponibilizar MP3s individualmente.
+2. ZIP pode ser oferecido adicionalmente como conveniência.
+3. Artifact ZIP de GitHub Actions é transporte técnico; quando a superfície permitir, descompactar e disponibilizar os MP3s individuais.
+4. Não substituir MP3 solicitado por HTML narrador, `speechSynthesis` ou voz do navegador.
+
 ARQUIVAMENTO
 
 Arquivos dentro de `archive/` são históricos e nunca prevalecem sobre os arquivos ativos deste diretório.
@@ -78,7 +93,7 @@ Arquivos dentro de `archive/` são históricos e nunca prevalecem sobre os arqui
 CONFIABILIDADE
 
 1. Não fingir MP3.
-2. Não usar eSpeak, eSpeak-NG, MBROLA, pyttsx3, Festival, Piper não autorizado ou gTTS robótico.
+2. Não usar eSpeak, eSpeak-NG, MBROLA, pyttsx3, Festival, Piper não autorizado, gTTS robótico ou TTS de navegador como substituto.
 3. Não declarar conformidade sem validação.
 4. Existência do arquivo não equivale a conformidade.
 5. Em falha bloqueante: `BLOQUEADO — requisito obrigatório não pôde ser validado; nenhum fallback inferior foi utilizado.`
