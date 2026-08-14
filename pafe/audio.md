@@ -1,17 +1,19 @@
 # audio.md — Padrão técnico de áudio P.A.F.E.
 
-**Versão:** v7.0 MASTER
-**Data:** 2026-07-17
-**Escopo:** técnica de síntese, processamento, validação e publicação.
+**Versão:** v7.1 MASTER  
+**Data:** 2026-08-14  
+**Escopo:** técnica de síntese, processamento, validação e publicação.  
 **Roteamento:** decidido por `audio_modos.md`.
 
 ## 1. Regra técnica central
 
 1. Cada assunto principal produz um MP3 independente.
-2. Não concatenar assuntos diferentes em `master_audio.mp3`.
-3. Chunks são temporários internos de um assunto, não capítulos de um master.
-4. Falha em um assunto não invalida os arquivos já aprovados.
-5. Arquivo existente não equivale a arquivo conforme.
+2. Cada MP3 usa uma única voz; não alternar vozes dentro do mesmo assunto apenas por variedade.
+3. Não concatenar assuntos diferentes em `master_audio.mp3`.
+4. Chunks são temporários internos de um assunto, não capítulos de um master.
+5. Falha em um assunto não invalida os arquivos já aprovados.
+6. Arquivo existente não equivale a arquivo conforme.
+7. HTML, TTS do navegador e `speechSynthesis` não substituem MP3 real solicitado.
 
 ## 2. Nomes
 
@@ -28,17 +30,37 @@ Sem acentos, caracteres problemáticos ou nomes genéricos.
 
 ## 3. Motor e voz
 
-Padrão:
+Motor gratuito preferencial quando a rota escolhida o suportar:
 
 ```text
 edge-tts
-pt-BR-AntonioNeural
 rate: -10% a -12%
 ```
 
-Voz alternativa somente neural e validada.
+A voz não é fixa. Antes da síntese, descobrir ou testar o catálogo realmente disponível na rota atual.
 
-Proibido: eSpeak, eSpeak-NG, MBROLA, pyttsx3, Festival, gTTS robótico e voz metálica.
+Estados operacionais:
+
+```text
+PREFERRED
+APPROVED
+AVAILABLE
+CANDIDATE
+REJECTED_TEMP
+LAST_RESORT
+```
+
+Elegibilidade:
+
+```text
+eligible = APPROVED ∩ AVAILABLE \ LAST_RESORT
+```
+
+`pt-BR-AntonioNeural` e `pt-BR-FranciscaNeural` são `LAST_RESORT`, não padrão. `pt-BR-LeticiaNeural` ou nome equivalente retornado pelo serviço pode ser `CANDIDATE`. Não inventar nomes nem disponibilidade.
+
+Quando houver várias vozes elegíveis, pode haver rotação entre assuntos conforme prioridade do usuário e uso recente. Cache/hash de MP3 já válido prevalece sobre ressintetização apenas para cumprir rotação.
+
+Proibido: eSpeak, eSpeak-NG, MBROLA, pyttsx3, Festival, gTTS robótico, voz metálica, motor não rastreável e `speechSynthesis` como substituto de MP3.
 
 ## 4. Pipeline por assunto
 
@@ -98,6 +120,8 @@ Somente sob pedido expresso. Pode conter YAML, roteiro externo, dicionário fon�
 
 O pacote também deve gerar N MP3s por assunto; nunca master único por padrão.
 
+ZIP não é pacote obrigatório. Pode ser oferecido adicionalmente como conveniência ou ser usado como transporte técnico de um artifact remoto.
+
 ## 7. Retry e retomada
 
 1. Dividir sem cortar frases.
@@ -118,6 +142,11 @@ O pacote também deve gerar N MP3s por assunto; nunca master único por padrão.
 6. remover `.part` em falha;
 7. nunca apagar outros MP3s válidos.
 
+Entrega ao usuário:
+- quando a superfície suportar, disponibilizar os MP3s individualmente;
+- ZIP pode ser oferecido como conveniência adicional;
+- quando o provedor remoto entregar somente artifact ZIP, baixar/descompactar e expor os MP3s individualmente quando tecnicamente possível.
+
 ## 9. Validação individual
 
 Para cada MP3:
@@ -126,20 +155,22 @@ Para cada MP3:
 - tamanho maior que zero;
 - duração positiva;
 - codec válido;
-- voz neural autorizada;
+- voz neural autorizada e efetivamente usada;
 - início e final audíveis;
 - ausência de truncamento;
 - ausência de loop;
 - ausência de silêncio para inflar duração;
 - loudness;
-- nome correto.
+- nome correto;
+- correspondência entre assunto, texto e arquivo.
 
 Validação global:
 
 - quantidade de MP3s = quantidade de assuntos;
 - `master_audio.mp3` ausente, salvo pedido expresso;
 - duração informada por arquivo;
-- exclusão de um arquivo não quebra os demais.
+- exclusão de um arquivo não quebra os demais;
+- ausência de substituição por `speechSynthesis`/TTS do navegador.
 
 ## 10. Duração
 
@@ -151,7 +182,8 @@ Usar aproximadamente 150 palavras úteis por minuto como estimativa. Não inflar
 - chave apenas em `.env`, variável de ambiente ou Secret;
 - API paga somente com autorização;
 - não desativar TLS;
-- não expor conteúdo sensível desnecessariamente.
+- não expor conteúdo sensível desnecessariamente;
+- não publicar conteúdo sensível em repositório público apenas para obter execução remota.
 
 ## 12. Estado final
 
