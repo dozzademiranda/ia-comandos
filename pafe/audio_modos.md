@@ -1,17 +1,19 @@
 # audio_modos.md — Modos de áudio do P.A.F.E.
 
-**Versão:** v2.2  
-**Data:** 2026-08-07  
+**Versão:** v2.3.0  
+**Data:** 2026-08-14  
 **Status:** ativo e prevalente sobre `pafe/audio.md` para decidir onde e como iniciar a geração.
 
 ## 1. Regra central
 
 1. Áudio significa MP3 neural real por assunto.
-2. Um assunto principal gera um MP3 independente.
-3. É proibido gerar somente `master_audio.mp3`, salvo pedido expresso posterior.
-4. Não usar fallback robótico.
-5. A linguagem natural e o contexto prevalecem sobre token exato de comando.
-6. Criar arquivo para download na conversa não exige autorização adicional quando o usuário já pediu o artefato.
+2. Um assunto principal gera um MP3 independente e usa uma única voz naquele arquivo.
+3. Não alternar vozes dentro do mesmo assunto apenas para variedade.
+4. É proibido gerar somente `master_audio.mp3`, salvo pedido expresso posterior.
+5. Não usar fallback robótico.
+6. HTML, `speechSynthesis` ou voz nativa do navegador não substituem `/pafe audio`.
+7. A linguagem natural e o contexto prevalecem sobre token exato de comando.
+8. Criar arquivo para download na conversa não exige autorização adicional quando o usuário já pediu o artefato.
 
 ## 2. Saída por comando
 
@@ -28,13 +30,16 @@ NN_<ASSUNTO>.mp3
 
 Sem HTML por padrão.
 
+Quando a plataforma suportar arquivos individuais, entregar os MP3s individualmente. ZIP pode ser oferecido como conveniência adicional ou usado como transporte obrigatório de um provedor, mas não substitui conceitualmente os MP3s individuais.
+
 ### `/pafe html audio` ou `/pafe audio html`
 
 Resultado:
 
-1. um HTML autocontido, sem áudio, player ou referência a MP3;
+1. um HTML autocontido, sem áudio, player, `speechSynthesis` ou referência a MP3;
 2. N MP3 independentes, um por assunto;
-3. nenhum master unificado.
+3. nenhum master unificado;
+4. ZIP apenas como conveniência adicional ou transporte técnico quando necessário.
 
 ### `/pafe audio local` ou `/pafe audio script`
 
@@ -57,6 +62,8 @@ Força pacote técnico completo.
 ### Rota 1 — MP3 neural direto
 
 Usar quando a plataforma consegue sintetizar, validar e entregar os arquivos.
+
+Falha de DNS/rede/egress no sandbox é falha da rota direta, não prova de impossibilidade global.
 
 ### Rota 2 — script local mínimo automático
 
@@ -93,8 +100,8 @@ Somente com autorização, custo estimado e segredo fora do chat.
 Entregar um único `.py`, autossuficiente, com:
 - assuntos e textos;
 - nomes dos MP3s;
-- `edge-tts`;
-- voz preferencial;
+- motor neural;
+- descoberta/seleção de voz;
 - retries;
 - pausas reais;
 - PCM uniforme;
@@ -127,6 +134,7 @@ Não gerar README, YAML, TXT, JSON, manifesto, requirements, setup, ZIP ou hash 
 6. Fechar o pull request sem merge.
 7. Não usar voz robótica.
 8. Não encerrar apenas com diagnóstico quando uma rota autorizada puder entregar os arquivos reais.
+9. Não substituir MP3 por `speechSynthesis` no HTML.
 
 ### Gemini, Perplexity e outras
 
@@ -134,27 +142,48 @@ Não gerar README, YAML, TXT, JSON, manifesto, requirements, setup, ZIP ou hash 
 2. Não usar voz robótica.
 3. Usar apenas rotas efetivamente disponíveis e autorizadas.
 4. Entregar script local se essa for a única rota capaz de concluir a tarefa.
+5. Não transformar HTML com TTS do navegador em equivalente de MP3 real.
 
 ## 7. Diagnóstico de falha
 
 Classificar:
-- DNS/rede;
+- DNS/rede/egress;
 - certificado/SSL;
 - endpoint/serviço;
 - autenticação/cota.
 
 Nunca desativar TLS como padrão. Nunca pedir chave no chat.
 
-## 8. TTS
+## 8. Motor e pool de vozes
 
-Padrão gratuito:
+Rota gratuita preferencial quando disponível:
 
 ```text
 edge-tts
-pt-BR-AntonioNeural
 ```
 
-Vozes adicionais devem ser descobertas ou testadas no ambiente real.
+A voz NÃO é fixa. Antes da geração, descobrir/testar as vozes realmente disponíveis no ambiente da rota escolhida.
+
+Estados de voz:
+
+```text
+PREFERRED
+APPROVED
+AVAILABLE
+CANDIDATE
+REJECTED_TEMP
+LAST_RESORT
+```
+
+Regra de elegibilidade:
+
+```text
+eligible = APPROVED ∩ AVAILABLE \ LAST_RESORT
+```
+
+Se ainda não houver voz `APPROVED`, testar candidatas reais e não inventar disponibilidade. `pt-BR-AntonioNeural` e `pt-BR-FranciscaNeural` são `LAST_RESORT`, não preferência. `pt-BR-LeticiaNeural` ou nome equivalente retornado pelo serviço pode ser `CANDIDATE`. Outras vozes pt-BR devem ser descobertas/testadas no ambiente real.
+
+Um arquivo usa uma só voz. Entre assuntos, rotação é permitida somente entre vozes elegíveis. Cache/hash de MP3 já válido prevalece sobre ressintetização apenas para cumprir rotação.
 
 Proibido como fallback final:
 - Piper não autorizado;
@@ -165,7 +194,8 @@ Proibido como fallback final:
 - Festival;
 - gTTS robótico;
 - voz metálica;
-- motor não rastreável.
+- motor não rastreável;
+- `speechSynthesis` como substituto de MP3 solicitado.
 
 ## 9. Testes de regressão bloqueantes
 
@@ -184,13 +214,18 @@ Saída obrigatória:
 - aplicar `pafe_gpt.md`;
 - usar branch e workflow temporários conforme autorização;
 - um MP3 por assunto;
-- `edge-tts` neural;
+- voz neural descoberta/validada no runner;
 - validação por `ffprobe`;
 - artifact físico baixado quando suportado;
 - pull request fechado sem merge;
 - nenhum pedido repetido de autorização já documentada;
-- nenhum fallback robótico.
+- nenhum fallback robótico;
+- nenhum `speechSynthesis` apresentado como substituto.
 
 ### 9.2. Execução local realmente disponível
 
 Quando a máquina local puder ser efetivamente usada para concluir a tarefa e GitHub não for necessário, o script mínimo continua válido. Reprovar se a IA apenas explicar, exigir comando adicional ou entregar master único.
+
+### 9.3. Entrega individual + ZIP
+
+Quando a plataforma permitir múltiplos downloads, reprovar se a única entrega ao usuário for ZIP. Aceitar ZIP adicional de conveniência. Se o provedor remoto só transportar artifact como ZIP, baixar/descompactar e expor os MP3s individualmente quando a superfície permitir.
