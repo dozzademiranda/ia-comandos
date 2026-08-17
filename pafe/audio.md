@@ -1,7 +1,7 @@
 # audio.md — Padrão técnico de áudio P.A.F.E.
 
-**Versão:** v7.1 MASTER  
-**Data:** 2026-08-14  
+**Versão:** v7.2 MASTER  
+**Data:** 2026-08-17  
 **Escopo:** técnica de síntese, processamento, validação e publicação.  
 **Roteamento:** decidido por `audio_modos.md`.
 
@@ -14,6 +14,7 @@
 5. Falha em um assunto não invalida os arquivos já aprovados.
 6. Arquivo existente não equivale a arquivo conforme.
 7. HTML, TTS do navegador e `speechSynthesis` não substituem MP3 real solicitado.
+8. Estado de provedor pago pertence a `audio_api_paga.md`; perfil/ranking/bans pertencem aos registries estruturados. Não duplicar nem inferir disponibilidade a partir de memória.
 
 ## 2. Nomes
 
@@ -28,16 +29,17 @@ NN_REVISAO_FINAL.mp3
 
 Sem acentos, caracteres problemáticos ou nomes genéricos.
 
-## 3. Motor e voz
+## 3. Motor, provedor e voz
 
-Motor gratuito preferencial quando a rota escolhida o suportar:
+A rota é decidida por `audio_modos.md`. Quando houver API paga, consultar `audio_api_paga.md`; quando houver decisão de voz, consultar `VOICE_REGISTRY.json`, `audio_perfil_fabio.md` e eventual override temporário vigente.
+
+Rota gratuita compatível quando selecionada:
 
 ```text
 edge-tts
-rate: -10% a -12%
 ```
 
-A voz não é fixa. Antes da síntese, descobrir ou testar o catálogo realmente disponível na rota atual.
+A voz não é fixa. Antes da síntese, descobrir/testar o catálogo realmente disponível na rota atual.
 
 Estados operacionais:
 
@@ -48,21 +50,41 @@ AVAILABLE
 CANDIDATE
 REJECTED_TEMP
 LAST_RESORT
+BANNED_BY_USER
 ```
 
 Elegibilidade:
 
 ```text
-eligible = APPROVED ∩ AVAILABLE \ LAST_RESORT
+eligible = PREFERRED/APPROVED ∩ AVAILABLE \ LAST_RESORT \ BANNED_BY_USER
 ```
 
-`pt-BR-AntonioNeural` e `pt-BR-FranciscaNeural` são `LAST_RESORT`, não padrão. `pt-BR-LeticiaNeural` ou nome equivalente retornado pelo serviço pode ser `CANDIDATE`. Não inventar nomes nem disponibilidade.
+O `VOICE_REGISTRY.json` é a fonte estruturada do ranking permanente e bans. `VOICE_PRIORITY_OVERRIDE_2026-08.json`, enquanto vigente, pode alterar prioridade temporariamente, mas não converte provedor indisponível em disponível.
 
 Quando houver várias vozes elegíveis, pode haver rotação entre assuntos conforme prioridade do usuário e uso recente. Cache/hash de MP3 já válido prevalece sobre ressintetização apenas para cumprir rotação.
 
 Proibido: eSpeak, eSpeak-NG, MBROLA, pyttsx3, Festival, gTTS robótico, voz metálica, motor não rastreável e `speechSynthesis` como substituto de MP3.
 
-## 4. Pipeline por assunto
+## 4. Preflight de provedor
+
+Antes de síntese longa, validar conforme a rota:
+
+```text
+Secret ou ausência de Secret conforme esperado
+→ autenticação
+→ endpoint
+→ saldo/cota
+→ catálogo/voice ID/modelo
+→ smoke test curto
+→ ffprobe
+→ produção
+```
+
+Falha deve ser classificada pela causa observada: rede/egress, TLS, autenticação, cota/rate limit, saldo/crédito, payload/contrato de API, voz/modelo ou processamento local.
+
+Não transformar erro de payload, crédito ou cota em alegação de chave ausente/inválida.
+
+## 5. Pipeline por assunto
 
 ```text
 texto original
@@ -92,7 +114,7 @@ TP=-1.5 dBTP
 LRA=11
 ```
 
-## 5. Script local mínimo
+## 6. Script local mínimo
 
 O script padrão de contingência deve ser um único `.py` autossuficiente.
 
@@ -114,7 +136,7 @@ Comportamento:
 - arquivo válido existente é preservado por padrão;
 - não usar `sudo`.
 
-## 6. Pacote técnico completo
+## 7. Pacote técnico completo
 
 Somente sob pedido expresso. Pode conter YAML, roteiro externo, dicionário fonético, manifesto, logs, validação e partes.
 
@@ -122,17 +144,18 @@ O pacote também deve gerar N MP3s por assunto; nunca master único por padrão.
 
 ZIP não é pacote obrigatório. Pode ser oferecido adicionalmente como conveniência ou ser usado como transporte técnico de um artifact remoto.
 
-## 7. Retry e retomada
+## 8. Retry e retomada
 
 1. Dividir sem cortar frases.
-2. Tentar cada chunk até três vezes.
-3. Usar espera progressiva.
+2. Tentar cada chunk até três vezes quando a falha for retriável.
+3. Usar espera progressiva para erros transitórios/rate limit.
 4. Preservar chunks válidos.
 5. Não reiniciar todos os assuntos por falha isolada.
 6. Não ocultar `stderr`.
-7. Verificar `returncode`.
+7. Verificar `returncode`/HTTP status.
+8. Não repetir automaticamente erro não retriável de crédito, autorização ou payload sem alterar a condição causadora.
 
-## 8. Publicação segura
+## 9. Publicação segura
 
 1. gerar em temporário;
 2. validar;
@@ -147,7 +170,7 @@ Entrega ao usuário:
 - ZIP pode ser oferecido como conveniência adicional;
 - quando o provedor remoto entregar somente artifact ZIP, baixar/descompactar e expor os MP3s individualmente quando tecnicamente possível.
 
-## 9. Validação individual
+## 10. Validação individual
 
 Para cada MP3:
 
@@ -156,6 +179,7 @@ Para cada MP3:
 - duração positiva;
 - codec válido;
 - voz neural autorizada e efetivamente usada;
+- provedor efetivamente usado e runtime-eligible;
 - início e final audíveis;
 - ausência de truncamento;
 - ausência de loop;
@@ -172,20 +196,35 @@ Validação global:
 - exclusão de um arquivo não quebra os demais;
 - ausência de substituição por `speechSynthesis`/TTS do navegador.
 
-## 10. Duração
+## 11. Duração
 
 Usar aproximadamente 150 palavras úteis por minuto como estimativa. Não inflar com repetição ou silêncio. A duração varia conforme o assunto; não impor duração idêntica a todos.
 
-## 11. Segurança
+## 12. Segurança
 
 - não registrar segredos;
 - chave apenas em `.env`, variável de ambiente ou Secret;
-- API paga somente com autorização;
+- não copiar valor de Secret para documentação, logs, prompts, registries ou continuidade;
+- API paga somente com autorização aplicável;
 - não desativar TLS;
 - não expor conteúdo sensível desnecessariamente;
-- não publicar conteúdo sensível em repositório público apenas para obter execução remota.
+- não publicar conteúdo sensível em repositório público apenas para obter execução remota;
+- existência de Secret pode ser documentada por nome lógico/localização, nunca por valor.
 
-## 12. Estado final
+## 13. Fontes relacionadas
+
+```text
+pafe/audio_modos.md
+pafe/audio_api_paga.md
+pafe/audio_perfil_fabio.md
+pafe/audio_capacidades_plataformas.md
+pafe/VOICE_REGISTRY.json
+pafe/VOICE_PRIORITY_OVERRIDE_2026-08.json
+pafe/pafe_gpt.md
+pafe/pafe_governanca_overlays.md
+```
+
+## 14. Estado final
 
 Aprovado:
 
