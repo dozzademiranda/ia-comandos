@@ -1,7 +1,7 @@
 COMANDO: /pafe
 
 ARQUIVO: pafe/README.md
-VERSÃO: 2026-08-14.1
+VERSÃO: 2026-08-17.1
 STATUS: canônico sanitizado
 
 O QUE É
@@ -19,6 +19,29 @@ INVOCAÇÕES
 7. `/pafe audio pacote` — pacote técnico completo.
 8. `/pafe menu` — menu apenas quando houver múltiplas rotas reais, custo, escrita externa ou incerteza relevante.
 
+FONTES DE ÁUDIO
+
+Para `/pafe audio`, a leitura mínima é:
+
+```text
+pafe/audio_modos.md
+pafe/audio.md
+pafe/audio_api_paga.md
+pafe/audio_capacidades_plataformas.md
+pafe/VOICE_REGISTRY.json
+pafe/audio_perfil_fabio.md
+```
+
+Se existir override temporário vigente, ler também:
+
+```text
+pafe/VOICE_PRIORITY_OVERRIDE_2026-08.json
+```
+
+`audio_api_paga.md` registra provedores, nomes lógicos de Secrets e último estado operacional conhecido, nunca valores de credenciais.
+
+`audio_perfil_fabio.md` resume critérios de preferência, mas o ranking/bans estruturados permanecem no `VOICE_REGISTRY.json`.
+
 REGRA DE HTML
 
 `/pafe html` gera exatamente um HTML autocontido, offline, acessível, responsivo, sem áudio, sem player, sem `speechSynthesis`, sem impressão e sem arquivos auxiliares.
@@ -35,8 +58,9 @@ REGRA DE ÁUDIO
 6. Falha em um assunto não invalida os demais.
 7. A exclusão de um MP3 estudado é comportamento normal.
 8. Regeneração seletiva deve existir por `--only` quando houver script local.
-9. A voz deve ser descoberta/testada na rota real; Antonio e Francisca são `LAST_RESORT`, não padrão.
+9. A voz deve ser descoberta/testada na rota real e respeitar ranking, bans e overrides persistidos.
 10. Cache/hash de MP3 válido prevalece sobre ressintetização apenas para cumprir rotação.
+11. Secret configurado não prova disponibilidade: autenticação, saldo/cota, endpoint, smoke test e voz elegível precisam passar.
 
 COMANDO COMBINADO
 
@@ -56,20 +80,23 @@ Ordem geral:
 2. script local mínimo automático quando a máquina local puder efetivamente executar;
 3. GitHub Actions/Codespaces quando a execução direta ou local não puder ser concluída pela conversa e houver autorização aplicável;
 4. pacote local completo, somente sob pedido;
-5. API paga, somente com autorização.
+5. API paga, somente com autorização aplicável e preflight conforme `audio_api_paga.md`.
 
 Falha de DNS/rede/egress no sandbox encerra somente a rota direta. Não declarar impossibilidade global enquanto houver rota neural autorizada capaz de concluir.
 
+Uma prioridade temporária de provedor, como `FISH_FIRST`, altera ordem de tentativa; não ignora autenticação, crédito/cota ou smoke test. Provedor indisponível recebe `REJECTED_TEMP` e o roteamento continua.
+
 Para Claude com execução ativa, aplicar `pafe_claude.md`.
 
-Para ChatGPT/GPT com acesso ao GitHub, aplicar `pafe_gpt.md`. Se o sandbox direto falhar e uma rota remota autorizada estiver disponível, não encerrar apenas com diagnóstico: aplicar a rota governada e entregar o artefato validado.
+Para ChatGPT/GPT com acesso ao GitHub, aplicar `pafe_gpt.md` e `audio_capacidades_plataformas.md`. Se o sandbox direto falhar e uma rota remota autorizada estiver disponível, não encerrar apenas com diagnóstico: aplicar a rota governada e entregar o artefato validado.
 
 OVERLAYS DE PLATAFORMA
 
 1. `pafe_claude.md` — Claude com bash, rede, arquivos e entrega de binários.
 2. `pafe_gpt.md` — ChatGPT/GPT com conectores e rota GitHub Actions.
-3. Overlays ampliam capacidades, mas não afastam `html.md`, `audio_modos.md`, `audio.md` ou `pafe_governanca_overlays.md`.
-4. `pafe_prompt_outras_ias.md` — instrução mínima para outras plataformas.
+3. `pafe/audio_capacidades_plataformas.md` — matriz operacional de execução e provedores.
+4. Overlays ampliam capacidades, mas não afastam `html.md`, `audio_modos.md`, `audio.md` ou `pafe_governanca_overlays.md`.
+5. `pafe_prompt_outras_ias.md` — instrução mínima para outras plataformas.
 
 AUTORIZAÇÃO
 
@@ -77,7 +104,7 @@ AUTORIZAÇÃO
 2. Escrita externa e rotas remotas são governadas por `pafe_governanca_overlays.md` e pela instrução atual do usuário.
 3. Se existir autorização persistente documentada em fonte privada governante ou no contexto atual, reutilizá-la estritamente dentro de seus limites; não copiá-la para repositório público.
 4. Na ausência de autorização documentada, não presumir permissão para escrita externa.
-5. Merge em ramo principal, API paga, envio de conteúdo sensível a terceiro e alteração destrutiva não são presumidos como autorizados.
+5. Merge em ramo principal, API paga, envio de conteúdo sensível a terceiro e alteração destrutiva não são presumidos como autorizados quando não estiverem incluídos na instrução atual ou em autorização governante válida.
 
 ENTREGA
 
@@ -96,4 +123,5 @@ CONFIABILIDADE
 2. Não usar eSpeak, eSpeak-NG, MBROLA, pyttsx3, Festival, Piper não autorizado, gTTS robótico ou TTS de navegador como substituto.
 3. Não declarar conformidade sem validação.
 4. Existência do arquivo não equivale a conformidade.
-5. Em falha bloqueante: `BLOQUEADO — requisito obrigatório não pôde ser validado; nenhum fallback inferior foi utilizado.`
+5. Secret existente não equivale a TTS operacional.
+6. Em falha bloqueante: `BLOQUEADO — requisito obrigatório não pôde ser validado; nenhum fallback inferior foi utilizado.`
