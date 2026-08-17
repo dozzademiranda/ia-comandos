@@ -1,7 +1,7 @@
 # audio_modos.md — Modos de áudio do P.A.F.E.
 
-**Versão:** v2.3.0  
-**Data:** 2026-08-14  
+**Versão:** v2.4.0  
+**Data:** 2026-08-17  
 **Status:** ativo e prevalente sobre `pafe/audio.md` para decidir onde e como iniciar a geração.
 
 ## 1. Regra central
@@ -14,6 +14,8 @@
 6. HTML, `speechSynthesis` ou voz nativa do navegador não substituem `/pafe audio`.
 7. A linguagem natural e o contexto prevalecem sobre token exato de comando.
 8. Criar arquivo para download na conversa não exige autorização adicional quando o usuário já pediu o artefato.
+9. Antes de selecionar provedor pago, consultar `audio_api_paga.md`; antes de selecionar voz, consultar `VOICE_REGISTRY.json`, `audio_perfil_fabio.md` e eventual override temporário vigente.
+10. Secret configurado não equivale a provedor disponível. Autenticação, crédito/cota, endpoint, smoke test e voz elegível devem passar no runtime.
 
 ## 2. Saída por comando
 
@@ -83,7 +85,7 @@ Usar quando:
 - a rota estiver autorizada;
 - o conteúdo puder ser processado com segurança no repositório escolhido.
 
-Para ChatGPT/GPT, aplicar `pafe_gpt.md`.
+Para ChatGPT/GPT, aplicar `pafe_gpt.md` e `audio_capacidades_plataformas.md`.
 
 Se existir autorização persistente para rota remota documentada em fonte privada governante ou no contexto atual, reutilizá-la estritamente dentro dos limites registrados. Não republicar identidade, redação ou detalhes privados dessa autorização. Na ausência de autorização documentada, seguir `pafe_governanca_overlays.md`.
 
@@ -93,7 +95,22 @@ Somente sob pedido expresso de pacote, YAML, setup, manifesto, pipeline ou audit
 
 ### Rota 5 — API paga
 
-Somente com autorização, custo estimado e segredo fora do chat.
+Somente com autorização aplicável e segredo fora do chat. Consultar `audio_api_paga.md` para provedores e estado operacional.
+
+Antes de texto longo, aplicar:
+
+```text
+provider_eligible = SECRET/NO_SECRET_OK
+                    ∩ AUTH_OK
+                    ∩ ENDPOINT_OK
+                    ∩ QUOTA_OR_CREDIT_OK
+                    ∩ TTS_SMOKE_TEST_OK
+                    ∩ VOICE_ELIGIBLE
+```
+
+Se um provedor falhar em qualquer gate, classificá-lo `REJECTED_TEMP` naquela execução e continuar para a próxima rota autorizada. Não repetir solicitação de chave que já esteja configurada em Secret.
+
+Uma política temporária como `FISH_FIRST` altera prioridade, não disponibilidade. Fish só precede os demais se passar o preflight atual.
 
 ## 5. Script local mínimo
 
@@ -116,6 +133,8 @@ Não gerar README, YAML, TXT, JSON, manifesto, requirements, setup, ZIP ou hash 
 
 ## 6. Capacidade por plataforma
 
+Consultar `audio_capacidades_plataformas.md` para a matriz operacional atual.
+
 ### Claude com execução ativa
 
 1. Fazer smoke test.
@@ -130,10 +149,10 @@ Não gerar README, YAML, TXT, JSON, manifesto, requirements, setup, ZIP ou hash 
 2. Não presumir incapacidade apenas porque o sandbox bloqueou DNS.
 3. Se a síntese direta falhar e GitHub estiver acessível, aplicar `pafe_gpt.md`.
 4. Só iniciar escrita externa se houver autorização aplicável documentada.
-5. Quando a rota GitHub estiver autorizada, usar branch/workflow temporários, gerar, validar e baixar o artifact.
-6. Fechar o pull request sem merge.
+5. Quando a rota GitHub estiver autorizada, usar branch/workflow temporários quando a operação for experimental; para workflows persistentes já governados, reutilizar o caminho validado sem recriá-lo desnecessariamente.
+6. Gerar, validar e recuperar o artifact real.
 7. Não usar voz robótica.
-8. Não encerrar apenas com diagnóstico quando uma rota autorizada puder entregar os arquivos reais.
+8. Não encerrar apenas com diagnóstico quando uma rota autorizada e runtime-eligible puder entregar os arquivos reais.
 9. Não substituir MP3 por `speechSynthesis` no HTML.
 
 ### Gemini, Perplexity e outras
@@ -146,17 +165,34 @@ Não gerar README, YAML, TXT, JSON, manifesto, requirements, setup, ZIP ou hash 
 
 ## 7. Diagnóstico de falha
 
-Classificar:
+Classificar separadamente:
 - DNS/rede/egress;
 - certificado/SSL;
 - endpoint/serviço;
-- autenticação/cota.
+- autenticação;
+- cota/rate limit;
+- saldo/crédito;
+- contrato/payload da API;
+- voice ID/modelo.
 
-Nunca desativar TLS como padrão. Nunca pedir chave no chat.
+Nunca desativar TLS como padrão. Nunca pedir chave no chat quando houver Secret governado disponível.
 
 ## 8. Motor e pool de vozes
 
-Rota gratuita preferencial quando disponível:
+A seleção de voz deve combinar três fontes:
+
+```text
+VOICE_REGISTRY.json
+→ ranking permanente, bans e velocidade
+
+VOICE_PRIORITY_OVERRIDE_2026-08.json
+→ prioridade temporária, se vigente
+
+audio_api_paga.md
+→ disponibilidade do provedor
+```
+
+Rota gratuita compatível:
 
 ```text
 edge-tts
@@ -173,15 +209,16 @@ AVAILABLE
 CANDIDATE
 REJECTED_TEMP
 LAST_RESORT
+BANNED_BY_USER
 ```
 
 Regra de elegibilidade:
 
 ```text
-eligible = APPROVED ∩ AVAILABLE \ LAST_RESORT
+eligible = APPROVED/PREFERRED ∩ AVAILABLE \ LAST_RESORT \ BANNED_BY_USER
 ```
 
-Se ainda não houver voz `APPROVED`, testar candidatas reais e não inventar disponibilidade. `pt-BR-AntonioNeural` e `pt-BR-FranciscaNeural` são `LAST_RESORT`, não preferência. `pt-BR-LeticiaNeural` ou nome equivalente retornado pelo serviço pode ser `CANDIDATE`. Outras vozes pt-BR devem ser descobertas/testadas no ambiente real.
+O registry estruturado prevalece sobre exemplos antigos deste arquivo. Não reativar voz banida ou rebaixada apenas porque ela aparece em histórico.
 
 Um arquivo usa uma só voz. Entre assuntos, rotação é permitida somente entre vozes elegíveis. Cache/hash de MP3 já válido prevalece sobre ressintetização apenas para cumprir rotação.
 
@@ -212,13 +249,13 @@ Contexto: síntese direta falha por DNS; conector GitHub disponível; autorizaç
 
 Saída obrigatória:
 - aplicar `pafe_gpt.md`;
-- usar branch e workflow temporários conforme autorização;
+- consultar `audio_api_paga.md` e o registry de vozes;
+- usar a rota remota autorizada;
 - um MP3 por assunto;
 - voz neural descoberta/validada no runner;
 - validação por `ffprobe`;
-- artifact físico baixado quando suportado;
-- pull request fechado sem merge;
-- nenhum pedido repetido de autorização já documentada;
+- artifact físico recuperado quando suportado;
+- nenhum pedido repetido de autorização/Secret já documentado;
 - nenhum fallback robótico;
 - nenhum `speechSynthesis` apresentado como substituto.
 
@@ -229,3 +266,7 @@ Quando a máquina local puder ser efetivamente usada para concluir a tarefa e Gi
 ### 9.3. Entrega individual + ZIP
 
 Quando a plataforma permitir múltiplos downloads, reprovar se a única entrega ao usuário for ZIP. Aceitar ZIP adicional de conveniência. Se o provedor remoto só transportar artifact como ZIP, baixar/descompactar e expor os MP3s individualmente quando a superfície permitir.
+
+### 9.4. Secret existe, provedor falha
+
+Reprovar se a IA concluir “chave ausente” apenas porque o TTS falhou. Separar autenticação de payload, cota, crédito e disponibilidade de voz. Registrar `REJECTED_TEMP` com a causa observada e seguir para a próxima rota autorizada.
