@@ -1,8 +1,8 @@
 # COMANDOS — ÍNDICE CANÔNICO
 
 Gerado por: GPT-5.6 Sol
-Data: 12/08/2026
-Versão: 1.9.0
+Data: 17/08/2026
+Versão: 1.10.0
 Estado: canônico sanitizado
 
 ## 1. Regra geral
@@ -209,6 +209,17 @@ Não cria pergunta final própria. A continuidade por uma tecla é governada por
 
 Exibe catálogo curto dos comandos ativos e sua função. Não precisa reproduzir este arquivo inteiro salvo pedido expresso.
 
+### 11.1. `/help`, `/help <comando>` e `/<comando>?`
+
+Fornece ajuda operacional sobre comandos canônicos sem executar o comando consultado. A definição detalhada vigente reside em `help.md`, versão **1.0.0 ou posterior**.
+
+- `/help` → explica como consultar comandos e diferencia ajuda detalhada de `/comandos`;
+- `/help <comando>` → mostra função, sintaxe, variantes/modificadores documentados, defaults, comportamento de execução, exemplos e fonte/versão quando confirmáveis;
+- `/<comando>?` → alias curto de `/help <comando>` quando inequívoco, por exemplo `/mpe?`, `/prompt?` e `/bootstrap?`;
+- `/help <comando> completo` → inclui proveniência, arquivo especializado aplicável, versão e observações de compatibilidade relevantes.
+
+Ao responder sobre “parâmetros”, distinguir comandos/aliases, variantes sintáticas, modificadores documentados e instruções livres. Não inventar flags ou opções ausentes das fontes vigentes. A consulta por `/help` ou `?` é somente leitura e não executa o comando-alvo.
+
 ## 12. Continuidade de uma tecla
 
 A regra global está em `instrucoes-universais.md`.
@@ -223,6 +234,7 @@ Um dígito isolado (`1`, `2`, `3`) na mensagem seguinte executa a opção numera
 - `comandos.md`;
 - `consolidar.md`;
 - `bootstrap.md`;
+- `help.md`;
 - `pafe/`;
 - `prompts/`.
 
@@ -274,6 +286,7 @@ Arquitetura-alvo: um único ponto de entrada do usuário; worker pull somente qu
 - `/consolidar` gera artefato integral + valida persistência/recuperação + usa recibo adaptativo quando conforme;
 - `/bootstrap` gera instruções transportáveis atualizadas para IAs sem acesso às fontes;
 - `/nova-conversa` é alias;
+- `/help <comando>` e `/<comando>?` mostram somente formas de uso documentadas, sem executar o comando-alvo;
 - `/tarefa` é a interface curta da Caixa Postal Multi-IA; `/multi` é alias de `/tarefa multi`;
 - resolução canônica distingue falha de rota, cache, recuperação parcial e indisponibilidade real;
 - `NÃO LOCALIZADO NESTA IA` nunca deve ser promovido automaticamente a `INEXISTENTE`;

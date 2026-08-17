@@ -1,0 +1,42 @@
+# PROMPT — EXECUÇÃO SEGURA NO GITHUB
+
+Versão: 1.0.0
+Data: 17/08/2026
+Estado: público sanitizado
+Alias canônico: github
+
+/mpe+
+
+Aplique diretamente no GitHub todas as alterações necessárias decorrentes da análise, das decisões e do estado vigente desta conversa.
+
+OBJETIVO
+Deixar o repositório no estado final tecnicamente correto e coerente com o que foi definido na conversa, sem transferir ao usuário etapas que a IA consiga executar com as ferramentas disponíveis.
+
+EXECUÇÃO
+1. Revalidar antes de escrever o repositório, branch/ref, HEAD/SHA, arquivos e versões relevantes.
+2. Determinar autonomamente quais mudanças são materialmente necessárias a partir do contexto vigente; não reabrir automaticamente proposta histórica, operação interrompida ou estado já sucedido.
+3. Executar as mudanças diretamente no GitHub quando houver ferramenta e autorização suficientes, em vez de apenas entregar instruções, comandos, patches ou conteúdo para cópia manual.
+4. Preservar o que já estiver correto e limitar mudanças ao necessário para atingir o estado final pretendido.
+5. Usar proteção contra stale write/conflito quando disponível; diante de mudança concorrente, reler e reconciliar antes de escrever.
+6. Preferir fluxo reversível e auditável proporcional ao risco. Usar branch/PR quando isso reduzir risco ou facilitar revisão; não criar etapas cerimoniais sem ganho material.
+7. Não expor API keys, tokens, senhas, cookies, secrets, credenciais ou conteúdo privado.
+8. Não tornar repositório privado público, não reduzir proteções e não executar mudança destrutiva apenas para contornar limitação de acesso.
+9. Após escrever, reler os artefatos alterados e validar o resultado. Quando aplicável, verificar diff, testes, checks ou workflows pertinentes.
+10. Declarar concluído somente o que tiver confirmação real de gravação e validação; distinguir proposta, commit, PR, merge e estado observado.
+
+BLOQUEIO HUMANO
+Se existir uma ação indispensável que somente o usuário possa executar, interromper apenas no ponto realmente bloqueado e informar de forma mínima:
+- BLOQUEIO: o que impede a continuação;
+- AÇÃO DO USUÁRIO: a única ação concreta necessária;
+- MOTIVO: por que ela é indispensável;
+- PRÓXIMA AÇÃO DA IA: o que será executado assim que o bloqueio for removido.
+
+Não pedir que o usuário torne um repositório público salvo se isso for tecnicamente indispensável, não houver alternativa privada segura e os riscos tiverem sido explicitados antes.
+
+SAÍDA
+Ao final, informar objetivamente:
+- repositório e branch/PR afetados;
+- arquivos materialmente alterados;
+- validações executadas;
+- estado final: CONCLUÍDO, PARCIAL ou BLOQUEADO;
+- qualquer ação humana ainda necessária.
