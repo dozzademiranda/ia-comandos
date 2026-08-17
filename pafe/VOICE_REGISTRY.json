@@ -1,8 +1,8 @@
 {
   "schema": "PAFE_VOICE_REGISTRY",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "state": "OPERACIONAL",
-  "updated_local": "2026-08-16T23:14:00-03:00",
+  "updated_local": "2026-08-16T23:43:00-03:00",
   "scope": "P.A.F.E. AUDIO/TTS/MP3",
   "selection_basis": {
     "sample_set": "VOICE_PRIORITY_SAMPLES_20260816",
@@ -24,7 +24,7 @@
   ],
   "elevenlabs": {
     "policy": "PREFER_WHEN_AVAILABLE_AND_TESTED",
-    "current_worker_state": "CANDIDATE_UNVERIFIED_NO_CREDENTIAL_IN_LAST_RUN",
+    "current_worker_state": "CANDIDATE_UNVERIFIED_NO_CREDENTIAL_IN_RUN_31988141526",
     "model_default": "eleven_multilingual_v2",
     "candidate_voice_ids": ["f9bIZ86icwYeMIwU7aND","WlyexGXUZChMcXINS0SV","pOFTEuuuGfBHwloQiNS4","OCm0Qx6MdQFxeclmUhHq","y6WtESLj18d0diFRruBs","KFngny3CPdDkcmlKEUlK","aU2vcrnwi348Gnc2Y1si","6sFKzaJr574YWVu4UuJF","MDLAMJ0jxkpYkjXbmG4t","xsSg7GkDPDhaGZpbKOLn","mBxe7tYxRAMLpIP3fPEp"],
     "rule": "Voice ID cadastrado não equivale a AVAILABLE; testar metadata + TTS na conta/sessão antes de promover."
@@ -41,6 +41,33 @@
     "Não usar voz banida nem como fallback.",
     "Descobrir/testar disponibilidade real antes de síntese.",
     "Preservar cache válido para evitar ressíntese e custo.",
-    "ElevenLabs pode superar a prioridade Edge somente depois de amostra comparável e aprovação do usuário."
-  ]
+    "ElevenLabs pode superar a prioridade Edge somente depois de amostra comparável e aprovação do usuário.",
+    "Em modo MAX_VOICES, todas as vozes AVAILABLE_TESTED podem ser usadas por fala em round-robin; isso não altera a prioridade subjetiva até nova avaliação do usuário."
+  ],
+  "last_runtime_validation": {
+    "run_id":"31988141526",
+    "artifact_id":"9274620762",
+    "artifact_name":"PAFE_CAP1_PODCAST_MAX_VOICES_20260816",
+    "repository":"dozzademiranda/monitor-processos",
+    "repository_visibility":"private",
+    "result":"PASS",
+    "podcast_duration_min":43.9,
+    "voices_approved_and_used":12,
+    "elevenlabs_available_in_run":false,
+    "voice_pool":[
+      {"order":1,"provider":"EDGE","short_name":"en-US-AndrewMultilingualNeural","locale":"en-US","gender":"Male","status":"APPROVED_PRIORITY","sample_duration_s":10.39},
+      {"order":2,"provider":"EDGE","short_name":"pt-PT-DuarteNeural","locale":"pt-PT","gender":"Male","status":"APPROVED_PRIORITY","sample_duration_s":8.50},
+      {"order":3,"provider":"EDGE","short_name":"pt-PT-RaquelNeural","locale":"pt-PT","gender":"Female","status":"APPROVED_PRIORITY","sample_duration_s":10.58},
+      {"order":4,"provider":"EDGE","short_name":"pt-BR-ThalitaMultilingualNeural","locale":"pt-BR","gender":"Female","status":"APPROVED_PRIORITY","sample_duration_s":9.14},
+      {"order":5,"provider":"EDGE","short_name":"en-US-AvaMultilingualNeural","locale":"en-US","gender":"Female","status":"APPROVED_PRIORITY","sample_duration_s":8.57},
+      {"order":6,"provider":"EDGE","short_name":"de-DE-FlorianMultilingualNeural","locale":"de-DE","gender":"Male","status":"AVAILABLE_TESTED","sample_duration_s":8.88},
+      {"order":7,"provider":"EDGE","short_name":"de-DE-SeraphinaMultilingualNeural","locale":"de-DE","gender":"Female","status":"AVAILABLE_TESTED","sample_duration_s":10.10},
+      {"order":8,"provider":"EDGE","short_name":"en-AU-WilliamMultilingualNeural","locale":"en-AU","gender":"Male","status":"AVAILABLE_TESTED","sample_duration_s":9.38},
+      {"order":9,"provider":"EDGE","short_name":"fr-FR-RemyMultilingualNeural","locale":"fr-FR","gender":"Male","status":"AVAILABLE_TESTED","sample_duration_s":9.14},
+      {"order":10,"provider":"EDGE","short_name":"fr-FR-VivienneMultilingualNeural","locale":"fr-FR","gender":"Female","status":"AVAILABLE_TESTED","sample_duration_s":8.86},
+      {"order":11,"provider":"EDGE","short_name":"it-IT-GiuseppeMultilingualNeural","locale":"it-IT","gender":"Male","status":"AVAILABLE_TESTED","sample_duration_s":9.46},
+      {"order":12,"provider":"EDGE","short_name":"ko-KR-HyunsuMultilingualNeural","locale":"ko-KR","gender":"Male","status":"AVAILABLE_TESTED","sample_duration_s":9.91}
+    ],
+    "note":"AVAILABLE_TESTED significa que sintetizou português no run; prioridade subjetiva ainda não definida pelo usuário."
+  }
 }
