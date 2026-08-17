@@ -3,7 +3,7 @@
 Gerado por: GPT-5.6 Sol
 Data: 17/08/2026
 Versão: 1.0.0
-Estado: candidato sanitizado
+Estado: canônico sanitizado
 
 ## 1. Objetivo
 
@@ -74,4 +74,4 @@ Mostrar catálogo/semântica de `/prompt`, incluindo carregar, executar, `não e
 
 ## 8. Ativação
 
-Este arquivo só se torna definição operacional ativa após ser referenciado pelo `comandos.md` canônico vigente. Até lá, seu estado é CANDIDATO, não comando ativo.
+Este arquivo é a definição especializada de `/help` quando referenciado pelo `comandos.md` canônico vigente. Fora dessa condição, tratá-lo como referência documentada, não como autoridade autônoma.
