@@ -1,6 +1,6 @@
 {
   "schema": "PAFE_VOICE_PRIORITY_OVERRIDE",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "state": "ACTIVE_TEMPORARY",
   "scope": "P.A.F.E. AUDIO/TTS/MP3",
   "effective_period": {
@@ -60,6 +60,7 @@
       "status": "PREFERRED_TEMPORARY"
     }
   ],
+  "never_use_scope": "PERMANENT_USER_BAN_NOT_EXPIRING_WITH_AUGUST_OVERRIDE",
   "never_use": [
     {
       "label": "Friendly Mature",
@@ -80,9 +81,9 @@
     {"global_rank": 18, "label": "Calm Professional"},
     {"global_rank": null, "label": "Friendly Mature", "status": "BANNED_BY_USER"}
   ],
-  "ranking_semantics": "The hypothetical lifetime ranks are preserved as user preference but are not merged into the permanent global ranking while Fish availability is temporary. During the effective period, the seven eligible Fish voices override provider order and are tried first in the temporary_priority order.",
+  "ranking_semantics": "The hypothetical lifetime ranks are preserved as user preference but are not merged into the permanent global ranking while Fish availability is temporary. During the effective period, the seven eligible Fish voices override provider order and are tried first in the temporary_priority order. The Friendly Mature ban is permanent and survives expiration of this temporary Fish-first policy.",
   "operational_rules": [
-    "Never use Friendly Mature, including fallback.",
+    "Never use Friendly Mature, including fallback; this prohibition is permanent and does not expire with August.",
     "During the effective period, exhaust eligible Fish voices before the ordinary global pool.",
     "If a Fish voice fails runtime validation, retire it for that run and continue to the next eligible Fish voice.",
     "After the effective period, stop applying FISH_FIRST automatically and revert to the permanent registry unless the user extends the override.",
