@@ -1,6 +1,6 @@
 # rodape.md — REDIRECIONADOR DE COMPATIBILIDADE
 
-Data: 07/08/2026
+Data: 17/08/2026
 Estado: SUPERADO COMO FONTE AUTÔNOMA
 
 Este arquivo existe apenas para preservar links e rotas antigas.
@@ -9,6 +9,8 @@ A definição vigente de `/rodape`, `/r`, `/rodape off` e `/r off` está em **`c
 
 Regras atuais:
 - `/rodape` acrescenta metadados operacionais somente quando houver conteúdo real;
+- `/mpe+` absorve `/rodape` por padrão, salvo `/r off` ou `/rodape off`;
+- `/rodape` não é mecanismo de revisão ou correção gramatical do texto do usuário;
 - não impõe pergunta final nem menu próprio;
 - ações já autorizadas devem ser executadas sem nova confirmação;
 - continuidade por uma tecla é governada por `instrucoes-universais.md`;
