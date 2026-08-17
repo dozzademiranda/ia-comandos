@@ -2,7 +2,7 @@
 
 Gerado por: GPT-5.6 Sol
 Data: 17/08/2026
-Versão: 1.10.0
+Versão: 1.11.0
 Estado: canônico sanitizado
 
 ## 1. Regra geral
@@ -95,11 +95,12 @@ Regras:
 4. não pedir informação já documentada;
 5. executar por padrão, inclusive quando o pedido for criar ou revisar um prompt;
 6. só não executar mediante ordem expressa como `não execute`, `apenas o prompt`, `aguarde`, `pause` ou equivalente;
-7. ordens de pausa valem para a interação corrente e não migram automaticamente por `/consolidar`.
+7. ordens de pausa valem para a interação corrente e não migram automaticamente por `/consolidar`;
+8. `/mpe+` absorve `/rodape` por padrão quando houver conteúdo operacional real; `/rodape off` ou `/r off` desativa essa camada na execução corrente.
 
 Níveis:
 - `/mpe`: aprimora silenciosamente e entrega resposta equilibrada;
-- `/mpe+`: mostra o prompt aprimorado, método/premissas úteis e a execução completa;
+- `/mpe+`: mostra o prompt aprimorado, método/premissas úteis, a execução completa e o fechamento operacional de `/rodape` quando aplicável;
 - `/mpe-`: mantém o mesmo rigor interno e entrega somente o essencial.
 
 Pesquisa externa:
@@ -203,6 +204,8 @@ Ativa fechamento estendido somente quando houver conteúdo operacional real, com
 - `/r` = `/rodape`;
 - `/rodape off` e `/r off` desativam.
 
+`/mpe+` absorve `/rodape` por padrão; `/mpe` e `/mpe-` não o absorvem automaticamente. O `/rodape` não é mecanismo de revisão ou correção gramatical do texto do usuário.
+
 Não cria pergunta final própria. A continuidade por uma tecla é governada por `instrucoes-universais.md`. `rodape.md` é apenas redirecionador.
 
 ## 11. `/comandos`
@@ -279,7 +282,7 @@ Arquitetura-alvo: um único ponto de entrada do usuário; worker pull somente qu
 ## 16. Regra final
 
 - `/mpe` melhora e executa;
-- `/mpe+` melhora, mostra mais e executa;
+- `/mpe+` melhora, mostra mais, executa e absorve `/rodape` por padrão quando aplicável, salvo `/r off` ou `/rodape off`;
 - `/mpe-` melhora, executa e mostra menos;
 - os três geram cabeçalho automaticamente, salvo `/id off`;
 - `/prompt` carrega/executa a biblioteca e promove melhorias quando solicitado;
