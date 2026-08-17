@@ -1,49 +1,62 @@
 {
   "schema": "PAFE_VOICE_REGISTRY",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "state": "OPERACIONAL",
-  "updated_local": "2026-08-16T23:43:00-03:00",
+  "updated_local": "2026-08-17T00:06:00-03:00",
   "scope": "P.A.F.E. AUDIO/TTS/MP3",
-  "selection_basis": {
-    "sample_set": "VOICE_PRIORITY_SAMPLES_20260816",
-    "user_ranking_original_sample_numbers": "1 > 3 > 4 > 5 > 2",
-    "comparison_rule": "mesmo texto curto em todas as vozes"
-  },
-  "edge_priority": [
-    {"priority":1,"sample_number":1,"label":"Andrew Multilingual","short_name":"en-US-AndrewMultilingualNeural","status":"APPROVED_PRIORITY","sample_duration_s":10.56},
-    {"priority":2,"sample_number":3,"label":"Duarte","short_name":"pt-PT-DuarteNeural","status":"APPROVED_PRIORITY","sample_duration_s":8.81},
-    {"priority":3,"sample_number":4,"label":"Raquel","short_name":"pt-PT-RaquelNeural","status":"APPROVED_PRIORITY","sample_duration_s":10.97},
-    {"priority":4,"sample_number":5,"label":"Thalita Multilingual","short_name":"pt-BR-ThalitaMultilingualNeural","status":"APPROVED_PRIORITY","sample_duration_s":9.53},
-    {"priority":5,"sample_number":2,"label":"Ava Multilingual","short_name":"en-US-AvaMultilingualNeural","status":"APPROVED_PRIORITY","sample_duration_s":8.98}
+  "user_priority_current": [
+    {"priority":1,"label":"Andrew Multilingual","short_name":"en-US-AndrewMultilingualNeural","provider":"EDGE","status":"PREFERRED"},
+    {"priority":2,"label":"Remy Multilingual","short_name":"fr-FR-RemyMultilingualNeural","provider":"EDGE","status":"PREFERRED"},
+    {"priority":3,"label":"William Multilingual","short_name":"en-AU-WilliamMultilingualNeural","provider":"EDGE","status":"PREFERRED"},
+    {"priority":4,"label":"Seraphina Multilingual","short_name":"de-DE-SeraphinaMultilingualNeural","provider":"EDGE","status":"PREFERRED"},
+    {"priority":5,"label":"Ava Multilingual","short_name":"en-US-AvaMultilingualNeural","provider":"EDGE","status":"PREFERRED"},
+    {"priority":6,"label":"Duarte","short_name":"pt-PT-DuarteNeural","provider":"EDGE","status":"PREFERRED"},
+    {"priority":7,"label":"Giuseppe Multilingual","short_name":"it-IT-GiuseppeMultilingualNeural","provider":"EDGE","status":"PREFERRED"},
+    {"priority":8,"label":"Vivienne Multilingual","short_name":"fr-FR-VivienneMultilingualNeural","provider":"EDGE","status":"PREFERRED"},
+    {"priority":9,"label":"Raquel","short_name":"pt-PT-RaquelNeural","provider":"EDGE","status":"PREFERRED"},
+    {"priority":10,"label":"Thalita Multilingual","short_name":"pt-BR-ThalitaMultilingualNeural","provider":"EDGE","status":"PREFERRED"},
+    {"priority":11,"label":"Florian Multilingual","short_name":"de-DE-FlorianMultilingualNeural","provider":"EDGE","status":"PREFERRED"},
+    {"priority":12,"label":"Hyunsu Multilingual","short_name":"ko-KR-HyunsuMultilingualNeural","provider":"EDGE","status":"PREFERRED"}
   ],
+  "ranking_note": "A ordem acima normaliza a sequência escrita pelo usuário; o número 8 apareceu duas vezes no texto original, mas a ordem relativa foi preservada.",
+  "target_voice_profile": {
+    "primary":"male_older_professor_bonachao",
+    "traits":["masculina","idosa ou madura","professoral","calorosa","bonachona","natural","clara","paciente","ligeiramente entusiasmada","boa para estudo longo"],
+    "avoid":["monotona","robotica","excessivamente grave ou ameaçadora","caricata","locutor de propaganda"]
+  },
   "banned": [
     {"label":"Antonio","match_token":"antonio","status":"BANNED_BY_USER"},
     {"label":"Francisca","match_token":"francisca","status":"BANNED_BY_USER"},
     {"label":"Brian Multilingual","match_token":"brianmultilingual","status":"BANNED_BY_USER"},
     {"label":"Emma Multilingual","match_token":"emmamultilingual","status":"BANNED_BY_USER"}
   ],
+  "edge_runtime_discovery_20260817": {
+    "run_id":"31989844726",
+    "artifact_id":"9274950478",
+    "repository":"dozzademiranda/monitor-processos",
+    "repository_visibility":"private",
+    "filter":"male AND (pt-BR OR pt-PT OR Multilingual OR DragonHD) excluding known 12 and banned",
+    "candidate_count":0,
+    "pass_count":0,
+    "result":"NO_ADDITIONAL_EDGE_VOICES",
+    "note":"A rota edge-tts atual não expôs novas vozes masculinas adequadas além das 12 já conhecidas; DragonHD não apareceu como candidata adicional nessa rota."
+  },
   "elevenlabs": {
-    "policy": "PREFER_WHEN_AVAILABLE_AND_TESTED",
-    "current_worker_state": "CANDIDATE_UNVERIFIED_NO_CREDENTIAL_IN_RUN_31988141526",
-    "model_default": "eleven_multilingual_v2",
-    "candidate_voice_ids": ["f9bIZ86icwYeMIwU7aND","WlyexGXUZChMcXINS0SV","pOFTEuuuGfBHwloQiNS4","OCm0Qx6MdQFxeclmUhHq","y6WtESLj18d0diFRruBs","KFngny3CPdDkcmlKEUlK","aU2vcrnwi348Gnc2Y1si","6sFKzaJr574YWVu4UuJF","MDLAMJ0jxkpYkjXbmG4t","xsSg7GkDPDhaGZpbKOLn","mBxe7tYxRAMLpIP3fPEp"],
-    "rule": "Voice ID cadastrado não equivale a AVAILABLE; testar metadata + TTS na conta/sessão antes de promover."
+    "policy":"PREFER_WHEN_AVAILABLE_AND_TESTED",
+    "current_worker_state":"CANDIDATE_UNVERIFIED_NO_CREDENTIAL_IN_LAST_PRIVATE_RUN",
+    "model_default":"eleven_multilingual_v2",
+    "candidate_voice_ids":["f9bIZ86icwYeMIwU7aND","WlyexGXUZChMcXINS0SV","pOFTEuuuGfBHwloQiNS4","OCm0Qx6MdQFxeclmUhHq","y6WtESLj18d0diFRruBs","KFngny3CPdDkcmlKEUlK","aU2vcrnwi348Gnc2Y1si","6sFKzaJr574YWVu4UuJF","MDLAMJ0jxkpYkjXbmG4t","xsSg7GkDPDhaGZpbKOLn","mBxe7tYxRAMLpIP3fPEp"],
+    "professor_old_male_public_candidates_20260817": [
+      {"rank_to_test":1,"name":"The Oxford Scholar","voice_id":"7KLwVEortCy2IpAzQfmA","profile":"male late-50s, warm, authoritative, deep, scholarly, measured, engaging","status":"PUBLIC_LIBRARY_PRESENT_NOT_ACCOUNT_VALIDATED"},
+      {"rank_to_test":2,"name":"Older Joe","voice_id":"qxePw1S1QmBgjlU3GIy5","profile":"older male, friendly, approachable, polished, calm authoritative narrator","status":"PUBLIC_LIBRARY_PRESENT_NOT_ACCOUNT_VALIDATED"},
+      {"rank_to_test":3,"name":"W. Storytime Oxley","voice_id":"iUqOXhMfiOIbBejNtfLR","profile":"American grandpa, rich baritone, patient, honest, warm","status":"PUBLIC_LIBRARY_PRESENT_NOT_ACCOUNT_VALIDATED"},
+      {"rank_to_test":4,"name":"Spuds Oxley","voice_id":"NOpBlnGInO9m6vDvFkFC","profile":"friendly grandpa, warm storyteller","status":"PUBLIC_LIBRARY_PRESENT_NOT_ACCOUNT_VALIDATED"},
+      {"rank_to_test":5,"name":"Declan Sage","voice_id":"kqVT88a5QfII1HNAEPTJ","profile":"deep resonant male, wise, deliberate, captivating, professor/narrator profile","status":"PUBLIC_LIBRARY_PRESENT_NOT_ACCOUNT_VALIDATED"},
+      {"rank_to_test":6,"name":"Grandpa Georg","voice_id":"LRpNiUBlcqgIsKUzcrlN","profile":"90+ male, raspy, dynamic, gentle, schoolmasterly, characterful","status":"PUBLIC_LIBRARY_PRESENT_NOT_ACCOUNT_VALIDATED"},
+      {"rank_to_test":7,"name":"Knox Dark 2","voice_id":"dPah2VEoifKnZT37774q","profile":"older male, serious, deep, steady, slow and methodical","status":"PUBLIC_LIBRARY_PRESENT_NOT_ACCOUNT_VALIDATED"}
+    ],
+    "rule":"Voice Library presence does not equal account/runtime availability; validate metadata + TTS with the user's authenticated ElevenLabs account before promotion to AVAILABLE or APPROVED."
   },
-  "podcast_role_default_v4": {
-    "HOST":"en-US-AndrewMultilingualNeural",
-    "ARGUIDOR":"pt-PT-DuarteNeural",
-    "ANALISTA":"pt-PT-RaquelNeural",
-    "CETICO":"pt-BR-ThalitaMultilingualNeural",
-    "COACH":"en-US-AvaMultilingualNeural"
-  },
-  "operational_rules": [
-    "Uma voz por papel dentro de cada episódio; podcast multivozes é exceção explicitamente autorizada pelo usuário.",
-    "Não usar voz banida nem como fallback.",
-    "Descobrir/testar disponibilidade real antes de síntese.",
-    "Preservar cache válido para evitar ressíntese e custo.",
-    "ElevenLabs pode superar a prioridade Edge somente depois de amostra comparável e aprovação do usuário.",
-    "Em modo MAX_VOICES, todas as vozes AVAILABLE_TESTED podem ser usadas por fala em round-robin; isso não altera a prioridade subjetiva até nova avaliação do usuário."
-  ],
   "last_runtime_validation": {
     "run_id":"31988141526",
     "artifact_id":"9274620762",
@@ -55,19 +68,25 @@
     "voices_approved_and_used":12,
     "elevenlabs_available_in_run":false,
     "voice_pool":[
-      {"order":1,"provider":"EDGE","short_name":"en-US-AndrewMultilingualNeural","locale":"en-US","gender":"Male","status":"APPROVED_PRIORITY","sample_duration_s":10.39},
-      {"order":2,"provider":"EDGE","short_name":"pt-PT-DuarteNeural","locale":"pt-PT","gender":"Male","status":"APPROVED_PRIORITY","sample_duration_s":8.50},
-      {"order":3,"provider":"EDGE","short_name":"pt-PT-RaquelNeural","locale":"pt-PT","gender":"Female","status":"APPROVED_PRIORITY","sample_duration_s":10.58},
-      {"order":4,"provider":"EDGE","short_name":"pt-BR-ThalitaMultilingualNeural","locale":"pt-BR","gender":"Female","status":"APPROVED_PRIORITY","sample_duration_s":9.14},
-      {"order":5,"provider":"EDGE","short_name":"en-US-AvaMultilingualNeural","locale":"en-US","gender":"Female","status":"APPROVED_PRIORITY","sample_duration_s":8.57},
-      {"order":6,"provider":"EDGE","short_name":"de-DE-FlorianMultilingualNeural","locale":"de-DE","gender":"Male","status":"AVAILABLE_TESTED","sample_duration_s":8.88},
-      {"order":7,"provider":"EDGE","short_name":"de-DE-SeraphinaMultilingualNeural","locale":"de-DE","gender":"Female","status":"AVAILABLE_TESTED","sample_duration_s":10.10},
-      {"order":8,"provider":"EDGE","short_name":"en-AU-WilliamMultilingualNeural","locale":"en-AU","gender":"Male","status":"AVAILABLE_TESTED","sample_duration_s":9.38},
-      {"order":9,"provider":"EDGE","short_name":"fr-FR-RemyMultilingualNeural","locale":"fr-FR","gender":"Male","status":"AVAILABLE_TESTED","sample_duration_s":9.14},
-      {"order":10,"provider":"EDGE","short_name":"fr-FR-VivienneMultilingualNeural","locale":"fr-FR","gender":"Female","status":"AVAILABLE_TESTED","sample_duration_s":8.86},
-      {"order":11,"provider":"EDGE","short_name":"it-IT-GiuseppeMultilingualNeural","locale":"it-IT","gender":"Male","status":"AVAILABLE_TESTED","sample_duration_s":9.46},
-      {"order":12,"provider":"EDGE","short_name":"ko-KR-HyunsuMultilingualNeural","locale":"ko-KR","gender":"Male","status":"AVAILABLE_TESTED","sample_duration_s":9.91}
-    ],
-    "note":"AVAILABLE_TESTED significa que sintetizou português no run; prioridade subjetiva ainda não definida pelo usuário."
-  }
+      {"provider":"EDGE","short_name":"en-US-AndrewMultilingualNeural","locale":"en-US","gender":"Male","status":"AVAILABLE_TESTED"},
+      {"provider":"EDGE","short_name":"fr-FR-RemyMultilingualNeural","locale":"fr-FR","gender":"Male","status":"AVAILABLE_TESTED"},
+      {"provider":"EDGE","short_name":"en-AU-WilliamMultilingualNeural","locale":"en-AU","gender":"Male","status":"AVAILABLE_TESTED"},
+      {"provider":"EDGE","short_name":"de-DE-SeraphinaMultilingualNeural","locale":"de-DE","gender":"Female","status":"AVAILABLE_TESTED"},
+      {"provider":"EDGE","short_name":"en-US-AvaMultilingualNeural","locale":"en-US","gender":"Female","status":"AVAILABLE_TESTED"},
+      {"provider":"EDGE","short_name":"pt-PT-DuarteNeural","locale":"pt-PT","gender":"Male","status":"AVAILABLE_TESTED"},
+      {"provider":"EDGE","short_name":"it-IT-GiuseppeMultilingualNeural","locale":"it-IT","gender":"Male","status":"AVAILABLE_TESTED"},
+      {"provider":"EDGE","short_name":"fr-FR-VivienneMultilingualNeural","locale":"fr-FR","gender":"Female","status":"AVAILABLE_TESTED"},
+      {"provider":"EDGE","short_name":"pt-PT-RaquelNeural","locale":"pt-PT","gender":"Female","status":"AVAILABLE_TESTED"},
+      {"provider":"EDGE","short_name":"pt-BR-ThalitaMultilingualNeural","locale":"pt-BR","gender":"Female","status":"AVAILABLE_TESTED"},
+      {"provider":"EDGE","short_name":"de-DE-FlorianMultilingualNeural","locale":"de-DE","gender":"Male","status":"AVAILABLE_TESTED"},
+      {"provider":"EDGE","short_name":"ko-KR-HyunsuMultilingualNeural","locale":"ko-KR","gender":"Male","status":"AVAILABLE_TESTED"}
+    ]
+  },
+  "operational_rules": [
+    "Não usar voz banida nem como fallback.",
+    "Descobrir/testar disponibilidade real antes de síntese.",
+    "Preservar cache válido para evitar ressíntese e custo.",
+    "Em podcast MAX_VOICES, usar variedade sem alterar a ordem subjetiva registrada.",
+    "ElevenLabs só entra na prioridade efetiva depois de amostra comparável e aprovação do usuário."
+  ]
 }
