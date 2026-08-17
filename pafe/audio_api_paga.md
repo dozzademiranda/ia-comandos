@@ -1,6 +1,6 @@
 # audio_api_paga.md — Registro operacional de provedores TTS
 
-**Versão:** v1.0.0  
+**Versão:** v1.0.1  
 **Data:** 2026-08-17  
 **Status:** ativo  
 **Escopo:** disponibilidade operacional de provedores TTS e localização lógica de Secrets.  
@@ -28,13 +28,13 @@ Ele NÃO substitui preflight. Estado persistido pode envelhecer; disponibilidade
 |---|---|---|---|---|
 | Microsoft Edge / `edge-tts` | nenhum | rotas locais/GitHub compatíveis | `AVAILABLE_TESTED` conforme `VOICE_REGISTRY.json`; catálogo deve ser redescoberto no runtime | gratuito/fallback neural |
 | ElevenLabs | `ELEVENLABS_API_KEY` | `dozzademiranda/ias-state` → `.github/workflows/elevenlabs-dispatch.yml` | `AUTHENTICATED_AND_TTS_VALIDATED` no histórico operacional de 2026-08-17 preservado em `VOICE_REGISTRY.json` | premium elegível quando voz/conta passarem preflight |
-| Hume AI / Octave | `HUME_API_KEY`; `HUME_SECRET_KEY` apenas para token OAuth quando necessário | `dozzademiranda/ias-state` → `.github/workflows/hume-synth.yml` | `AUTH_AND_VOICE_LISTING_PASS__TTS_BLOCKED_PAYLOAD_PARSE`: API key listou 160 vozes HUME_AI; filtro masculino retornou 97; CUSTOM_VOICE retornou 0; OAuth token retornou HTTP 200; TTS `/v0/tts/file` retornou HTTP 400 `E0101 payload_parse` inclusive em teste mínimo de 2026-08-17 | não elegível para produção até novo TTS E2E HTTP 200 |
-| Fish Audio | `FISH_AUDIO_API_KEY` | `dozzademiranda/ias-state` → `.github/workflows/fish-audio-synth.yml` | `CONFIGURED_BUT_API_CREDIT_BLOCKED`: houve TTS PT-BR anterior bem-sucedido em 2026-08-17 com Capitão Nascimento; preflight posterior retornou HTTP 402 `Insufficient API credit` | não elegível enquanto o preflight continuar 402 |
+| Hume AI / Octave | `HUME_API_KEY`; `HUME_SECRET_KEY` apenas para token OAuth quando necessário | worker persistente existe, mas precisa reconciliação | `AUTH_AND_VOICE_LISTING_PASS__TTS_BLOCKED_PAYLOAD_PARSE`: API key listou 160 vozes HUME_AI; filtro masculino retornou 97; CUSTOM_VOICE retornou 0; OAuth token retornou HTTP 200; TTS `/v0/tts/file` e `/v0/tts` retornaram HTTP 400 `E0101 payload_parse` nos testes de 2026-08-17 | não elegível para produção até novo TTS E2E HTTP 200 |
+| Fish Audio | `FISH_AUDIO_API_KEY` | worker persistente existe, mas usa contrato legado e precisa reconciliação | `CONFIGURED_BUT_API_CREDIT_BLOCKED`: houve TTS PT-BR anterior bem-sucedido em 2026-08-17 com Capitão Nascimento; preflight posterior pelo contrato atual retornou HTTP 402 `Insufficient API credit` | não elegível enquanto o preflight continuar 402 |
 | Azure AI Speech / Microsoft Speech API | credencial própria se configurada | não confirmada nesta rodada | `HISTORICAL_REFERENCE__CURRENT_SECRET_NOT_VERIFIED_THIS_RUN` | capacidade distinta de `edge-tts`; não presumir disponibilidade |
 
 ## 4. Fish Audio — regra atual
 
-A integração HTTP vigente usa:
+O contrato HTTP atual da rota é:
 
 ```text
 POST https://api.fish.audio/v1/tts
@@ -44,6 +44,8 @@ body reference_id: <voice/model id>
 ```
 
 `voice_id` no corpo e campo `language` não são tratados como equivalentes ao contrato atual da rota. O identificador de voz/modelo deve ser enviado como `reference_id`.
+
+**Atenção:** o arquivo persistente `dozzademiranda/ias-state/.github/workflows/scripts/fish_synth.js` ainda estava usando o contrato legado `voice_id`/`language` na auditoria de 2026-08-17. A tentativa de substituição direta desse worker a partir desta execução foi bloqueada pela camada de segurança da ferramenta por o arquivo operacional referenciar Secrets. O delta pendente foi registrado em `dozzademiranda/ias-state` issue `#1`; não declarar o worker persistente como corrigido até readback de commit posterior.
 
 A política temporária `FISH_FIRST` só se aplica quando o provedor estiver **runtime-available**. Erro de crédito/cota/autenticação retira Fish da elegibilidade daquela execução e o roteamento continua para a próxima rota autorizada.
 
@@ -95,15 +97,25 @@ Entretanto, o TTS REST não passou no E2E desta rodada:
 POST /v0/tts/file
 → HTTP 400
 → code E0101 / payload_parse
+
+POST /v0/tts
+version: "2"
+voice id explícita
+instant_mode: false
+→ HTTP 400
+→ code E0101 / payload_parse
 ```
 
-O erro persistiu com payload mínimo alinhado à documentação oficial. Classificar como **TTS_BLOCKED_PENDING_REVALIDATION**, não como chave ausente ou inválida.
+O erro persistiu com payloads alinhados à documentação oficial. Classificar como **TTS_BLOCKED_PENDING_REVALIDATION**, não como chave ausente ou inválida.
+
+**Atenção:** os workers persistentes `hume_synth_simple.js`, `hume_synth_token.js` e a orquestração de `hume-synth.yml` também precisam reconciliação. O workflow atual reutiliza uma camada de fallback multi-provider que pode transportar um mesmo `VOICE_ID` entre provedores incompatíveis. O delta está registrado na issue `dozzademiranda/ias-state#1`.
 
 Artefatos de auditoria preservados no GitHub Actions:
 
 ```text
 run 32011571653 / artifact 9281954656 — catálogo Hume e diagnósticos
-run 32029850349 / artifact 9288464910 — TTS mínimo Hume, HTTP 400
+run 32029850349 / artifact 9288464910 — TTS mínimo Hume file, HTTP 400
+run 32030363531 / artifact 9288648083 — TTS JSON Octave 2 com voice explícita, HTTP 400
 ```
 
 ## 6. Regra de elegibilidade do provedor
