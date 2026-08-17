@@ -1,0 +1,28 @@
+name: TEMP PAFE ElevenLabs Voice Audition
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tmp/pafe-elevenlabs-audition/**'
+      - '.github/workflows/tmp-pafe-elevenlabs-audition.yml'
+permissions:
+  contents: read
+jobs:
+  audition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate short ElevenLabs voice auditions
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          XI_API_KEY: ${{ secrets.XI_API_KEY }}
+        run: python3 tmp/pafe-elevenlabs-audition/audition.py
+      - name: Upload audition artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pafe-elevenlabs-audition
+          path: audition_out/
+          if-no-files-found: error
+          retention-days: 1
