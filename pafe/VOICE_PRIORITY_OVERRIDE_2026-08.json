@@ -1,6 +1,6 @@
 {
   "schema": "PAFE_VOICE_PRIORITY_OVERRIDE",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "state": "ACTIVE_TEMPORARY",
   "scope": "P.A.F.E. AUDIO/TTS/MP3",
   "effective_period": {
@@ -10,65 +10,18 @@
   },
   "temporary_provider_policy": "FISH_FIRST",
   "temporary_priority": [
-    {
-      "priority": 1,
-      "label": "Professor PT",
-      "provider": "FISH_AUDIO",
-      "voice_id": "8f53abe6a78d40cfb9e071efc8644117",
-      "status": "PREFERRED_TEMPORARY"
-    },
-    {
-      "priority": 2,
-      "label": "Book Narrator",
-      "provider": "FISH_AUDIO",
-      "voice_id": "f8dfe9c83081432386f143e2fe9767ef",
-      "status": "PREFERRED_TEMPORARY"
-    },
-    {
-      "priority": 3,
-      "label": "Slax",
-      "provider": "FISH_AUDIO",
-      "voice_id": "8867e81f31bc48d591749b1af0ac6fe0",
-      "status": "PREFERRED_TEMPORARY"
-    },
-    {
-      "priority": 4,
-      "label": "Valentino",
-      "provider": "FISH_AUDIO",
-      "voice_id": "a1fe2e1b6f324e27929d5088f2d09be3",
-      "status": "PREFERRED_TEMPORARY"
-    },
-    {
-      "priority": 5,
-      "label": "Warm Gentle (God Voice)",
-      "provider": "FISH_AUDIO",
-      "voice_id": "3d9fca75027f4a86a677dd7044996a87",
-      "status": "PREFERRED_TEMPORARY"
-    },
-    {
-      "priority": 6,
-      "label": "Documentary",
-      "provider": "FISH_AUDIO",
-      "voice_id": "c3958f083c2d407982263c77cfa831e3",
-      "status": "PREFERRED_TEMPORARY"
-    },
-    {
-      "priority": 7,
-      "label": "Calm Professional",
-      "provider": "FISH_AUDIO",
-      "voice_id": "e0e2468ce2d746c1b20a4414435f6f48",
-      "status": "PREFERRED_TEMPORARY"
-    }
+    {"priority": 1, "label": "Professor PT", "provider": "FISH_AUDIO", "voice_id": "8f53abe6a78d40cfb9e071efc8644117", "status": "PREFERRED_TEMPORARY"},
+    {"priority": 2, "label": "Book Narrator", "provider": "FISH_AUDIO", "voice_id": "f8dfe9c83081432386f143e2fe9767ef", "status": "PREFERRED_TEMPORARY"},
+    {"priority": 3, "label": "Slax", "provider": "FISH_AUDIO", "voice_id": "8867e81f31bc48d591749b1af0ac6fe0", "status": "PREFERRED_TEMPORARY"},
+    {"priority": 4, "label": "Valentino", "provider": "FISH_AUDIO", "voice_id": "a1fe2e1b6f324e27929d5088f2d09be3", "status": "PREFERRED_TEMPORARY"},
+    {"priority": 5, "label": "Warm Gentle (God Voice)", "provider": "FISH_AUDIO", "voice_id": "3d9fca75027f4a86a677dd7044996a87", "status": "PREFERRED_TEMPORARY"},
+    {"priority": 6, "label": "Documentary", "provider": "FISH_AUDIO", "voice_id": "c3958f083c2d407982263c77cfa831e3", "status": "PREFERRED_TEMPORARY"},
+    {"priority": 7, "label": "Calm Professional", "provider": "FISH_AUDIO", "voice_id": "e0e2468ce2d746c1b20a4414435f6f48", "status": "PREFERRED_TEMPORARY"},
+    {"priority": 8, "label": "Capitão Nascimento", "provider": "FISH_AUDIO", "voice_id": "102bccca7dc64b6b8f8494c199c5d153", "status": "APPROVED_FOR_USE_RANK_PENDING", "validation": "PT-BR V0 TTS PASS 2026-08-17; HTTP 200; 9.3 s"}
   ],
   "never_use_scope": "PERMANENT_USER_BAN_NOT_EXPIRING_WITH_AUGUST_OVERRIDE",
   "never_use": [
-    {
-      "label": "Friendly Mature",
-      "provider": "FISH_AUDIO",
-      "voice_id": "8bed0e9b444046e2bf72da4b251d9a1d",
-      "status": "BANNED_BY_USER",
-      "rule": "NEVER_USE_EVEN_AS_FALLBACK"
-    }
+    {"label": "Friendly Mature", "provider": "FISH_AUDIO", "voice_id": "8bed0e9b444046e2bf72da4b251d9a1d", "status": "BANNED_BY_USER", "rule": "NEVER_USE_EVEN_AS_FALLBACK"}
   ],
   "fallback_after_fish": "Use user_priority_current from pafe/VOICE_REGISTRY.json, always excluding every banned or unavailable voice.",
   "hypothetical_lifetime_global_ranking": [
@@ -79,12 +32,14 @@
     {"global_rank": 16, "label": "Warm Gentle (God Voice)"},
     {"global_rank": 17, "label": "Documentary"},
     {"global_rank": 18, "label": "Calm Professional"},
+    {"global_rank": null, "label": "Capitão Nascimento", "status": "RANK_PENDING_USER_EVALUATION"},
     {"global_rank": null, "label": "Friendly Mature", "status": "BANNED_BY_USER"}
   ],
-  "ranking_semantics": "The hypothetical lifetime ranks are preserved as user preference but are not merged into the permanent global ranking while Fish availability is temporary. During the effective period, the seven eligible Fish voices override provider order and are tried first in the temporary_priority order. The Friendly Mature ban is permanent and survives expiration of this temporary Fish-first policy.",
+  "ranking_semantics": "The hypothetical lifetime ranks are preserved as user preference but are not merged into the permanent global ranking while Fish availability is temporary. During the effective period, the ranked Fish voices are tried first. Capitão Nascimento was explicitly selected for use by the user and is appended to the Fish-first pool until the user assigns a comparative rank. Friendly Mature remains permanently banned.",
   "operational_rules": [
     "Never use Friendly Mature, including fallback; this prohibition is permanent and does not expire with August.",
     "During the effective period, exhaust eligible Fish voices before the ordinary global pool.",
+    "Use Capitão Nascimento as an approved Fish voice; keep its comparative rank pending explicit user evaluation.",
     "If a Fish voice fails runtime validation, retire it for that run and continue to the next eligible Fish voice.",
     "After the effective period, stop applying FISH_FIRST automatically and revert to the permanent registry unless the user extends the override.",
     "Do not reinterpret the hypothetical lifetime ranks as current permanent ranks without a later explicit user instruction."
