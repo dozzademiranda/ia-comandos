@@ -1,21 +1,23 @@
 # audio_modos.md — Modos de áudio do P.A.F.E.
 
-**Versão:** v2.4.0  
-**Data:** 2026-08-17  
+**Versão:** v2.5.0  
+**Data:** 2026-08-19  
 **Status:** ativo e prevalente sobre `pafe/audio.md` para decidir onde e como iniciar a geração.
 
 ## 1. Regra central
 
 1. Áudio significa MP3 neural real por assunto.
-2. Um assunto principal gera um MP3 independente e usa uma única voz naquele arquivo.
-3. Não alternar vozes dentro do mesmo assunto apenas para variedade.
-4. É proibido gerar somente `master_audio.mp3`, salvo pedido expresso posterior.
-5. Não usar fallback robótico.
-6. HTML, `speechSynthesis` ou voz nativa do navegador não substituem `/pafe audio`.
-7. A linguagem natural e o contexto prevalecem sobre token exato de comando.
-8. Criar arquivo para download na conversa não exige autorização adicional quando o usuário já pediu o artefato.
-9. Antes de selecionar provedor pago, consultar `audio_api_paga.md`; antes de selecionar voz, consultar `VOICE_REGISTRY.json`, `audio_perfil_fabio.md` e eventual override temporário vigente.
-10. Secret configurado não equivale a provedor disponível. Autenticação, crédito/cota, endpoint, smoke test e voz elegível devem passar no runtime.
+2. Um assunto principal gera um MP3 independente.
+3. Um MP3 pode usar uma ou várias vozes elegíveis. A rotação existe para evitar repetição excessiva da mesma voz no conjunto de áudios e pode ocorrer também dentro de um arquivo quando houver função semântica ou pedagógica.
+4. Dentro do mesmo assunto, alternar vozes por personagem, papel, pergunta/resposta, contraponto, bloco conceitual ou transição real; evitar troca aleatória apenas por variedade.
+5. Vozes temporariamente disponíveis devem ser aproveitadas preferencialmente em conteúdo novo enquanto estiverem runtime-eligible e aprovadas, sem ultrapassar bans, qualidade ou preflight.
+6. É proibido gerar somente `master_audio.mp3`, salvo pedido expresso posterior.
+7. Não usar fallback robótico.
+8. HTML, `speechSynthesis` ou voz nativa do navegador não substituem `/pafe audio`.
+9. A linguagem natural e o contexto prevalecem sobre token exato de comando.
+10. Criar arquivo para download na conversa não exige autorização adicional quando o usuário já pediu o artefato.
+11. Antes de selecionar provedor pago, consultar `audio_api_paga.md`; antes de selecionar voz, consultar `VOICE_REGISTRY.json`, `audio_perfil_fabio.md` e eventual override temporário vigente.
+12. Secret configurado não equivale a provedor disponível. Autenticação, crédito/cota, endpoint, smoke test e voz elegível devem passar no runtime.
 
 ## 2. Saída por comando
 
@@ -119,6 +121,7 @@ Entregar um único `.py`, autossuficiente, com:
 - nomes dos MP3s;
 - motor neural;
 - descoberta/seleção de voz;
+- mapeamento de papel/segmento para voz quando houver múltiplas vozes;
 - retries;
 - pausas reais;
 - PCM uniforme;
@@ -139,7 +142,7 @@ Consultar `audio_capacidades_plataformas.md` para a matriz operacional atual.
 
 1. Fazer smoke test.
 2. Gerar MP3 neural direto quando possível.
-3. Gerar um MP3 por assunto.
+3. Gerar um MP3 por assunto, com uma ou várias vozes elegíveis conforme a estrutura do conteúdo.
 4. Nunca gerar master único por padrão.
 5. Se falhar, aplicar `pafe_claude.md` e a rota compatível.
 
@@ -220,7 +223,7 @@ eligible = APPROVED/PREFERRED ∩ AVAILABLE \ LAST_RESORT \ BANNED_BY_USER
 
 O registry estruturado prevalece sobre exemplos antigos deste arquivo. Não reativar voz banida ou rebaixada apenas porque ela aparece em histórico.
 
-Um arquivo usa uma só voz. Entre assuntos, rotação é permitida somente entre vozes elegíveis. Cache/hash de MP3 já válido prevalece sobre ressintetização apenas para cumprir rotação.
+Um arquivo pode usar uma ou várias vozes elegíveis. No conjunto, distribuir o pool de modo a evitar repetição desnecessária da mesma voz em todos os áudios antes de reutilizá-la, respeitando adequação ao papel e preferência. Dentro do arquivo, a alternância deve seguir estrutura semântica/pedagógica, não aleatoriedade. Vozes com disponibilidade temporária recebem prioridade de aproveitamento em novas gerações enquanto permanecerem elegíveis. Cache/hash de MP3 já válido prevalece sobre ressintetização apenas para cumprir rotação ou aproveitar voz nova.
 
 Proibido como fallback final:
 - Piper não autorizado;
@@ -252,7 +255,7 @@ Saída obrigatória:
 - consultar `audio_api_paga.md` e o registry de vozes;
 - usar a rota remota autorizada;
 - um MP3 por assunto;
-- voz neural descoberta/validada no runner;
+- uma ou várias vozes neurais descobertas/validadas no runner conforme a estrutura do conteúdo;
 - validação por `ffprobe`;
 - artifact físico recuperado quando suportado;
 - nenhum pedido repetido de autorização/Secret já documentado;

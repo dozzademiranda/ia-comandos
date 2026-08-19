@@ -1,20 +1,26 @@
 # audio.md — Padrão técnico de áudio P.A.F.E.
 
-**Versão:** v7.2 MASTER  
-**Data:** 2026-08-17  
+**Versão:** v7.3 MASTER  
+**Data:** 2026-08-19  
 **Escopo:** técnica de síntese, processamento, validação e publicação.  
 **Roteamento:** decidido por `audio_modos.md`.
 
 ## 1. Regra técnica central
 
 1. Cada assunto principal produz um MP3 independente.
-2. Cada MP3 usa uma única voz; não alternar vozes dentro do mesmo assunto apenas por variedade.
-3. Não concatenar assuntos diferentes em `master_audio.mp3`.
-4. Chunks são temporários internos de um assunto, não capítulos de um master.
-5. Falha em um assunto não invalida os arquivos já aprovados.
-6. Arquivo existente não equivale a arquivo conforme.
-7. HTML, TTS do navegador e `speechSynthesis` não substituem MP3 real solicitado.
-8. Estado de provedor pago pertence a `audio_api_paga.md`; perfil/ranking/bans pertencem aos registries estruturados. Não duplicar nem inferir disponibilidade a partir de memória.
+2. Um MP3 pode usar uma ou várias vozes neurais elegíveis. Não existe limite geral de uma voz por arquivo.
+3. A finalidade da rotação é evitar que a mesma voz domine todos os áudios/arquivos e aproveitar diversidade real de vozes, inclusive dentro de um mesmo MP3 quando isso tiver função semântica ou pedagógica.
+4. Dentro de um arquivo, múltiplas vozes são permitidas para personagens, papéis, perguntas/respostas, contrapontos, blocos conceituais ou transições semanticamente distintas. Evitar troca aleatória a cada frase apenas para criar variedade.
+5. Em um lote de áudios, distribuir as vozes elegíveis de modo a reduzir repetição desnecessária antes de reutilizar a mesma voz, sem sacrificar adequação ao papel, inteligibilidade, qualidade ou preferência do usuário.
+6. Vozes com janela de disponibilidade temporária devem ser aproveitadas preferencialmente em novas gerações ou em regenerações já necessárias enquanto estiverem runtime-eligible e aprovadas; disponibilidade temporária nunca supera bans, preflight, qualidade ou segurança.
+7. Quando houver personagem ou função cognitiva recorrente, manter identidade vocal estável enquanto isso ajudar reconhecimento e aprendizagem; trocar apenas por decisão pedagógica, indisponibilidade, qualidade ou instrução aplicável.
+8. MP3 já válido não deve ser ressintetizado apenas para cumprir variedade, rotação ou aproveitar uma voz nova/temporária; aplicar a política de diversidade prioritariamente a conteúdo novo ou a regeneração já necessária.
+9. Não concatenar assuntos diferentes em `master_audio.mp3`.
+10. Chunks são temporários internos de um assunto, não capítulos de um master.
+11. Falha em um assunto não invalida os arquivos já aprovados.
+12. Arquivo existente não equivale a arquivo conforme.
+13. HTML, TTS do navegador e `speechSynthesis` não substituem MP3 real solicitado.
+14. Estado de provedor pago pertence a `audio_api_paga.md`; perfil/ranking/bans pertencem aos registries estruturados. Não duplicar nem inferir disponibilidade a partir de memória.
 
 ## 2. Nomes
 
@@ -61,7 +67,7 @@ eligible = PREFERRED/APPROVED ∩ AVAILABLE \ LAST_RESORT \ BANNED_BY_USER
 
 O `VOICE_REGISTRY.json` é a fonte estruturada do ranking permanente e bans. `VOICE_PRIORITY_OVERRIDE_2026-08.json`, enquanto vigente, pode alterar prioridade temporariamente, mas não converte provedor indisponível em disponível.
 
-Quando houver várias vozes elegíveis, pode haver rotação entre assuntos conforme prioridade do usuário e uso recente. Cache/hash de MP3 já válido prevalece sobre ressintetização apenas para cumprir rotação.
+Quando houver várias vozes elegíveis, a seleção pode distribuir vozes entre assuntos e também dentro do mesmo assunto por segmentos/papéis semanticamente distintos. Em um conjunto de arquivos, evitar usar sempre a mesma voz quando houver alternativas elegíveis adequadas. Vozes temporariamente disponíveis podem receber prioridade de uso enquanto a janela estiver aberta, sem ultrapassar bans, qualidade ou preflight. Cache/hash de MP3 já válido prevalece sobre ressintetização apenas para cumprir rotação.
 
 Proibido: eSpeak, eSpeak-NG, MBROLA, pyttsx3, Festival, gTTS robótico, voz metálica, motor não rastreável e `speechSynthesis` como substituto de MP3.
 
@@ -92,7 +98,9 @@ texto original
 → sanitização
 → correções fonéticas
 → divisão semântica
-→ síntese neural
+→ definição de papéis/segmentos
+→ mapeamento de voz(es) elegível(is)
+→ síntese neural por segmento
 → validação dos chunks
 → PCM WAV uniforme
 → pausas reais
@@ -114,6 +122,8 @@ TP=-1.5 dBTP
 LRA=11
 ```
 
+Quando houver múltiplas vozes no mesmo MP3, normalizar os segmentos para evitar saltos de loudness e preservar transições audíveis sem cortes abruptos.
+
 ## 6. Script local mínimo
 
 O script padrão de contingência deve ser um único `.py` autossuficiente.
@@ -134,6 +144,7 @@ Comportamento:
 - `--only`: gera apenas os números indicados;
 - `--force`: permite sobrescrita intencional;
 - arquivo válido existente é preservado por padrão;
+- quando houver múltiplas vozes, o script deve preservar mapeamento determinístico entre papel/segmento e voz para permitir reprodução e auditoria;
 - não usar `sudo`.
 
 ## 7. Pacote técnico completo
@@ -178,8 +189,10 @@ Para cada MP3:
 - tamanho maior que zero;
 - duração positiva;
 - codec válido;
-- voz neural autorizada e efetivamente usada;
-- provedor efetivamente usado e runtime-eligible;
+- voz ou vozes neurais autorizadas e efetivamente usadas;
+- provedor(es) efetivamente usado(s) e runtime-eligible;
+- quando multivoz, correspondência entre segmento/papel e voz planejada;
+- quando multivoz, transições sem cortes abruptos ou desequilíbrio de loudness;
 - início e final audíveis;
 - ausência de truncamento;
 - ausência de loop;
@@ -193,6 +206,8 @@ Validação global:
 - quantidade de MP3s = quantidade de assuntos;
 - `master_audio.mp3` ausente, salvo pedido expresso;
 - duração informada por arquivo;
+- quando houver várias vozes elegíveis adequadas, ausência de repetição desnecessária da mesma voz em todos os arquivos;
+- uso oportuno de vozes temporariamente disponíveis em conteúdo novo quando isso não reduzir qualidade;
 - exclusão de um arquivo não quebra os demais;
 - ausência de substituição por `speechSynthesis`/TTS do navegador.
 

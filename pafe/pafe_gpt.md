@@ -1,7 +1,7 @@
 # /pafe — Overlay GPT
 
-**Versão:** 1.3  
-**Data:** 2026-08-17  
+**Versão:** 1.4  
+**Data:** 2026-08-19  
 **Escopo:** ChatGPT/GPT com ferramentas de execução, conectores de arquivos e acesso autorizado ao GitHub.  
 **Estado:** canônico sanitizado
 
@@ -39,7 +39,7 @@ Não depender de memória para saber se ElevenLabs, Hume, Fish ou outro provedor
 
 Quando a rota estiver disponível e autorizada:
 
-1. resolver o provedor e a voz a partir das fontes vigentes;
+1. resolver o provedor e o pool de vozes a partir das fontes vigentes;
 2. testar a síntese direta no ambiente atual quando houver execução e isso for útil;
 3. classificar a falha como DNS/rede/egress, SSL, endpoint, autenticação, cota/rate limit, saldo/crédito, payload/contrato ou voz/modelo;
 4. preferir workflow persistente já governado quando ele existir e estiver correto;
@@ -47,14 +47,15 @@ Quando a rota estiver disponível e autorizada:
 6. nunca tornar repositório público apenas para obter execução ou Secret;
 7. usar runner compatível, FFmpeg e FFprobe quando necessário;
 8. descobrir/listar vozes realmente disponíveis no provedor quando o catálogo for dinâmico;
-9. gerar um MP3 independente por assunto, usando uma única voz por arquivo;
+9. gerar um MP3 independente por assunto, com uma ou várias vozes elegíveis conforme papéis/segmentos e a política de diversidade de `audio.md`;
 10. validar cada MP3 com `ffprobe` e as regras de `audio.md`;
-11. publicar os MP3s como artifact do GitHub Actions quando essa for a superfície de transporte;
-12. confirmar a conclusão real do workflow;
-13. baixar o artifact para a conversa quando a plataforma permitir;
-14. descompactar e disponibilizar MP3s individuais quando a superfície permitir;
-15. conferir quantidade de arquivos, duração e integridade;
-16. fechar PR temporário sem merge e excluir branch temporária quando a ferramenta disponível permitir e isso não causar perda de evidência necessária.
+11. quando houver múltiplas vozes, preservar mapeamento auditável entre segmento/papel e voz usada;
+12. publicar os MP3s como artifact do GitHub Actions quando essa for a superfície de transporte;
+13. confirmar a conclusão real do workflow;
+14. baixar o artifact para a conversa quando a plataforma permitir;
+15. descompactar e disponibilizar MP3s individuais quando a superfície permitir;
+16. conferir quantidade de arquivos, duração e integridade;
+17. fechar PR temporário sem merge e excluir branch temporária quando a ferramenta disponível permitir e isso não causar perda de evidência necessária.
 
 ## 4. Autorização
 
@@ -75,7 +76,7 @@ Quando a rota estiver disponível e autorizada:
 5. FFmpeg e FFprobe: obrigatórios quando houver pós-processamento/validação.
 6. Saída: MP3; processamento final conforme `audio.md`.
 7. Um arquivo por assunto.
-8. Uma única voz por arquivo.
+8. Um arquivo pode conter uma ou várias vozes elegíveis; diversidade é permitida dentro do arquivo quando estruturada por papel/segmento e desejada no conjunto de arquivos.
 9. Nenhum `master_audio.mp3` por padrão.
 10. Nenhum loop, silêncio artificial ou duplicação para inflar duração.
 11. O HTML, quando também solicitado, permanece separado e sem player, `<audio>`, `speechSynthesis` ou referência a `.mp3`.
@@ -111,9 +112,9 @@ audio_api_paga.md
 
 Estados: `PREFERRED`, `APPROVED`, `AVAILABLE`, `CANDIDATE`, `REJECTED_TEMP`, `LAST_RESORT`, `BANNED_BY_USER`.
 
-Selecionar somente voz elegível no provedor que passou o preflight. Aprovação histórica da voz não torna o provedor disponível no presente.
+Selecionar somente vozes elegíveis em provedores que passaram o preflight. Aprovação histórica da voz não torna o provedor disponível no presente.
 
-Entre assuntos, rotação pode ocorrer somente entre vozes elegíveis. Não ressintetizar MP3 já válido apenas para cumprir rotação. Não inventar nome de voz nem declarar voz utilizada sem verificar a execução/arquivo.
+A rotação pode ocorrer entre assuntos e dentro do mesmo assunto por personagem, papel ou segmento semanticamente distinto. Em um lote, evitar repetir a mesma voz em todos os arquivos quando houver alternativas elegíveis adequadas. Vozes temporariamente disponíveis podem ser priorizadas em conteúdo novo enquanto a janela estiver aberta, sem superar bans, qualidade ou preflight. Não ressintetizar MP3 já válido apenas para cumprir rotação ou aproveitar voz nova. Não inventar nome de voz nem declarar voz utilizada sem verificar a execução/arquivo.
 
 ## 8. Validação bloqueante
 
@@ -122,9 +123,9 @@ Para cada MP3, verificar:
 - tamanho maior que zero;
 - codec;
 - duração;
-- bitrate/frequência/canais quando material;
-- voz neural selecionada conforme política;
-- provedor efetivamente usado e aprovado no smoke test;
+- voz ou vozes neurais selecionadas conforme política;
+- provedor(es) efetivamente usado(s) e aprovado(s) no smoke test;
+- quando multivoz, correspondência entre papel/segmento e voz prevista;
 - início e final sem truncamento;
 - ausência de loop e silêncio artificial;
 - correspondência entre assunto, nome e conteúdo.

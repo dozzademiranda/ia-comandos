@@ -1,7 +1,7 @@
 COMANDO: /pafe
 
 ARQUIVO: pafe/README.md
-VERSÃO: 2026-08-17.1
+VERSÃO: 2026-08-19.1
 STATUS: canônico sanitizado
 
 O QUE É
@@ -52,15 +52,18 @@ REGRA DE ÁUDIO
 
 1. Áudio significa MP3 neural real por assunto.
 2. Um assunto principal gera um MP3 independente.
-3. Cada MP3 usa uma única voz; não alternar vozes dentro do mesmo assunto apenas por variedade.
-4. `master_audio.mp3` é proibido por padrão.
-5. Se um assunto exceder limite técnico, usar partes numeradas.
-6. Falha em um assunto não invalida os demais.
-7. A exclusão de um MP3 estudado é comportamento normal.
-8. Regeneração seletiva deve existir por `--only` quando houver script local.
-9. A voz deve ser descoberta/testada na rota real e respeitar ranking, bans e overrides persistidos.
-10. Cache/hash de MP3 válido prevalece sobre ressintetização apenas para cumprir rotação.
-11. Secret configurado não prova disponibilidade: autenticação, saldo/cota, endpoint, smoke test e voz elegível precisam passar.
+3. Um MP3 pode usar uma ou várias vozes neurais elegíveis; não há limite geral de uma voz por arquivo.
+4. A diversidade de vozes é desejada entre arquivos e, quando houver função semântica ou pedagógica, também dentro do mesmo arquivo. Não usar sempre a mesma voz quando houver alternativas elegíveis adequadas.
+5. Dentro de um MP3, alternar por personagem, papel, pergunta/resposta, contraponto, bloco conceitual ou transição real; evitar troca aleatória por frase apenas para aumentar variedade.
+6. Vozes com disponibilidade temporária devem ser aproveitadas preferencialmente em conteúdo novo enquanto estiverem runtime-eligible e aprovadas, sem superar bans, qualidade ou preflight.
+7. `master_audio.mp3` é proibido por padrão.
+8. Se um assunto exceder limite técnico, usar partes numeradas.
+9. Falha em um assunto não invalida os demais.
+10. A exclusão de um MP3 estudado é comportamento normal.
+11. Regeneração seletiva deve existir por `--only` quando houver script local.
+12. A voz deve ser descoberta/testada na rota real e respeitar ranking, bans e overrides persistidos.
+13. Cache/hash de MP3 válido prevalece sobre ressintetização apenas para cumprir rotação ou aproveitar voz nova/temporária.
+14. Secret configurado não prova disponibilidade: autenticação, saldo/cota, endpoint, smoke test e voz elegível precisam passar.
 
 COMANDO COMBINADO
 
