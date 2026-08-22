@@ -1,8 +1,8 @@
 # COMANDOS — ÍNDICE CANÔNICO
 
 Gerado por: GPT-5.6 Sol
-Data: 17/08/2026
-Versão: 1.11.0
+Data: 22/08/2026
+Versão: 1.13.0
 Estado: canônico sanitizado
 
 ## 1. Regra geral
@@ -154,9 +154,13 @@ Gerencia a biblioteca canônica de prompts reutilizáveis.
 
 ## 6. `/consolidar`
 
-Definição detalhada vigente: `consolidar.md`, versão **2.3.0 ou posterior**.
+Definição detalhada vigente: `consolidar.md`, versão **2.5.0 ou posterior**.
 
-Sempre gera um artefato integral, autocontido e não canônico de continuidade, com RETOMADA IMEDIATA. Em projeto com armazenamento gravável, resolve a residência correta, persiste, relê, valida o conteúdo e testa recuperação direta pelo identificador estável. Quando todos os gates passam e não há portabilidade imediata, o chat pode apresentar apenas RECIBO DE CONTINUIDADE; caso contrário, apresenta o artefato integral. Consolidado não é Bíblia Canônica.
+REGRA DURA DE RESOLUÇÃO: `/consolidar` não pode ser executado somente a partir deste resumo. Antes de persistir qualquer conteúdo, carregar a definição especializada vigente de `consolidar.md` e aplicar seus gates integralmente. Se a definição especializada não puder ser materializada, não fingir conformidade com a versão vigente.
+
+Sempre gera um artefato integral, autocontido e **CONTINUIDADE — NÃO CANÔNICA**, com RETOMADA IMEDIATA. O CURRENT de `/consolidar` é separado da Bíblia Canônica; nunca usar ou sobrescrever a Bíblia Canônica como CURRENT de continuidade apenas por ela conter contexto do projeto.
+
+Quando Google Drive/Caixa Postal aplicáveis estiverem acessíveis, depois de persistir e validar o artefato integral, `/consolidar` deve tentar criar uma TASK de handoff `CONTINUITY_HANDOFF`. Se `SHORT_DISPATCH_STATE = READY`, usar `MODO DE ENTREGA: TAREFA` e a resposta visível deve ser **exatamente uma única linha**: `/tarefa <TASK_ID>`. Nesse modo, essa saída específica prevalece sobre cabeçalho, `/mpe+`, `/rodape`, recibo, menu ou qualquer texto adicional. Se o handoff curto não puder ser validado, usar o fallback definido em `consolidar.md`; nunca entregar uma TASK não validada.
 
 Ao resolver `consolidar.md`, aplicar também as regras de resolução resiliente, autoridade × localização, `NÃO LOCALIZADO ≠ INEXISTENTE` e paginação documental deste arquivo.
 
@@ -286,7 +290,7 @@ Arquitetura-alvo: um único ponto de entrada do usuário; worker pull somente qu
 - `/mpe-` melhora, executa e mostra menos;
 - os três geram cabeçalho automaticamente, salvo `/id off`;
 - `/prompt` carrega/executa a biblioteca e promove melhorias quando solicitado;
-- `/consolidar` gera artefato integral + valida persistência/recuperação + usa recibo adaptativo quando conforme;
+- `/consolidar` carrega obrigatoriamente `consolidar.md` v2.5.0+, gera continuidade não canônica separada da Bíblia, valida persistência/recuperação e, com TASK_HANDOFF READY, entrega somente `/tarefa <TASK_ID>`;
 - `/bootstrap` gera instruções transportáveis atualizadas para IAs sem acesso às fontes;
 - `/nova-conversa` é alias;
 - `/help <comando>` e `/<comando>?` mostram somente formas de uso documentadas, sem executar o comando-alvo;
