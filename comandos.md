@@ -2,7 +2,8 @@
 
 Gerado por: GPT-5.6 Sol
 Data: 22/08/2026
-Versão: 1.13.0
+Versão: 1.14.0
+Release: IAS-REL-20260822-COMANDOS-001
 Estado: canônico sanitizado
 
 ## 1. Regra geral
@@ -25,7 +26,7 @@ Estado: canônico sanitizado
    - Perplexity/sem conector privado: GitHub `dozzademiranda/ia-comandos`, branch `main`.
 4. Se houver versão interna claramente mais nova e validada, ela prevalece, salvo extensão privada que não deva ser publicada.
 5. Se duas fontes declararem a mesma versão mas divergirem materialmente, informar `NÃO SINCRONIZADO` e reconciliar antes de propagar.
-6. GitHub público contém somente núcleo global sanitizado; Box e Drive podem conter extensões privadas. Diferença privada deliberada não é conflito do núcleo público.
+6. O mesmo nome de arquivo canônico em múltiplos provedores deve representar o mesmo **CORE**: mesmo payload semântico, mesma versão e mesmo `RELEASE_ID`. Extensões privadas ou provider-specific devem residir em overlays separados.
 7. `archive/`, `old/`, arquivos `*.old*`, `(OLD)`, `intermediario_*` e relatórios históricos não participam do bootstrap nem prevalecem sobre arquivos ativos.
 
 ### 2.1. Resolução resiliente de fontes canônicas
@@ -75,6 +76,21 @@ Quando a tarefa envolver citação ou localização em documento paginado:
 3. para referência bibliográfica, usar a paginação impressa da edição efetivamente adotada, salvo norma específica em contrário;
 4. ausência de conferência visual/primária deve permanecer explicitamente pendente, não ser resolvida por inferência de índice.
 
+### 2.4. CORE + OVERLAY + RELEASE_SYNC_GATE
+
+Esta regra é automática para qualquer arquivo canônico materialmente espelhado em mais de um provedor. O usuário não precisa pedir `/sync`.
+
+1. **CORE idêntico:** o mesmo nome de arquivo em GitHub, Drive e Box deve conter o mesmo CORE, com a mesma versão semântica e o mesmo `RELEASE_ID`.
+2. **OVERLAY separado:** regra privada, provider-specific, ponteiro interno ou extensão deliberada não deve ser embutida em uma cópia diferente do CORE. Usar arquivo separado, como `comandos.private.md` ou overlay equivalente. Overlay complementa o CORE e não cria uma segunda definição concorrente do comando.
+3. **Um payload por release:** alteração material começa em um único payload renderizado. Não editar os provedores independentemente.
+4. **Stale-write protection:** antes de gravar, capturar a revisão observada de cada destino quando disponível — blob SHA/commit no GitHub, `revisionId` no Drive, file version/SHA no Box. Se o estado mudou, parar, reler e reconciliar; não sobrescrever ramo novo com payload antigo.
+5. **Write → readback → hash:** gravar nos destinos obrigatórios, reler o conteúdo integral, normalizar em UTF-8 + NFC + LF e calcular SHA-256 do CORE quando a superfície permitir; quando não permitir cálculo direto, usar digest/identificador imutável do provedor mais readback semântico integral. Um target só pode ser `MATCH` quando versão, `RELEASE_ID` e fingerprint esperado coincidirem.
+6. **Estados:** usar `MATCH`, `DRIFT`, `STALE` ou `UNKNOWN`. `MATCH` global exige `MATCH` em todos os targets obrigatórios. Falha de uma rota não autoriza declarar sincronização.
+7. **Falha parcial:** não fazer rollback destrutivo dos targets já gravados apenas para “igualar por baixo”. Registrar o release como incompleto e reconciliar o target faltante antes de uma nova alteração material no mesmo arquivo.
+8. **Manifesto:** manter `IAS__RELEASE_MANIFEST__CURRENT` em armazenamento privado com `RELEASE_ID`, arquivo, versão semântica, hash esperado, targets, revisões físicas e estado. O manifesto registra a publicação; não substitui o conteúdo canônico.
+9. **Revisões físicas:** commit SHA, Drive revisionId e Box fileVersion podem ser diferentes. Isso não é DRIFT. O que deve coincidir entre os COREs é payload semântico, versão, `RELEASE_ID` e fingerprint normalizado.
+10. **Privacidade:** GitHub público recebe apenas CORE sanitizado. Overlays e manifesto podem permanecer em Drive/Box; nunca incluir secrets, tokens ou credenciais.
+
 ## 3. `/mpe`, `/mpe+`, `/mpe-`
 
 `/mpe` = **Melhore o Prompt e Execute-o**.
@@ -97,6 +113,40 @@ Regras:
 6. só não executar mediante ordem expressa como `não execute`, `apenas o prompt`, `aguarde`, `pause` ou equivalente;
 7. ordens de pausa valem para a interação corrente e não migram automaticamente por `/consolidar`;
 8. `/mpe+` absorve `/rodape` por padrão quando houver conteúdo operacional real; `/rodape off` ou `/r off` desativa essa camada na execução corrente.
+
+### 3.0. Superfície de leitura do usuário — REGRA DURA
+
+No `/mpe`, o trabalho interno pode ser amplo, mas o chat deve mostrar somente informação que o usuário ainda precise **ler para decidir, agir, corrigir, fornecer dado indispensável ou compreender risco material**.
+
+Não mostrar por padrão:
+- relatório do que a IA já fez;
+- lista do que já estava correto;
+- etapas internas concluídas;
+- justificativas de rotina;
+- validações que passaram sem ressalva;
+- comparação sem consequência prática;
+- informação técnica destinada apenas a outra IA.
+
+Quando nenhuma ação ou decisão depender do usuário, preferir somente:
+
+`AÇÃO DO USUÁRIO: NENHUMA`.
+
+Exceção: mostrar diretamente no chat qualquer achado, risco, limitação ou resultado que seja material para a decisão do usuário ou que não possa ser delegado a artefato externo sem perda de compreensão.
+
+### 3.0.1. Artefato de handoff / informação para outra IA
+
+Quando informação omitida da superfície do usuário for material para continuidade, auditoria, automação ou outra IA:
+
+1. preferir UM artefato de handoff e retornar ao usuário apenas seu link/referência, mais eventual ação indispensável;
+2. formato padrão: Markdown (`.md`), por ser textual, portável, legível por humanos/IAs e adequado a versionamento;
+3. usar JSON (`.json`) quando o consumidor for automação e houver schema estruturado;
+4. usar TXT (`.txt`) como fallback de máxima compatibilidade;
+5. usar PDF somente quando layout, paginação, evidência visual ou fidelidade de apresentação forem materiais;
+6. não gerar artefato apenas para esconder detalhe trivial;
+7. preferir link estável em armazenamento acessível à IA destinatária quando houver capacidade real;
+8. nunca persistir credenciais, tokens, cookies, secrets ou outros dados privados desnecessários.
+
+Em troca Multi-IA, preferir a arquitetura `/tarefa` / `/multi` e a Caixa Postal existente quando o CAPABILITY_PROFILE da conexão real fechar DISCOVER → READ → EXECUTE → WRITE → VERIFY → RECOVER. Não transferir mensagens manualmente ao usuário quando o sistema puder fazê-lo com segurança.
 
 Níveis:
 - `/mpe`: aprimora silenciosamente e entrega resposta equilibrada;
@@ -147,7 +197,7 @@ Gerencia a biblioteca canônica de prompts reutilizáveis.
 1. `/prompt` → ler `prompts/README.md` e mostrar catálogo curto de aliases disponíveis.
 2. `/prompt <alias>` → resolver o alias, carregar a versão canônica vigente do prompt e **executá-la por padrão**.
 3. `/prompt <alias> não execute` → carregar/devolver o prompt sem execução.
-4. `/prompt promover <alias>` → comparar o prompt vigente com melhorias materiais descobertas na conversa atual; incorporar somente melhorias úteis; remover dados privados quando o destino for público; atualizar versão interna; manter nome estável; atualizar catálogo; sincronizar os espelhos aplicáveis; reler e validar.
+4. `/prompt promover <alias>` → comparar o prompt vigente com melhorias materiais descobertas na conversa atual; incorporar somente melhorias úteis; remover dados privados quando o destino for público; atualizar versão interna; manter nome estável; atualizar catálogo; sincronizar os espelhos aplicáveis via `RELEASE_SYNC_GATE`; reler e validar.
 5. Não criar novo prompt canônico se a necessidade já estiver coberta por um existente.
 6. Prompt privado pode existir somente em Drive/Box. Se a plataforma só tiver GitHub e o alias for privado, declarar indisponibilidade real; não inventar conteúdo.
 7. Nome de arquivo canônico permanece estável; versão fica dentro do arquivo e no histórico nativo do provedor.
@@ -245,7 +295,14 @@ Um dígito isolado (`1`, `2`, `3`) na mensagem seguinte executa a opção numera
 - `pafe/`;
 - `prompts/`.
 
-### 13.2. Redirecionadores de compatibilidade
+### 13.2. Overlays privados/provider-specific
+Overlays ativos complementam o CORE sem alterar o arquivo público de mesmo nome. Quando acessíveis e aplicáveis, carregá-los depois do CORE:
+- `comandos.private.md` ou equivalente provider-specific;
+- outros overlays explicitamente declarados como ativos.
+
+Overlay nunca autoriza manter uma cópia divergente do CORE sob o mesmo nome `comandos.md`.
+
+### 13.3. Redirecionadores de compatibilidade
 Podem permanecer para preservar links antigos, mas não são fontes autônomas:
 - `mpe.md`;
 - `id.md`;
@@ -254,7 +311,7 @@ Podem permanecer para preservar links antigos, mas não são fontes autônomas:
 - `nconversa.md`;
 - arquivos provider-specific declarados como legados, como `instrucoes-universais-GEMINI.md` ou `instrucoes-personalizadas-gpt.md`.
 
-### 13.3. Histórico
+### 13.4. Histórico
 `archive/`, `old/` e arquivos explicitamente históricos nunca são carregados por padrão. Só consultar quando o usuário pedir histórico, auditoria ou recuperação de delta.
 
 ## 14. Segurança e privacidade
@@ -266,7 +323,7 @@ Podem permanecer para preservar links antigos, mas não são fontes autônomas:
 5. não afirmar ação externa concluída sem confirmação real;
 6. não confundir consenso de IAs com evidência;
 7. conteúdo público deve ser sanitizado;
-8. extensões privadas podem permanecer em Box/Drive sem serem replicadas no GitHub;
+8. extensões privadas devem residir em overlays separados em Drive/Box, não em cópias divergentes do CORE;
 9. nenhuma regra deste arquivo substitui políticas obrigatórias da plataforma utilizada.
 
 ## 15. `/tarefa` e `/multi`
@@ -295,6 +352,7 @@ Arquitetura-alvo: um único ponto de entrada do usuário; worker pull somente qu
 - `/nova-conversa` é alias;
 - `/help <comando>` e `/<comando>?` mostram somente formas de uso documentadas, sem executar o comando-alvo;
 - `/tarefa` é a interface curta da Caixa Postal Multi-IA; `/multi` é alias de `/tarefa multi`;
+- todo arquivo multi-provider material usa `CORE + OVERLAY + RELEASE_SYNC_GATE`; o mesmo CORE só é `MATCH` após write/readback/fingerprint em todos os targets obrigatórios;
 - resolução canônica distingue falha de rota, cache, recuperação parcial e indisponibilidade real;
 - `NÃO LOCALIZADO NESTA IA` nunca deve ser promovido automaticamente a `INEXISTENTE`;
 - fallback local deve ser versionado ou declarado como versão não documentada;
