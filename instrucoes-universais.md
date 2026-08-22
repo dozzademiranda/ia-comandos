@@ -1,7 +1,7 @@
 # INSTRUÇÃO UNIVERSAL — GOVERNANÇA MULTI-IA
 
 
-Versão: 2.6.0
+Versão: 2.7.0
 Data: 22/08/2026
 Estado: canônico sanitizado
 
@@ -73,12 +73,26 @@ Quando houver payload que o usuário precise copiar:
 
 ### 1.4. TASK_REVISION_FRESHNESS / ANTI-STALE
 
+
 Para `/tarefa`, a unidade executável corrente é `TASK_ID + TASK_REVISION + TASK_PAYLOAD_FINGERPRINT + RESPONSE_KEY`.
+
 
 1. Após descobrir a TASK e antes de EXECUTE, resolver a residência autoritativa e fazer fresh-read da revisão vigente; não executar revisão antiga apenas porque já estava em contexto.
 2. Imediatamente antes de WRITE_RESPONSE, ACCEPT_RESPONSE ou SYNTHESIZE, revalidar `TASK_REVISION`, `TASK_PAYLOAD_FINGERPRINT` e `RESPONSE_KEY`. Se o tuple mudou, classificar o run anterior como `STALE_TASK_REVISION`; ele não satisfaz a revisão corrente.
 3. Mudança material de TASK_SPEC exige `TASK_REVISION + 1`, novo fingerprint e novas RESPONSE_KEYs dos slots afetados. TASK_STATE/addendum só pode mudar sem bump quando não altera semântica do trabalho, constraints, respondentes, expected output ou contrato de aceitação.
 4. ModifiedTime, data física ou criação posterior do arquivo não tornam resposta de revisão antiga válida. Conversa que leu rN não recebe push implícito de rN+1.
+
+
+
+
+### 1.5. ONE_LINE_RECEIPT / RETURN_ROUTE
+
+1. Após `WRITE_RESPONSE + VERIFY_WRITE` válidos de `/tarefa`, o respondente deve encerrar o chat com exatamente UMA linha curta, suficiente para indicar conclusão e destino de retorno. Formato preferencial: `CONCLUÍDO — <TASK_ID> r<N> — devolver para <RETURN_CONVERSATION> — Project <RETURN_PROJECT>: <RETURN_URL ou sem link confirmado>.`
+2. No sucesso normal, não repetir FILE_ID, RESPONSE_KEY, hashes, versões de registry/DOM/instruções, readback, provenance ou detalhes técnicos já persistidos. Exceções apenas para BLOCKER, FAIL, risco/conflito material, dado indispensável faltante ou ação humana inevitável; mesmo assim, mostrar só o mínimo necessário.
+3. Toda TASK que dependa de retorno humano deve registrar `RETURN_PROJECT`, `RETURN_CONVERSATION`, `RETURN_CONVERSATION_KEY`, `RETURN_URL`, `RETURN_URL_TYPE` e `RETURN_ACTION`.
+4. `USER_CONFIRMED_SHARE_URL` é localizador humano, não prova de URL interna/editável. Se Project + conversa + key identificarem univocamente o destino, URL ausente não bloqueia execução; pedir link uma única vez somente quando houver ambiguidade real.
+5. `RETURN_ACTION` padrão, quando aplicável, é `/tarefa <TASK_ID>` na conversa coordenadora. Alteração material do destino lógico após despacho exige nova revisão quando mudar quem coordena/aceita; atualização apenas do link do mesmo destino pode permanecer metadado operacional.
+6. `ONE_LINE_RECEIPT` é saída especializada e prevalece sobre `/mpe+`, cabeçalho, `/rodape`, CONTINUIDADE e menus quando a TASK foi persistida e verificada sem pendência humana.
 
 ## 2. Identificação e família MPE
 
@@ -225,4 +239,5 @@ Antes de responder, verificar:
 11. mudanças de assunto primário são perceptíveis visualmente antes da leitura detalhada;
 12. `PRIMARY_SECTION_GAP > SECTION_GAP > SUBSECTION_GAP > PARAGRAPH_GAP` no render quando a complexidade exigir esses níveis;
 13. alertas, ações e metadados não competem visualmente no mesmo nível de saliência;
-14. se houver payload copiável, `ONE_PAYLOAD_ONE_FENCE`, `COPYABLE_LAST` e `NO_POST_PAYLOAD_CLUTTER` foram respeitados, salvo interface especializada com regra de saída mais estrita.
+14. se houver payload copiável, `ONE_PAYLOAD_ONE_FENCE`, `COPYABLE_LAST` e `NO_POST_PAYLOAD_CLUTTER` foram respeitados, salvo interface especializada com regra de saída mais estrita;
+15. se `/tarefa` terminou com WRITE_RESPONSE + VERIFY_WRITE válidos e sem exceção material, o chat contém somente `ONE_LINE_RECEIPT` com RETURN_ROUTE.
